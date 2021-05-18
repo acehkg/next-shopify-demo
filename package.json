@@ -1,0 +1,27 @@
+{
+  "name": "NEXT JS and Shopify",
+  "version": "1.0.0",
+  "description": "A demo of a NEXT JS app connected to the Shopify Storefron API",
+  "main": "index.js",
+  "author": "Andrew Embury",
+  "license": "ISC",
+  "dependencies": {
+    "next": "^10.0.9",
+    "next-google-fonts": "^2.2.0",
+    "react": "^17.0.1",
+    "react-cookie": "^4.0.3",
+    "react-dom": "^17.0.1",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^2.0.3",
+    "shopify-buy": "^2.11.0",
+    "styled-components": "latest"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "devDependencies": {
+    "babel-plugin-styled-components": "latest"
+  }
+}
