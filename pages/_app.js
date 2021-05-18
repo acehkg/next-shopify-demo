@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import GlobalStyles from '../style/GlobalStyles';
 import Font from '../style/Font';
 import 'semantic-ui-css/semantic.min.css';
@@ -6,35 +6,45 @@ import 'semantic-ui-css/semantic.min.css';
 import NavOpenProvider from '../context/MenuContext';
 //Cart Context
 import CartProvider from '../context/CartContext';
-import useCart from '../hooks/useCart';
 //cookies provider
-import { CookiesProvider } from 'react-cookie';
+import { CookiesProvider, useCookies } from 'react-cookie';
 //Layout Components
 import Header from '../components/header/Header';
 import Slider from '../components/header/Slider';
 
-const CartWrapper = ({ children }) => {
-  const { createCheckout, cart } = useCart();
-  useEffect(() => {
-    createCheckout();
-  }, []);
-  console.log(cart);
-  return <CookiesProvider>{children}</CookiesProvider>;
-};
-
 function MyApp({ Component, pageProps }) {
+  const [checkout, setCheckout] = useState();
+  const [cookies, setCookie] = useCookies(['checkoutId']);
+
+  useEffect(async () => {
+    let checkoutId = cookies;
+    if (Object.keys(checkoutId).length === 0) {
+      const createdCheckout = await fetch('/api/createCheckout');
+      createdCheckout.json().then((body) => {
+        setCookie('checkoutId', body.id);
+        setCheckout(body.id);
+      });
+    } else {
+      const existingCheckout = await fetch('/api/existingCheckout', {
+        method: 'POST',
+        body: checkoutId.checkoutId,
+      });
+      existingCheckout.json().then((body) => {
+        setCheckout(body.id);
+      });
+    }
+  }, []);
   return (
     <>
-      <CartProvider>
-        <CartWrapper>
+      <CookiesProvider>
+        <CartProvider checkout={checkout}>
           <NavOpenProvider>
             <Slider />
             <Header />
             <Component {...pageProps} />
           </NavOpenProvider>
-        </CartWrapper>
-      </CartProvider>
-
+        </CartProvider>
+      </CookiesProvider>
       <Font />
       <GlobalStyles />
     </>

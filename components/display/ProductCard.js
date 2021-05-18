@@ -33,9 +33,9 @@ const Description = styled.p`
 `;
 
 const ProductCard = ({ product }) => {
-  const { addItemToCart, cart } = useCart();
+  const { addItemToCart, checkout } = useCart();
   const handleClick = () => {
-    addItemToCart(product.variants[0].id, 1, cart.id);
+    addItemToCart(product.variants[0].id, 1, checkout);
   };
 
   return (
