@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Logo from './Logo';
 import DesktopLinks from './DesktopLinks';
 import Burger from '../header/Burger';
-//cart
+// get cart data
 import useCart from '../../hooks/useCart';
 
 const Head = styled.header`
@@ -18,17 +18,8 @@ const Head = styled.header`
   margin-bottom: 2rem;
 `;
 const Header = () => {
+  const { checkout } = useCart();
   const { open } = useNav();
-  const { cart } = useCart();
-  console.log(cart);
-  let counter = 0;
-  if (cart === 'undefined') {
-    counter = 0;
-  }
-  if (cart == !'undefined') {
-    counter = cart.lineItems.length;
-  }
-  console.log(counter);
   useEffect(() => {
     if (open === true) {
       document.body.style.overflow = 'hidden';
@@ -37,12 +28,13 @@ const Header = () => {
       document.body.style.overflow = '';
     }
   }, [open]);
+
   return (
     <Head open={open}>
       <Logo image='/images/logo.jpg' alt='logo' />
       <Burger />
       <DesktopLinks />
-      <Counter>{counter}</Counter>
+      <Counter>0</Counter>
     </Head>
   );
 };
