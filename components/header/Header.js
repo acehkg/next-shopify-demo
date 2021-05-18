@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import Logo from './Logo';
 import DesktopLinks from './DesktopLinks';
 import Burger from '../header/Burger';
-// get cart data
+//cart
+import useCartContext from '../../hooks/useCartContext';
 import useCart from '../../hooks/useCart';
 
 const Head = styled.header`
@@ -18,7 +19,9 @@ const Head = styled.header`
   margin-bottom: 2rem;
 `;
 const Header = () => {
-  const { checkout } = useCart();
+  const { checkout } = useCartContext();
+  const data = useCart(checkout);
+  console.log(data);
   const { open } = useNav();
   useEffect(() => {
     if (open === true) {

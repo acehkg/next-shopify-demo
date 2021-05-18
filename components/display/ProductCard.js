@@ -1,5 +1,5 @@
 //cart context
-import useCart from '../../hooks/useCart';
+import useCartContext from '../../hooks/useCartContext';
 import styled from 'styled-components';
 import Link from 'next/link';
 
@@ -33,7 +33,7 @@ const Description = styled.p`
 `;
 
 const ProductCard = ({ product }) => {
-  const { addItemToCart, checkout } = useCart();
+  const { addItemToCart, checkout } = useCartContext();
   const handleClick = () => {
     addItemToCart(product.variants[0].id, 1, checkout);
   };
