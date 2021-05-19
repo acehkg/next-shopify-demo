@@ -1,16 +1,12 @@
 import useSWR from 'swr';
 
 const fetcherWithCheckout = async (url, checkoutId) => {
-  await fetch('/api/existingCheckout', {
+  const res = await fetch(url, {
     method: 'POST',
     body: checkoutId,
-  })
-    .then((response) => {
-      return response.json();
-    })
-    .then((response) => {
-      console.log(response);
-    });
+  });
+  const checkout = await res.json();
+  return checkout;
 };
 
 const useCart = (checkoutId) => {
@@ -18,7 +14,7 @@ const useCart = (checkoutId) => {
     [`/api/existingCheckout/`, checkoutId],
     fetcherWithCheckout
   );
-  console.log(JSON.stringify(data));
+
   return {
     data,
     isLoading: !error && !data,
