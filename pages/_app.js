@@ -21,11 +21,13 @@ function MyApp({ Component, pageProps }) {
   //retrieve existing checkout from cookies or create a new checkout
   useEffect(async () => {
     let checkoutId = cookies;
+    let date = new Date();
+    date.setTime(date.getTime() + expDays * 24 * 60 * 60 * 1000);
     try {
       if (Object.keys(checkoutId).length === 0) {
         const res = await fetch('/api/createCheckout');
         const createdCheckout = await res.json();
-        setCookie('checkoutId', createdCheckout.id);
+        setCookie('checkoutId', createdCheckout.id, { expires: date });
         setCheckout(createdCheckout.id);
       } else {
         const res = await fetch('/api/existingCheckout', {
