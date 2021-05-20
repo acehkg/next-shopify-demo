@@ -22,12 +22,15 @@ function MyApp({ Component, pageProps }) {
   useEffect(async () => {
     let checkoutId = cookies;
     let date = new Date();
-    date.setTime(date.getTime() + expDays * 24 * 60 * 60 * 1000);
+    date.setTime(date.getTime() + 30 * 24 * 60 * 60 * 1000);
     try {
       if (Object.keys(checkoutId).length === 0) {
         const res = await fetch('/api/createCheckout');
         const createdCheckout = await res.json();
-        setCookie('checkoutId', createdCheckout.id, { expires: date });
+        setCookie('checkoutId', createdCheckout.id, {
+          expires: date,
+          secure: true,
+        });
         setCheckout(createdCheckout.id);
       } else {
         const res = await fetch('/api/existingCheckout', {
