@@ -21,6 +21,7 @@ const Head = styled.header`
 const Header = () => {
   const { checkoutId } = useCartContext();
   const data = useCart(checkoutId);
+
   const { open } = useNav();
   useEffect(() => {
     if (open === true) {

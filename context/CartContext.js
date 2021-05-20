@@ -1,5 +1,4 @@
 import { createContext } from 'react';
-
 export const CartContext = createContext();
 
 const Cart = ({ children, checkoutId }) => {

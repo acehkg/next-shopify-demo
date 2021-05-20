@@ -6,6 +6,8 @@ import 'semantic-ui-css/semantic.min.css';
 import NavOpenProvider from '../context/MenuContext';
 //Cart Context
 import CartProvider from '../context/CartContext';
+//useSWR for cart data fetching
+import useCart from '../hooks/useCart';
 //cookies provider
 import { CookiesProvider, useCookies } from 'react-cookie';
 //Layout Components
@@ -16,6 +18,7 @@ function MyApp({ Component, pageProps }) {
   const [checkout, setCheckout] = useState();
   const [cookies, setCookie] = useCookies(['checkoutId']);
 
+  //retrieve existing checkout from cookies or create a new checkout
   useEffect(async () => {
     let checkoutId = cookies;
     try {
@@ -37,6 +40,8 @@ function MyApp({ Component, pageProps }) {
       console.log(e);
     }
   }, []);
+  //fetch cart data using SWR on app loading
+  useCart(checkout);
   return (
     <>
       <CookiesProvider>
