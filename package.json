@@ -1,5 +1,5 @@
 {
-  "name": "NEXT JS and Shopify",
+  "name": "nextjs-and-shopify",
   "version": "1.0.0",
   "description": "A demo of a NEXT JS app connected to the Shopify Storefron API",
   "main": "index.js",
