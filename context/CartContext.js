@@ -1,8 +1,7 @@
 import { createContext } from 'react';
-
 export const CartContext = createContext();
 
-const Cart = ({ children, checkout }) => {
+const Cart = ({ children, checkoutId }) => {
   const addItemToCart = async (variantId, quantity, checkoutId) => {
     await fetch('/api/addLineItem', {
       method: 'POST',
@@ -15,7 +14,7 @@ const Cart = ({ children, checkout }) => {
   };
 
   const exposed = {
-    checkout,
+    checkoutId,
     addItemToCart,
   };
 

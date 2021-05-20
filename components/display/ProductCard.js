@@ -1,7 +1,8 @@
 //cart context
-import useCart from '../../hooks/useCart';
+import useCartContext from '../../hooks/useCartContext';
 import styled from 'styled-components';
 import Link from 'next/link';
+import { mutate } from 'swr';
 
 const CardImage = ({ src, alt }) => {
   return <Image src={src} alt={alt} />;
@@ -33,9 +34,10 @@ const Description = styled.p`
 `;
 
 const ProductCard = ({ product }) => {
-  const { addItemToCart, checkout } = useCart();
-  const handleClick = () => {
-    addItemToCart(product.variants[0].id, 1, checkout);
+  const { addItemToCart, checkoutId } = useCartContext();
+  const handleClick = async () => {
+    await addItemToCart(product.variants[0].id, 1, checkoutId);
+    mutate([`/api/existingCheckout/`, checkoutId]);
   };
 
   return (

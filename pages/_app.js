@@ -6,6 +6,8 @@ import 'semantic-ui-css/semantic.min.css';
 import NavOpenProvider from '../context/MenuContext';
 //Cart Context
 import CartProvider from '../context/CartContext';
+//useSWR for cart data fetching
+import useCart from '../hooks/useCart';
 //cookies provider
 import { CookiesProvider, useCookies } from 'react-cookie';
 //Layout Components
@@ -16,28 +18,34 @@ function MyApp({ Component, pageProps }) {
   const [checkout, setCheckout] = useState();
   const [cookies, setCookie] = useCookies(['checkoutId']);
 
+  //retrieve existing checkout from cookies or create a new checkout
   useEffect(async () => {
     let checkoutId = cookies;
-    if (Object.keys(checkoutId).length === 0) {
-      const createdCheckout = await fetch('/api/createCheckout');
-      createdCheckout.json().then((body) => {
-        setCookie('checkoutId', body.id);
-        setCheckout(body.id);
-      });
-    } else {
-      const existingCheckout = await fetch('/api/existingCheckout', {
-        method: 'POST',
-        body: checkoutId.checkoutId,
-      });
-      existingCheckout.json().then((body) => {
-        setCheckout(body.id);
-      });
+    try {
+      if (Object.keys(checkoutId).length === 0) {
+        const res = await fetch('/api/createCheckout');
+        const createdCheckout = await res.json();
+        setCookie('checkoutId', createdCheckout.id);
+        setCheckout(createdCheckout.id);
+      } else {
+        const res = await fetch('/api/existingCheckout', {
+          method: 'POST',
+          body: checkoutId.checkoutId,
+        });
+        const existingCheckout = await res.json();
+        setCheckout(existingCheckout.id);
+      }
+    } catch (e) {
+      console.log('Error!');
+      console.log(e);
     }
   }, []);
+  //fetch cart data using SWR on app loading
+  useCart(checkout);
   return (
     <>
       <CookiesProvider>
-        <CartProvider checkout={checkout}>
+        <CartProvider checkoutId={checkout}>
           <NavOpenProvider>
             <Slider />
             <Header />

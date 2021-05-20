@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import Logo from './Logo';
 import DesktopLinks from './DesktopLinks';
 import Burger from '../header/Burger';
-// get cart data
+//cart
+import useCartContext from '../../hooks/useCartContext';
 import useCart from '../../hooks/useCart';
 
 const Head = styled.header`
@@ -18,7 +19,9 @@ const Head = styled.header`
   margin-bottom: 2rem;
 `;
 const Header = () => {
-  const { checkout } = useCart();
+  const { checkoutId } = useCartContext();
+  const data = useCart(checkoutId);
+
   const { open } = useNav();
   useEffect(() => {
     if (open === true) {
@@ -34,7 +37,11 @@ const Header = () => {
       <Logo image='/images/logo.jpg' alt='logo' />
       <Burger />
       <DesktopLinks />
-      <Counter>0</Counter>
+      <Counter>
+        {data.isLoading || data.checkout === undefined
+          ? '...'
+          : `${data.checkout.paymentDueV2.amount}`}
+      </Counter>
     </Head>
   );
 };
