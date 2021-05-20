@@ -1,8 +1,11 @@
-//cart context
-import useCartContext from '../../hooks/useCartContext';
-import styled from 'styled-components';
+import { useState } from 'react';
 import Link from 'next/link';
+//cart context and data
+import useCartContext from '../../hooks/useCartContext';
 import { mutate } from 'swr';
+//styling
+import styled from 'styled-components';
+import { Select, Button, Icon } from 'semantic-ui-react';
 
 const CardImage = ({ src, alt }) => {
   return <Image src={src} alt={alt} />;
@@ -33,11 +36,76 @@ const Description = styled.p`
   padding: 1rem;
 `;
 
+const OptionsSelect = ({ options, onChange }) => {
+  return (
+    <SelectWrapper>
+      <Select
+        placeholder='Select Quantity'
+        options={options}
+        onChange={onChange}
+      />
+    </SelectWrapper>
+  );
+};
+const SelectWrapper = styled.div`
+  padding: 0 1rem;
+`;
+const BuyButton = ({ onClick }) => {
+  return (
+    <ButtonWrapper>
+      <Button icon onClick={onClick}>
+        <Icon name='add to cart' />
+      </Button>
+    </ButtonWrapper>
+  );
+};
+const ButtonWrapper = styled.div`
+  padding-right: 0.75rem;
+`;
+const BuyNow = ({ options, onChange, onClick }) => {
+  return (
+    <BuyWrapper>
+      <OptionsSelect options={options} onChange={onChange} />
+      <BuyButton onClick={onClick} />
+    </BuyWrapper>
+  );
+};
+
+const BuyWrapper = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+  padding-bottom: 1rem;
+`;
 const ProductCard = ({ product }) => {
+  //retrieve checkout ID and funtions from cart context for adding to cart
   const { addItemToCart, checkoutId } = useCartContext();
+  //set value of selected dropdown items in state
+  const [selected, setSelected] = useState();
+  //function to create the options array for the semantic UI react select component
+  const selectOptions = product.variants.map((variant) => {
+    return {
+      key: variant.id,
+      value: variant.id,
+      text:
+        variant.title +
+        ' ' +
+        'CAN' +
+        ' ' +
+        '$' +
+        variant.price +
+        variant.priceV2.currencyCode,
+    };
+  });
+
+  //evetn handler for add to cart button
   const handleClick = async () => {
-    await addItemToCart(product.variants[0].id, 1, checkoutId);
+    await addItemToCart(selected, 1, checkoutId);
     mutate([`/api/existingCheckout/`, checkoutId]);
+  };
+  //evetn handler for change dropdown value
+  const selectChange = (e, data) => {
+    e.preventDefault();
+    setSelected(data.value);
   };
 
   return (
@@ -51,22 +119,29 @@ const ProductCard = ({ product }) => {
           />
         </>
       </Link>
-      <button onClick={handleClick}>BUY NOW</button>
+      <BuyNow
+        options={selectOptions}
+        onChange={selectChange}
+        onClick={handleClick}
+      />
     </Wrapper>
   );
 };
 
 const Wrapper = styled.div`
   cursor: pointer;
-  width: 19rem;
+  width: 20rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  transition: 0.3s;
 
-  &:hover {
-    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+  @media (min-width: 375px) {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+
+    &:hover {
+      box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    }
   }
 `;
 export default ProductCard;

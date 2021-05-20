@@ -6,7 +6,6 @@ const useCart = (checkoutId) => {
     [`/api/existingCheckout/`, checkoutId],
     fetcherWithCheckout
   );
-  console.log('swr triggered');
   return {
     checkout,
     isLoading: !error && !checkout,
