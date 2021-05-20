@@ -19,9 +19,8 @@ const Head = styled.header`
   margin-bottom: 2rem;
 `;
 const Header = () => {
-  const { checkout } = useCartContext();
-  const data = useCart(checkout);
-  console.log(data);
+  const { checkoutId } = useCartContext();
+  const data = useCart(checkoutId);
   const { open } = useNav();
   useEffect(() => {
     if (open === true) {
@@ -37,7 +36,11 @@ const Header = () => {
       <Logo image='/images/logo.jpg' alt='logo' />
       <Burger />
       <DesktopLinks />
-      <Counter>0</Counter>
+      <Counter>
+        {data.isLoading || data.checkout === undefined
+          ? '...'
+          : `${data.checkout.paymentDueV2.amount}`}
+      </Counter>
     </Head>
   );
 };
