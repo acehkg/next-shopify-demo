@@ -12,7 +12,7 @@ const CardImage = ({ src, alt }) => {
 };
 
 const Image = styled.img`
-  width: 18rem;
+  width: 100%;
   height: auto;
 `;
 const CardContent = ({ title, description }) => {
@@ -89,8 +89,6 @@ const ProductCard = ({ product }) => {
       text:
         variant.title +
         ' ' +
-        'CAN' +
-        ' ' +
         '$' +
         variant.price +
         variant.priceV2.currencyCode,
@@ -99,8 +97,13 @@ const ProductCard = ({ product }) => {
 
   //evetn handler for add to cart button
   const handleClick = async () => {
-    await addItemToCart(selected, 1, checkoutId);
-    mutate([`/api/existingCheckout/`, checkoutId]);
+    try {
+      await addItemToCart(selected, 1, checkoutId);
+      mutate([`/api/existingCheckout/`, checkoutId]);
+    } catch (e) {
+      console.log('Error adding item to cart...');
+      console.log(e);
+    }
   };
   //evetn handler for change dropdown value
   const selectChange = (e, data) => {
@@ -134,6 +137,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
 
   @media (min-width: 375px) {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);

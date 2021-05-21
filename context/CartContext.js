@@ -13,9 +13,19 @@ const Cart = ({ children, checkoutId }) => {
     });
   };
 
+  const removeItemFromCart = async (variantId, checkoutId) => {
+    await fetch('/api/removeLineItem', {
+      method: 'POST',
+      body: JSON.stringify({
+        variantId,
+        checkoutId,
+      }),
+    });
+  };
   const exposed = {
     checkoutId,
     addItemToCart,
+    removeItemFromCart,
   };
 
   return (

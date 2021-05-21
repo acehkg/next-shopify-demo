@@ -7,7 +7,7 @@ export const fetcherWithCheckout = async (url, checkoutId) => {
     const checkout = await res.json();
     return checkout;
   } catch (e) {
-    console.log('Problem fetching checkout...');
+    console.log('Still waiting for checkout ID');
     console.log(e);
   }
 };
