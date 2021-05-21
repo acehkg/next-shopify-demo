@@ -89,8 +89,6 @@ const ProductCard = ({ product }) => {
       text:
         variant.title +
         ' ' +
-        'CAN' +
-        ' ' +
         '$' +
         variant.price +
         variant.priceV2.currencyCode,
@@ -99,8 +97,13 @@ const ProductCard = ({ product }) => {
 
   //evetn handler for add to cart button
   const handleClick = async () => {
-    await addItemToCart(selected, 1, checkoutId);
-    mutate([`/api/existingCheckout/`, checkoutId]);
+    try {
+      await addItemToCart(selected, 1, checkoutId);
+      mutate([`/api/existingCheckout/`, checkoutId]);
+    } catch (e) {
+      console.log('Error adding item to cart...');
+      console.log(e);
+    }
   };
   //evetn handler for change dropdown value
   const selectChange = (e, data) => {

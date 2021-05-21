@@ -10,7 +10,6 @@ export default async function handler(req, res) {
       quantity,
     },
   ];
-
   await shopifyClient.checkout.addLineItems(checkoutId, itemToAdd);
   res.status(200).json();
 }

@@ -6,8 +6,6 @@ import 'semantic-ui-css/semantic.min.css';
 import NavOpenProvider from '../context/MenuContext';
 //Cart Context
 import CartProvider from '../context/CartContext';
-//useSWR for cart data fetching
-import useCart from '../hooks/useCart';
 //cookies provider
 import { CookiesProvider, useCookies } from 'react-cookie';
 //Layout Components
@@ -41,12 +39,11 @@ function MyApp({ Component, pageProps }) {
         setCheckout(existingCheckout.id);
       }
     } catch (e) {
-      console.log('Error creating checkout!');
+      console.log('Error creating or restrieving checkout!');
       console.log(e);
     }
   }, []);
-  //fetch cart data using SWR on app loading
-  useCart(checkout);
+
   return (
     <>
       <CookiesProvider>

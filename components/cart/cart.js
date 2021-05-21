@@ -1,7 +1,7 @@
 import useCart from '../../hooks/useCart';
 
-const Cart = async ({ checkoutId }) => {
-  await useCart(checkoutId);
+const Cart = ({ checkoutId }) => {
+  useCart(checkoutId);
 
   return <></>;
 };
