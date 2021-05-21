@@ -31,6 +31,9 @@ const DesktopLinks = () => {
       <Link href='/products'>
         <a>PRODUCTS</a>
       </Link>
+      <Link href='/cart'>
+        <a>CART</a>
+      </Link>
     </Wrapper>
   );
 };

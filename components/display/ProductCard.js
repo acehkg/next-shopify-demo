@@ -12,7 +12,7 @@ const CardImage = ({ src, alt }) => {
 };
 
 const Image = styled.img`
-  width: 18rem;
+  width: 100%;
   height: auto;
 `;
 const CardContent = ({ title, description }) => {
@@ -137,6 +137,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
 
   @media (min-width: 375px) {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);

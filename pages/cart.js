@@ -18,16 +18,36 @@ const LoadingWrapper = styled.div`
   height: 100%;
 `;
 
-const CartImage = ({ src, alt }) => {
-  return <Image src={src} alt={alt} />;
+const CartImage = ({ src, alt, count }) => {
+  return (
+    <ImageWrapper>
+      <Image src={src} alt={alt} />
+      <Count>{count}</Count>
+    </ImageWrapper>
+  );
 };
+const ImageWrapper = styled.div`
+  position: relative;
+`;
+
+const Count = styled.p`
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 1.5rem;
+  width: 1.5rem;
+  background: lightgrey;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 1.5rem;
+`;
 
 const Image = styled.img`
-  width: 6rem;
+  width: 8rem;
   height: auto;
 `;
 
-const CartItem = ({ title, quantity, size, src, alt, id }) => {
+const CartItem = ({ title, quantity, price, currency, size, src, alt, id }) => {
   const { checkoutId, removeItemFromCart } = useCartContext();
   const handleClick = async () => {
     try {
@@ -38,13 +58,14 @@ const CartItem = ({ title, quantity, size, src, alt, id }) => {
       console.log(e);
     }
   };
+  const subTotal = (price * quantity).toFixed(2);
   return (
     <ItemWrapper>
-      <CartImage src={src} alt={alt} />
+      <CartImage src={src} alt={alt} count={quantity} />
       <TextWrapper>
         <Title>{title}</Title>
         <Size>{size}</Size>
-        <Qty>{quantity}</Qty>
+        <SubTotal>${subTotal}</SubTotal>
       </TextWrapper>
       <Button
         icon
@@ -74,7 +95,7 @@ const Title = styled.p`
   }
 `;
 const Size = styled.p``;
-const Qty = styled.p``;
+const SubTotal = styled.p``;
 
 const TextWrapper = styled.div`
   display: flex;
@@ -94,13 +115,16 @@ const Checkout = ({ total, currency, url }) => {
   );
 };
 
-const CheckoutWrapper = styled.div``;
-const Total = styled.p``;
+const CheckoutWrapper = styled.div`
+  text-align: center;
+`;
+const Total = styled.p`
+  padding: 1rem;
+`;
 
 const Cart = () => {
   const { checkoutId } = useCartContext();
   const cartData = useCart(checkoutId);
-  console.log(cartData);
   if (cartData.isLoading === true) {
     return <Loading />;
   }
@@ -112,6 +136,8 @@ const Cart = () => {
           id={item.id}
           title={item.title}
           quantity={item.quantity}
+          price={item.variant.priceV2.amount}
+          currency={item.variant.priceV2.currencyCode}
           size={item.variant.title}
           src={item.variant.image.src}
           alt={item.title}

@@ -26,6 +26,9 @@ const MobileLinks = () => {
       <Link href={'/products'}>
         <a onClick={handleNav}>PRODUCTS</a>
       </Link>
+      <Link href={'/cart'}>
+        <a onClick={handleNav}>CART</a>
+      </Link>
     </Wrapper>
   );
 };
