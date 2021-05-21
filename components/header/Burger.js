@@ -12,7 +12,7 @@ const StyledBurger = styled.div`
   height: 2rem;
   //right: 2rem;
   //top: 4rem;
-  //z-index: 2;
+  z-index: 2;
   @media (min-width: 834px) {
     display: none;
   }

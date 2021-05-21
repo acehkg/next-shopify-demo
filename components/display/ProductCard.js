@@ -111,13 +111,13 @@ const ProductCard = ({ product }) => {
   return (
     <Wrapper>
       <Link href={`/products/${product.handle}`}>
-        <>
+        <a>
           <CardImage src={product.images[0].src} alt={product.title} />
           <CardContent
             title={product.title}
             description={product.description}
           />
-        </>
+        </a>
       </Link>
       <BuyNow
         options={selectOptions}

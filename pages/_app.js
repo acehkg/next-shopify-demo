@@ -41,7 +41,7 @@ function MyApp({ Component, pageProps }) {
         setCheckout(existingCheckout.id);
       }
     } catch (e) {
-      console.log('Error!');
+      console.log('Error creating checkout!');
       console.log(e);
     }
   }, []);

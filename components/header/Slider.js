@@ -11,7 +11,7 @@ const Panel = styled.div`
   background-color: var(--slider-color);
   transition: 0.2s ease-in-out;
   right: ${(props) => (props.open ? '0' : '-100%')};
-  //z-index: 1;
+  z-index: 1;
 
   @media (min-width: 768px) {
     width: 50%;
