@@ -4,8 +4,6 @@ import styled from 'styled-components';
 import Logo from './Logo';
 import DesktopLinks from './DesktopLinks';
 import Burger from '../header/Burger';
-//cart widget
-import CartWidget from '../cart/CartWidget';
 
 const Head = styled.header`
   display: flex;
@@ -31,7 +29,6 @@ const Header = () => {
   return (
     <Head open={open}>
       <Logo image='/images/logo.jpg' alt='logo' />
-      <CartWidget />
       <Burger />
       <DesktopLinks />
     </Head>

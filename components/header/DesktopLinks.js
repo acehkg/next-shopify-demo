@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import Link from 'next/link';
-import useNav from '../../hooks/useNav';
+import CartWidget from '../cart/CartWidget';
 
 const Wrapper = styled.nav`
   height: 100%;
@@ -17,12 +17,11 @@ const Wrapper = styled.nav`
     }
   }
 
-  @media (max-width: 834px) {
+  @media (max-width: 768px) {
     display: none;
   }
 `;
 const DesktopLinks = () => {
-  const { links } = useNav();
   return (
     <Wrapper>
       <Link href='/'>
@@ -32,7 +31,9 @@ const DesktopLinks = () => {
         <a>PRODUCTS</a>
       </Link>
       <Link href='/cart'>
-        <a>CART</a>
+        <a>
+          <CartWidget />
+        </a>
       </Link>
     </Wrapper>
   );

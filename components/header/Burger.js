@@ -4,14 +4,11 @@ import { mediaQueries } from '../../config/configuration';
 import useNav from '../../hooks/useNav';
 
 const StyledBurger = styled.div`
-  //position: absolute;
   display: flex;
   justify-content: space-around;
   flex-flow: column nowrap;
   width: 2rem;
   height: 2rem;
-  //right: 2rem;
-  //top: 4rem;
   z-index: 2;
   @media (min-width: 834px) {
     display: none;

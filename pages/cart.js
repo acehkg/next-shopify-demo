@@ -105,9 +105,10 @@ const TextWrapper = styled.div`
 `;
 
 const Checkout = ({ total, currency, url }) => {
+  const price = (total * 1).toFixed(2);
   return (
     <CheckoutWrapper>
-      <Total>{`${total}${currency}`}</Total>
+      <Total>${`${price}${currency}`}</Total>
       <a href={url}>
         <Button>CHECKOUT</Button>
       </a>
