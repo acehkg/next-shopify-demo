@@ -47,7 +47,7 @@ const Image = styled.img`
   height: auto;
 `;
 
-const CartItem = ({ title, quantity, price, currency, size, src, alt, id }) => {
+const CartItem = ({ title, quantity, price, size, src, alt, id }) => {
   const { checkoutId, removeItemFromCart } = useCartContext();
   const handleClick = async () => {
     try {
@@ -64,7 +64,7 @@ const CartItem = ({ title, quantity, price, currency, size, src, alt, id }) => {
       <CartImage src={src} alt={alt} count={quantity} />
       <TextWrapper>
         <Title>{title}</Title>
-        <Size>{size}</Size>
+        {size === 'Default Title' ? <div></div> : <Size>{size}</Size>}
         <SubTotal>${subTotal}</SubTotal>
       </TextWrapper>
       <Button
