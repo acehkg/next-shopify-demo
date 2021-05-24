@@ -62,7 +62,16 @@ const BuyButton = ({ onClick }) => {
 const ButtonWrapper = styled.div`
   padding-right: 0.75rem;
 `;
-const BuyNow = ({ options, onChange, onClick }) => {
+const BuyNow = ({ options, onChange, onClick, variants, oneVariant }) => {
+  //if no variants render a buy button only else render the select
+  if (variants.length === 1) {
+    oneVariant(variants[0].id);
+    return (
+      <BuyWrapper>
+        <BuyButton onClick={onClick} />
+      </BuyWrapper>
+    );
+  }
   return (
     <BuyWrapper>
       <OptionsSelect options={options} onChange={onChange} />
@@ -95,6 +104,9 @@ const ProductCard = ({ product }) => {
     };
   });
 
+  const [hasVariants, setHasVariants] = useState();
+  const variants = product.variants;
+
   //evetn handler for add to cart button
   const handleClick = async () => {
     try {
@@ -110,7 +122,9 @@ const ProductCard = ({ product }) => {
     e.preventDefault();
     setSelected(data.value);
   };
-
+  const oneVariant = (id) => {
+    setSelected(id);
+  };
   return (
     <Wrapper>
       <Link href={`/products/${product.handle}`}>
@@ -126,6 +140,8 @@ const ProductCard = ({ product }) => {
         options={selectOptions}
         onChange={selectChange}
         onClick={handleClick}
+        variants={variants}
+        oneVariant={oneVariant}
       />
     </Wrapper>
   );

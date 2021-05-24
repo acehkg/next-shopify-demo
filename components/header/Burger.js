@@ -1,6 +1,4 @@
-import { useEffect } from 'react';
 import styled from 'styled-components';
-import { mediaQueries } from '../../config/configuration';
 import useNav from '../../hooks/useNav';
 
 const StyledBurger = styled.div`
