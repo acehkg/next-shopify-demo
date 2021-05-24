@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Logo from './Logo';
 import DesktopLinks from './DesktopLinks';
 import Burger from '../header/Burger';
+import MobileCartDisplay from '../cart/MobileCartDIsplay';
 
 const Head = styled.header`
   display: flex;
@@ -29,10 +30,17 @@ const Header = () => {
   return (
     <Head open={open}>
       <Logo image='/images/logo.jpg' alt='logo' />
-      <Burger />
+      <BurgerWrapper>
+        <MobileCartDisplay />
+        <Burger />
+      </BurgerWrapper>
       <DesktopLinks />
     </Head>
   );
 };
-
+const BurgerWrapper = styled.div`
+  display: flex;
+  width: 8rem;
+  justify-content: space-between;
+`;
 export default Header;

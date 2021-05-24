@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import Link from 'next/link';
 import useNav from '../../hooks/useNav';
-import CartWidget from '../cart/CartWidget';
 
 const Wrapper = styled.nav`
   height: 100%;
@@ -26,11 +25,6 @@ const MobileLinks = () => {
       </Link>
       <Link href={'/products'}>
         <a onClick={handleNav}>PRODUCTS</a>
-      </Link>
-      <Link href={'/cart'}>
-        <a onClick={handleNav}>
-          <CartWidget />
-        </a>
       </Link>
     </Wrapper>
   );

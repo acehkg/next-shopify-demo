@@ -2,6 +2,7 @@ import useCart from '../../hooks/useCart';
 import useCartContext from '../../hooks/useCartContext';
 import styled from 'styled-components';
 import { Icon } from 'semantic-ui-react';
+import Link from 'next/link';
 
 const Waiting = () => {
   return <Zero>$0.00</Zero>;
@@ -9,7 +10,7 @@ const Waiting = () => {
 const Zero = styled.p`
   color: #fff;
 `;
-const CartWidget = () => {
+const MobileCartDisplay = () => {
   const { checkoutId } = useCartContext();
   const cartData = useCart(checkoutId);
 
@@ -19,22 +20,30 @@ const CartWidget = () => {
 
   const price = cartData.checkout.totalPriceV2.amount;
   const total = (price * 1).toFixed(2);
+
   return (
-    <WidgetWrapper>
-      <Icon name='cart' color='red' size='large' />
-      <Total>${total}</Total>
-    </WidgetWrapper>
+    <Link href='/cart'>
+      <WidgetWrapper>
+        <Icon name='cart' color='red' size='small' />
+        <Total>${total}</Total>
+      </WidgetWrapper>
+    </Link>
   );
 };
-const WidgetWrapper = styled.div`
+const WidgetWrapper = styled.a`
   display: flex;
-  flex-direction: column;
   align-items: center;
-  height: 5rem;
-  justify-content: space-evenly;
+
+  cursor: pointer;
+  @media (min-width: 769px) {
+    display: none;
+  }
 `;
+
 const Total = styled.p`
+  padding-top: 0.4rem;
+  font-size: 0.75rem;
   color: #fff;
 `;
 
-export default CartWidget;
+export default MobileCartDisplay;
