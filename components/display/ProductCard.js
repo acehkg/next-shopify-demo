@@ -40,9 +40,10 @@ const OptionsSelect = ({ options, onChange }) => {
   return (
     <SelectWrapper>
       <Select
-        placeholder='Select Quantity'
+        placeholder='Select Options'
         options={options}
         onChange={onChange}
+        aria-label='select options'
       />
     </SelectWrapper>
   );
@@ -53,7 +54,7 @@ const SelectWrapper = styled.div`
 const BuyButton = ({ onClick }) => {
   return (
     <ButtonWrapper>
-      <Button icon onClick={onClick}>
+      <Button icon onClick={onClick} aria-label='Buy Now'>
         <Icon name='add to cart' />
       </Button>
     </ButtonWrapper>

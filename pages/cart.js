@@ -73,6 +73,7 @@ const CartItem = ({ title, quantity, price, size, src, alt, id }) => {
         size='tiny'
         style={{ margin: '0' }}
         onClick={handleClick}
+        aria-label='Remove Item'
       >
         <Icon name='remove' size='small' />
       </Button>

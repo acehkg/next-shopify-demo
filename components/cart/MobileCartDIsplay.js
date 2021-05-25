@@ -23,7 +23,7 @@ const MobileCartDisplay = () => {
 
   return (
     <Link href='/cart'>
-      <WidgetWrapper>
+      <WidgetWrapper aria-label='Shopping Cart'>
         <Icon name='cart' color='red' size='small' />
         <Total>${total}</Total>
       </WidgetWrapper>

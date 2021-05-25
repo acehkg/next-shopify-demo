@@ -20,7 +20,7 @@ const CartWidget = () => {
   const price = cartData.checkout.totalPriceV2.amount;
   const total = (price * 1).toFixed(2);
   return (
-    <WidgetWrapper>
+    <WidgetWrapper aria-label='cart'>
       <Icon name='cart' color='red' size='large' />
       <Total>${total}</Total>
     </WidgetWrapper>
