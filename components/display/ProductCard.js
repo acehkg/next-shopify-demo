@@ -12,10 +12,12 @@ import { Carousel } from 'react-responsive-carousel';
 const CardImage = ({ images }) => {
   return (
     <Carousel
+      swipeable={true}
       showThumbs={false}
       showStatus={false}
       emulateTouch={true}
       infiniteLoop={true}
+      showArrows={false}
     >
       {images.map((image) => {
         return <Image src={image.src} alt={image.alt} />;
@@ -171,7 +173,9 @@ const Wrapper = styled.div`
   @media (min-width: 375px) {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     transition: 0.3s;
+  }
 
+  @media (min-width: 1024px) {
     &:hover {
       box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
     }
