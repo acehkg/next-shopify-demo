@@ -24,7 +24,7 @@ const MobileCartDisplay = () => {
   return (
     <Link href='/cart'>
       <WidgetWrapper aria-label='Shopping Cart'>
-        <Icon name='cart' color='red' size='small' />
+        <Icon name='cart' color='red' size='large' />
         <Total>${total}</Total>
       </WidgetWrapper>
     </Link>
@@ -32,7 +32,6 @@ const MobileCartDisplay = () => {
 };
 const WidgetWrapper = styled.a`
   display: flex;
-  align-items: center;
 
   cursor: pointer;
   @media (min-width: 769px) {
@@ -41,8 +40,8 @@ const WidgetWrapper = styled.a`
 `;
 
 const Total = styled.p`
-  padding-top: 0.4rem;
-  font-size: 0.75rem;
+  padding-top: 0.6rem;
+  font-size: 1rem;
   color: #fff;
 `;
 

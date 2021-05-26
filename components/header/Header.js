@@ -40,7 +40,7 @@ const Header = () => {
 };
 const BurgerWrapper = styled.div`
   display: flex;
-  width: 8rem;
+  width: 10rem;
   justify-content: space-between;
 `;
 export default Header;

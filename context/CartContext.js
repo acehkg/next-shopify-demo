@@ -25,10 +25,11 @@ const Cart = ({ children, checkoutId }) => {
     });
   };
 
-  const updateItemInCart = async (variantId, quantity, checkoutId) => {
-    await fetch('/api/updateLineItem', {
+  const updateItemInCart = async (id, variantId, quantity, checkoutId) => {
+    await fetch('/api/updateLineItems', {
       method: 'POST',
       body: JSON.stringify({
+        id,
         variantId,
         quantity,
         checkoutId,
