@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 //cart context and data
 import useCartContext from '../../hooks/useCartContext';
@@ -6,24 +6,11 @@ import { mutate } from 'swr';
 //styling
 import styled from 'styled-components';
 import { Select, Button, Icon } from 'semantic-ui-react';
-//carousel for product images
-import { Carousel } from 'react-responsive-carousel';
 
-const CardImage = ({ images }) => {
-  return (
-    <Carousel
-      swipeable={true}
-      showThumbs={false}
-      showStatus={false}
-      emulateTouch={true}
-      infiniteLoop={true}
-      showArrows={false}
-    >
-      {images.map((image) => {
-        return <Image src={image.src} alt={image.alt} />;
-      })}
-    </Carousel>
-  );
+const CardImage = ({ product, variant }) => {
+  const variantSelected = product.variants.filter((v) => v.id === variant);
+
+  return <Image src={variantSelected[0].image.src} />;
 };
 
 const Image = styled.img`
@@ -81,7 +68,10 @@ const ButtonWrapper = styled.div`
 const BuyNow = ({ options, onChange, onClick, variants, oneVariant }) => {
   //if no variants render a buy button only else render the select
   if (variants.length === 1) {
-    oneVariant(variants[0].id);
+    useEffect(() => {
+      oneVariant(variants[0].id);
+    }, []);
+
     return (
       <BuyWrapper>
         <BuyButton onClick={onClick} />
@@ -105,7 +95,7 @@ const ProductCard = ({ product }) => {
   //retrieve checkout ID and funtions from cart context for adding to cart
   const { addItemToCart, checkoutId } = useCartContext();
   //set value of selected dropdown items in state
-  const [selected, setSelected] = useState();
+
   //function to create the options array for the semantic UI react select component
   const selectOptions = product.variants.map((variant) => {
     return {
@@ -121,6 +111,7 @@ const ProductCard = ({ product }) => {
   });
 
   const variants = product.variants;
+  const [selected, setSelected] = useState(variants[0].id);
 
   //evetn handler for add to cart button
   const handleClick = async () => {
@@ -133,6 +124,7 @@ const ProductCard = ({ product }) => {
     }
   };
   //evetn handler for change dropdown value
+
   const selectChange = (e, data) => {
     e.preventDefault();
     setSelected(data.value);
@@ -142,7 +134,7 @@ const ProductCard = ({ product }) => {
   };
   return (
     <Wrapper>
-      <CardImage images={product.images} />
+      <CardImage product={product} variant={selected} />
       <Link href={`/products/${product.handle}`}>
         <a>
           <CardContent

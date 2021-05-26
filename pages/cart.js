@@ -206,7 +206,7 @@ const Cart = () => {
   if (cartData.isLoading === true) {
     return <Loading />;
   }
-  console.log(cartData.checkout.lineItems);
+
   return (
     <>
       {cartData.checkout.lineItems.map((item) => (
