@@ -105,7 +105,6 @@ const ProductCard = ({ product }) => {
     };
   });
 
-  const [hasVariants, setHasVariants] = useState();
   const variants = product.variants;
 
   //evetn handler for add to cart button

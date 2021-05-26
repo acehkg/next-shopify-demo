@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import useCart from '../hooks/useCart';
 import useCartContext from '../hooks/useCartContext';
 import { Dimmer, Loader, Button, Icon } from 'semantic-ui-react';
@@ -18,14 +19,54 @@ const LoadingWrapper = styled.div`
   height: 100%;
 `;
 
-const CartImage = ({ src, alt, count }) => {
+const CartImage = ({ src, alt, count, handleIncrease, handleDecrease }) => {
   return (
     <ImageWrapper>
       <Image src={src} alt={alt} />
       <Count>{count}</Count>
+      <UpdateWrapper>
+        <Button
+          aria-label='Add One and Update Cart'
+          onClick={handleIncrease}
+          style={{
+            padding: '.25rem',
+            height: '1.5rem',
+            width: '1.5rem',
+            margin: '0',
+          }}
+        >
+          <Increment>+</Increment>
+        </Button>
+        <Button
+          aria-lable='Remove One and Update Cart'
+          onClick={handleDecrease}
+          style={{
+            padding: '.25rem',
+            height: '1.5rem',
+            width: '1.5rem',
+            margin: '0',
+          }}
+        >
+          <Increment>-</Increment>
+        </Button>
+      </UpdateWrapper>
     </ImageWrapper>
   );
 };
+
+const Increment = styled.span`
+  font-size: 1rem;
+  font-weight: 700;
+`;
+const UpdateWrapper = styled.div`
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+`;
 const ImageWrapper = styled.div`
   position: relative;
 `;
@@ -47,8 +88,29 @@ const Image = styled.img`
   height: auto;
 `;
 
-const CartItem = ({ title, quantity, price, size, src, alt, id }) => {
-  const { checkoutId, removeItemFromCart } = useCartContext();
+const CartItem = ({
+  title,
+  quantity,
+  price,
+  size,
+  src,
+  alt,
+  id,
+  variantId,
+}) => {
+  const { checkoutId, removeItemFromCart, updateItemInCart } = useCartContext();
+  const [qty, setQty] = useState(quantity);
+
+  useEffect(async () => {
+    try {
+      await updateItemInCart(id, variantId, qty, checkoutId);
+      mutate([`/api/existingCheckout/`, checkoutId]);
+    } catch (e) {
+      console.log('Error updating cart...');
+      console.log(e);
+    }
+  }, [qty]);
+
   const handleClick = async () => {
     try {
       await removeItemFromCart(id, checkoutId);
@@ -58,10 +120,24 @@ const CartItem = ({ title, quantity, price, size, src, alt, id }) => {
       console.log(e);
     }
   };
+
+  const handleIncrease = () => {
+    setQty((qty) => qty + 1);
+  };
+
+  const handleDecrease = () => {
+    setQty((qty) => qty - 1);
+  };
   const subTotal = (price * quantity).toFixed(2);
   return (
     <ItemWrapper>
-      <CartImage src={src} alt={alt} count={quantity} />
+      <CartImage
+        src={src}
+        alt={alt}
+        count={qty}
+        handleIncrease={handleIncrease}
+        handleDecrease={handleDecrease}
+      />
       <TextWrapper>
         <Title>{title}</Title>
         {size === 'Default Title' ? <div></div> : <Size>{size}</Size>}
@@ -75,7 +151,7 @@ const CartItem = ({ title, quantity, price, size, src, alt, id }) => {
         onClick={handleClick}
         aria-label='Remove Item'
       >
-        <Icon name='remove' size='small' />
+        <Icon name='remove' size='small' style={{ lineHeight: '1.45' }} />
       </Button>
     </ItemWrapper>
   );
@@ -130,6 +206,7 @@ const Cart = () => {
   if (cartData.isLoading === true) {
     return <Loading />;
   }
+  console.log(cartData.checkout.lineItems);
   return (
     <>
       {cartData.checkout.lineItems.map((item) => (
@@ -143,6 +220,7 @@ const Cart = () => {
           size={item.variant.title}
           src={item.variant.image.src}
           alt={item.title}
+          variantId={item.variant.id}
         />
       ))}
       <Checkout
