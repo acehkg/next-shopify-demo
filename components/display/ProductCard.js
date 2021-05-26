@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import { Select, Button, Icon } from 'semantic-ui-react';
 
 const CardImage = ({ product, variant }) => {
+  //filter for and display image of selected variant
   const variantSelected = product.variants.filter((v) => v.id === variant);
 
   return <Image src={variantSelected[0].image.src} />;
@@ -53,6 +54,7 @@ const OptionsSelect = ({ options, onChange }) => {
 const SelectWrapper = styled.div`
   padding: 0 1rem;
 `;
+
 const BuyButton = ({ onClick }) => {
   return (
     <ButtonWrapper>
@@ -65,6 +67,7 @@ const BuyButton = ({ onClick }) => {
 const ButtonWrapper = styled.div`
   padding-right: 0.75rem;
 `;
+
 const BuyNow = ({ options, onChange, onClick, variants, oneVariant }) => {
   //if no variants render a buy button only else render the select
   if (variants.length === 1) {
@@ -73,9 +76,10 @@ const BuyNow = ({ options, onChange, onClick, variants, oneVariant }) => {
     }, []);
 
     return (
-      <BuyWrapper>
+      <OneWrapper>
+        <OnePrice>${variants[0].price}</OnePrice>
         <BuyButton onClick={onClick} />
-      </BuyWrapper>
+      </OneWrapper>
     );
   }
   return (
@@ -91,10 +95,17 @@ const BuyWrapper = styled.div`
   justify-content: space-evenly;
   padding-bottom: 1rem;
 `;
+
+const OneWrapper = styled.div`
+  display: flex;
+  width: 50%;
+  justify-content: space-evenly;
+  align-items: center;
+`;
+const OnePrice = styled.p``;
 const ProductCard = ({ product }) => {
   //retrieve checkout ID and funtions from cart context for adding to cart
   const { addItemToCart, checkoutId } = useCartContext();
-  //set value of selected dropdown items in state
 
   //function to create the options array for the semantic UI react select component
   const selectOptions = product.variants.map((variant) => {
@@ -110,6 +121,7 @@ const ProductCard = ({ product }) => {
     };
   });
 
+  //set state of selected variant
   const variants = product.variants;
   const [selected, setSelected] = useState(variants[0].id);
 
@@ -124,11 +136,12 @@ const ProductCard = ({ product }) => {
     }
   };
   //evetn handler for change dropdown value
-
   const selectChange = (e, data) => {
     e.preventDefault();
     setSelected(data.value);
   };
+
+  //only one variant
   const oneVariant = (id) => {
     setSelected(id);
   };

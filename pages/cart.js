@@ -38,7 +38,7 @@ const CartImage = ({ src, alt, count, handleIncrease, handleDecrease }) => {
           <Increment>+</Increment>
         </Button>
         <Button
-          aria-lable='Remove One and Update Cart'
+          aria-label='Remove One and Update Cart'
           onClick={handleDecrease}
           style={{
             padding: '.25rem',
