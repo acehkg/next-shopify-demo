@@ -9,6 +9,9 @@ const Waiting = () => {
 };
 const Zero = styled.p`
   color: #fff;
+  @media (min-width: 769px) {
+    display: none;
+  }
 `;
 const MobileCartDisplay = () => {
   const { checkoutId } = useCartContext();

@@ -6,9 +6,22 @@ import { mutate } from 'swr';
 //styling
 import styled from 'styled-components';
 import { Select, Button, Icon } from 'semantic-ui-react';
+//carousel for product images
+import { Carousel } from 'react-responsive-carousel';
 
-const CardImage = ({ src, alt }) => {
-  return <Image src={src} alt={alt} />;
+const CardImage = ({ images }) => {
+  return (
+    <Carousel
+      showThumbs={false}
+      showStatus={false}
+      emulateTouch={true}
+      infiniteLoop={true}
+    >
+      {images.map((image) => {
+        return <Image src={image.src} alt={image.alt} />;
+      })}
+    </Carousel>
+  );
 };
 
 const Image = styled.img`
@@ -127,9 +140,9 @@ const ProductCard = ({ product }) => {
   };
   return (
     <Wrapper>
+      <CardImage images={product.images} />
       <Link href={`/products/${product.handle}`}>
         <a>
-          <CardImage src={product.images[0].src} alt={product.title} />
           <CardContent
             title={product.title}
             description={product.description}
