@@ -70,15 +70,89 @@ const BuyButton = styled.button`
   border-radius: 0.25rem;
 `;
 
-const SelectedImage = ({ selected, original }) => {
+const SelectedImage = ({ selected, original, images }) => {
   if (selected === undefined) {
-    return <Image src={original.image.src} alt={original.title} />;
+    return (
+      <ImagesWrapper>
+        <FeatureWrapper>
+          <Image src={original.image.src} alt={original.title} />
+        </FeatureWrapper>
+        <ThumbnailWrapper>
+          {images.map((image) => {
+            return (
+              <Thumb key={image.id} src={image.src} alt={original.title} />
+            );
+          })}
+        </ThumbnailWrapper>
+      </ImagesWrapper>
+    );
   }
-  return <Image src={selected.image.src} alt={selected.title} />;
+  return (
+    <ImagesWrapper>
+      <FeatureWrapper>
+        <Image src={selected.image.src} alt={selected.title} />
+      </FeatureWrapper>
+      <ThumbnailWrapper>
+        {images.map((image) => {
+          return <Thumb key={image.id} src={image.src} alt={original.title} />;
+        })}
+      </ThumbnailWrapper>
+    </ImagesWrapper>
+  );
 };
 const Image = styled.img`
   width: 100%;
   height: auto;
+  @media (min-width: 768px) {
+    width: 70%;
+  }
+`;
+
+const Thumb = styled.img`
+  width: 8rem;
+  height: auto;
+  // border: lightgrey solid 2px;
+  //border-radius: 2px;
+`;
+const ThumbnailWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-self: center;
+`;
+const ImagesWrapper = styled.div`
+  width: 90%;
+  margin: 0 auto;
+  padding: 2rem 0;
+  display: flex;
+`;
+
+const FeatureWrapper = styled.div`
+  align-self: center;
+`;
+
+const ProductDescription = ({ product }) => {
+  return (
+    <DescriptionWrapper>
+      <Title>{product.title}</Title>
+      <Description>{product.description}</Description>
+    </DescriptionWrapper>
+  );
+};
+
+const DescriptionWrapper = styled.div`
+  padding: 2rem 0;
+  width: 80%;
+  margin: 0 auto;
+`;
+const Title = styled.h3`
+  font-size: 1.5rem;
+  text-align: center;
+  padding: 1rem 0;
+`;
+const Description = styled.p`
+  line-height: 1.45;
+  text-align: center;
 `;
 const OneOptionProduct = ({ product }) => {
   //for a product with to options render selectors and filter selections for target variantId
@@ -126,24 +200,31 @@ const OneOptionProduct = ({ product }) => {
   };
 
   return (
-    <>
-      <SelectedImage selected={selected[0]} original={product.variants[0]} />
-      <SelectorWrapper>
-        <SelectorOne
-          values={optionOne.values}
-          title={optionOne.name}
-          handleChange={handleChangeOne}
-        />
-      </SelectorWrapper>
-      <FilterBuyWrapper>
-        <QtyBuy
-          quantity={quantity}
-          handleQty={handleQty}
-          number={10}
-          handleClick={handleClick}
-        />
-      </FilterBuyWrapper>
-    </>
+    <PageWrapper>
+      <SelectedImage
+        selected={selected[0]}
+        original={product.variants[0]}
+        images={product.images}
+      />
+      <DescriptionBuyWrapper>
+        <ProductDescription product={product} />
+        <SelectorWrapper>
+          <SelectorOne
+            values={optionOne.values}
+            title={optionOne.name}
+            handleChange={handleChangeOne}
+          />
+        </SelectorWrapper>
+        <FilterBuyWrapper>
+          <QtyBuy
+            quantity={quantity}
+            handleQty={handleQty}
+            number={10}
+            handleClick={handleClick}
+          />
+        </FilterBuyWrapper>
+      </DescriptionBuyWrapper>
+    </PageWrapper>
   );
 };
 const SelectorWrapper = styled.div`
@@ -161,5 +242,22 @@ const FilterBuyWrapper = styled.div`
   align-items: center;
   gap: 1rem;
 `;
+const PageWrapper = styled.div`
+  @media (min-width: 1024px) {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+  }
+`;
 
+const DescriptionBuyWrapper = styled.div`
+  @media (min-width: 768px) {
+    display: flex;
+    flex-direction: column;
+    @media (min-width: 1024px) {
+      width: 50%;
+    }
+  }
+`;
 export default OneOptionProduct;

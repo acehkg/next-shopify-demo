@@ -6,26 +6,6 @@ import { mutate } from 'swr';
 import { Select, Icon } from 'semantic-ui-react';
 import { createNumberOptions } from '../../utils/utils';
 
-const SelectorOne = ({ values, title, handleChange }) => {
-  //construct options object for the select
-  const options = values.map((value) => {
-    return {
-      key: value.value,
-      value: value.value,
-      text: value.value,
-    };
-  });
-  return (
-    <Select
-      aria-label={title}
-      options={options}
-      placeholder={title}
-      onChange={handleChange}
-      fluid={true}
-    />
-  );
-};
-
 const QtyBuy = ({ quantity, handleQty, number, handleClick }) => {
   const options = createNumberOptions(number);
 
@@ -51,6 +31,7 @@ const QtyBuy = ({ quantity, handleQty, number, handleClick }) => {
 
 const BuyWrapper = styled.div`
   width: 100%;
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -77,6 +58,30 @@ const Image = styled.img`
   width: 100%;
   height: auto;
 `;
+
+const ProductDescription = ({ product }) => {
+  return (
+    <DescriptionWrapper>
+      <Title>{product.title}</Title>
+      <Description>{product.description}</Description>
+    </DescriptionWrapper>
+  );
+};
+
+const DescriptionWrapper = styled.div`
+  padding: 2rem 0;
+  width: 80%;
+  margin: 0 auto;
+`;
+const Title = styled.h3`
+  font-size: 1.5rem;
+  text-align: center;
+  padding: 1rem 0;
+`;
+const Description = styled.p`
+  line-height: 1.45;
+  text-align: center;
+`;
 const NoOptionProduct = ({ product }) => {
   const [quantity, setQuantity] = useState(1);
   //checkoutid
@@ -100,17 +105,20 @@ const NoOptionProduct = ({ product }) => {
   };
 
   return (
-    <>
+    <PageWrapper>
       <SelectedImage selected={product} />
-      <FilterBuyWrapper>
-        <QtyBuy
-          quantity={quantity}
-          handleQty={handleQty}
-          number={10}
-          handleClick={handleClick}
-        />
-      </FilterBuyWrapper>
-    </>
+      <DescriptionBuyWrapper>
+        <ProductDescription product={product} />
+        <FilterBuyWrapper>
+          <QtyBuy
+            quantity={quantity}
+            handleQty={handleQty}
+            number={10}
+            handleClick={handleClick}
+          />
+        </FilterBuyWrapper>
+      </DescriptionBuyWrapper>
+    </PageWrapper>
   );
 };
 
@@ -121,6 +129,21 @@ const FilterBuyWrapper = styled.div`
   display: flex;
   align-items: center;
   gap: 1rem;
+`;
+
+const PageWrapper = styled.div`
+  @media (min-width: 768px) {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+  }
+`;
+
+const DescriptionBuyWrapper = styled.div`
+  @media (min-width: 768px) {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 export default NoOptionProduct;
