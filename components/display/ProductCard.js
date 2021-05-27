@@ -101,6 +101,7 @@ const OneWrapper = styled.div`
   width: 50%;
   justify-content: space-evenly;
   align-items: center;
+  padding-bottom: 1rem;
 `;
 const OnePrice = styled.p``;
 const ProductCard = ({ product }) => {

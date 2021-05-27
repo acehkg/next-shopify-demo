@@ -33,7 +33,7 @@ export async function getStaticPaths() {
     params: { collection: collection.handle },
   });
   const paths = formattedCollections.map(createPath);
-  console.log(paths);
+
   return {
     paths,
     fallback: false,
