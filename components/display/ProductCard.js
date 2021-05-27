@@ -148,14 +148,13 @@ const ProductCard = ({ product }) => {
   return (
     <Wrapper>
       <CardImage product={product} variant={selected} />
-      <Link href={`/products/${product.handle}`}>
-        <a>
-          <CardContent
-            title={product.title}
-            description={product.description}
-          />
-        </a>
-      </Link>
+
+      <CardContent title={product.title} description={product.description} />
+      <DetailsWrapper>
+        <Link href={`/products/${product.handle}`}>
+          <Button as='a'>PRODUCT DETAILS</Button>
+        </Link>
+      </DetailsWrapper>
       <BuyNow
         options={selectOptions}
         onChange={selectChange}
@@ -168,7 +167,6 @@ const ProductCard = ({ product }) => {
 };
 
 const Wrapper = styled.div`
-  cursor: pointer;
   width: 20rem;
   display: flex;
   flex-direction: column;
@@ -185,5 +183,9 @@ const Wrapper = styled.div`
       box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
     }
   }
+`;
+
+const DetailsWrapper = styled.div`
+  padding-bottom: 1rem;
 `;
 export default ProductCard;
