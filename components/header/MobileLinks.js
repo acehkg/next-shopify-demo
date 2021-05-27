@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Link from 'next/link';
 import useNav from '../../hooks/useNav';
+import links from '../../utils/links.json';
 
 const Wrapper = styled.nav`
   height: 100%;
@@ -24,8 +25,15 @@ const MobileLinks = () => {
         <a onClick={handleNav}>HOME</a>
       </Link>
       <Link href={'/products'}>
-        <a onClick={handleNav}>PRODUCTS</a>
+        <a onClick={handleNav}>ALL PRODUCTS</a>
       </Link>
+      {links.map((link) => {
+        return (
+          <Link key={link.handle} href={`/collections/${link.handle}`}>
+            <a onClick={handleNav}>{link.title.toUpperCase()}</a>
+          </Link>
+        );
+      })}
     </Wrapper>
   );
 };

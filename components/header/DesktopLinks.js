@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Link from 'next/link';
 import CartWidget from '../cart/CartWidget';
+import links from '../../utils/links.json';
 
 const Wrapper = styled.nav`
   height: 100%;
@@ -28,8 +29,15 @@ const DesktopLinks = () => {
         <a>HOME</a>
       </Link>
       <Link href='/products'>
-        <a>PRODUCTS</a>
+        <a>ALL PRODUCTS</a>
       </Link>
+      {links.map((link) => {
+        return (
+          <Link key={link.handle} href={`/collections/${link.handle}`}>
+            <a>{link.title.toUpperCase()}</a>
+          </Link>
+        );
+      })}
       <Link href='/cart'>
         <a>
           <CartWidget />
