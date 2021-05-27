@@ -60,7 +60,7 @@ const Increment = styled.span`
 `;
 const UpdateWrapper = styled.div`
   position: absolute;
-  top: 40%;
+  bottom: 10%;
   left: 50%;
   transform: translateX(-50%);
   width: 90%;

@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import GlobalStyles from '../style/GlobalStyles';
 import Font from '../style/Font';
 import 'semantic-ui-css/semantic.min.css';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
 //Context for navbar state on mobile
 import NavOpenProvider from '../context/MenuContext';
 //Cart Context
