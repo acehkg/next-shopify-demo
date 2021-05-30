@@ -89,36 +89,28 @@ const BuyButton = styled.button`
   border-radius: 0.25rem;
 `;
 
-const SelectedImage = ({ selected, original, images }) => {
-  if (selected === undefined) {
-    return (
-      <ImagesWrapper>
-        <FeatureWrapper>
-          <Image src={original.image.src} alt={original.title} />
-        </FeatureWrapper>
-        <ThumbnailWrapper>
-          {images.map((image) => {
-            return (
-              <Thumb key={image.id} src={image.src} alt={original.title} />
-            );
-          })}
-        </ThumbnailWrapper>
-      </ImagesWrapper>
-    );
-  }
+const SelectedImage = ({ selectedImg, imageClick, images, alt }) => {
   return (
     <ImagesWrapper>
       <FeatureWrapper>
-        <Image src={selected.image.src} alt={selected.title} />
+        <Image src={selectedImg} alt={alt} />
       </FeatureWrapper>
       <ThumbnailWrapper>
         {images.map((image) => {
-          return <Thumb key={image.id} src={image.src} alt={original.title} />;
+          return (
+            <Thumb
+              key={image.id}
+              src={image.src}
+              alt={alt}
+              onClick={() => imageClick(image.src)}
+            />
+          );
         })}
       </ThumbnailWrapper>
     </ImagesWrapper>
   );
 };
+
 const Image = styled.img`
   width: 100%;
   height: auto;
@@ -130,8 +122,6 @@ const Image = styled.img`
 const Thumb = styled.img`
   width: 8rem;
   height: auto;
-  // border: lightgrey solid 2px;
-  //border-radius: 2px;
 `;
 const ThumbnailWrapper = styled.div`
   display: flex;
@@ -176,7 +166,7 @@ const Description = styled.p`
 const TwoOptionProduct = ({ product }) => {
   //for a product with to options render selectors and filter selections for target variantId
   const [selected, setSelected] = useState(product.variants);
-
+  const [selectedImg, setSelectedImg] = useState(product.images[0].src);
   const [selectOne, setSelectOne] = useState();
   const [selectTwo, setSelectTwo] = useState();
   const [filter, setFilter] = useState('');
@@ -225,13 +215,17 @@ const TwoOptionProduct = ({ product }) => {
     e.preventDefault();
     setQuantity(() => data.value);
   };
-
+  const imageClick = (src) => {
+    console.log('change image');
+    setSelectedImg(src);
+  };
   return (
     <PageWrapper>
       <SelectedImage
-        selected={selected[0]}
-        original={product.variants[0]}
+        selectedImg={selectedImg}
+        imageClick={imageClick}
         images={product.images}
+        alt={product.title}
       />
       <DescriptionBuyWrapper>
         <ProductDescription product={product} />
