@@ -3,14 +3,14 @@ import { shopifyClient } from '../utils/client';
 //styling
 import styled from 'styled-components';
 import GridContainer from '../components/layout/GridContainer';
-import ProductCard from '../components/display/ProductCard';
+import CollectionCard from '../components/display/CollectionCard';
 
-const Products = ({ products }) => {
+const Collections = ({ collections }) => {
   return (
     <PageWrapper>
       <GridContainer>
-        {products.map((product) => {
-          return <ProductCard key={product.id} product={product} />;
+        {collections.map((collection) => {
+          return <CollectionCard key={collection.id} collection={collection} />;
         })}
       </GridContainer>
     </PageWrapper>
@@ -22,14 +22,14 @@ const PageWrapper = styled.div`
   margin: 0 auto;
 `;
 
-export default Products;
+export default Collections;
 
 export async function getStaticProps() {
   //query storefront API and fetch all products in shop
-  const products = await shopifyClient.product.fetchAll();
+  const collections = await shopifyClient.collection.fetchAll();
 
   return {
     //data needs to be properly formatted
-    props: { products: JSON.parse(JSON.stringify(products)) },
+    props: { collections: JSON.parse(JSON.stringify(collections)) },
   };
 }
