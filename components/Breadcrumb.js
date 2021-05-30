@@ -35,6 +35,8 @@ const Breadcrumb = () => {
 };
 const BreadcrumbWrapper = styled.nav`
   display: flex;
+  width: 80%;
+  margin: 0 auto;
   gap: 1rem;
   padding-bottom: 1rem;
   padding-left: 1rem;
