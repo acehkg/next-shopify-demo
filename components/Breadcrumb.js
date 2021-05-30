@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import styled from 'styled-components';
+import { Icon } from 'semantic-ui-react';
 
 const Breadcrumb = () => {
   const { asPath } = useRouter();
@@ -11,27 +12,33 @@ const Breadcrumb = () => {
       <Link href='/'>
         <a>HOME</a>
       </Link>
-      <span>></span>
+
       {pathnames.map((name, index) => {
         const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
         const isLast = index === pathnames.length - 1;
         return isLast ? (
-          <p>{name.toUpperCase()}</p>
+          <>
+            <Icon name='angle right' />
+            <p>{name.toUpperCase()}</p>
+          </>
         ) : (
           <>
+            <Icon name='angle right' />
             <Link href={routeTo}>
               <a>{name.toUpperCase()}</a>
             </Link>
-            <span>></span>
           </>
         );
       })}
     </BreadcrumbWrapper>
   );
 };
-const BreadcrumbWrapper = styled.div`
+const BreadcrumbWrapper = styled.nav`
   display: flex;
-  gap: 2rem;
+  gap: 1rem;
   padding-bottom: 1rem;
+  padding-left: 1rem;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
 `;
 export default Breadcrumb;
