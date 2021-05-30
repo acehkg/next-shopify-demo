@@ -4,10 +4,13 @@ export const MenuContext = createContext();
 
 const NavOpen = ({ children }) => {
   const [open, setOpen] = useState(false);
+  const [crumb, setCrumb] = useState([]);
 
   const exposed = {
     open,
     setOpen,
+    crumb,
+    setCrumb,
   };
 
   return (

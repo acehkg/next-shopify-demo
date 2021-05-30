@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 //global styles and styles for components
 import GlobalStyles from '../style/GlobalStyles';
 import Font from '../style/Font';
@@ -11,6 +12,7 @@ import CartProvider from '../context/CartContext';
 import { CookiesProvider, useCookies } from 'react-cookie';
 //Layout Components
 import Header from '../components/header/Header';
+import Breadcumb from '../components/Breadcrumb';
 import Slider from '../components/header/Slider';
 
 function MyApp({ Component, pageProps }) {
@@ -52,6 +54,7 @@ function MyApp({ Component, pageProps }) {
           <NavOpenProvider>
             <Slider />
             <Header />
+            <Breadcumb />
             <Component {...pageProps} />
           </NavOpenProvider>
         </CartProvider>
