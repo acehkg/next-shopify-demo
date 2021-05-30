@@ -176,6 +176,7 @@ const Description = styled.p`
 const TwoOptionProduct = ({ product }) => {
   //for a product with to options render selectors and filter selections for target variantId
   const [selected, setSelected] = useState(product.variants);
+
   const [selectOne, setSelectOne] = useState();
   const [selectTwo, setSelectTwo] = useState();
   const [filter, setFilter] = useState('');

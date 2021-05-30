@@ -11,10 +11,11 @@ const Wrapper = styled.nav`
   align-items: center;
   padding-right: 1rem;
   color: var(--link-color);
+  font-size: 1rem;
 
   a {
     &:not(:first-child) {
-      padding-left: 5rem;
+      padding-left: 2rem;
     }
   }
 
