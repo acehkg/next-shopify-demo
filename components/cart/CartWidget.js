@@ -18,7 +18,13 @@ const CartWidget = () => {
   const price = cartData.checkout.totalPriceV2.amount;
   const total = (price * 1).toFixed(2);
   return (
-    <Flex direction='column' align='center' aria-label='cart'>
+    <Flex
+      direction='column'
+      align='center'
+      pt={[4, 4, 0, 0]}
+      pl={[0, 0, 4, 0]}
+      aria-label='cart'
+    >
       <RiShoppingCart2Line size={24} />
       <Text>${total}</Text>
     </Flex>

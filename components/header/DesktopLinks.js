@@ -1,4 +1,4 @@
-import { Flex } from '@chakra-ui/react';
+import { Flex, Spacer } from '@chakra-ui/react';
 import MenuItem from '../header/MenuItem';
 import CartWidget from '../cart/CartWidget';
 import links from '../../utils/links.json';
@@ -8,18 +8,22 @@ const DesktopLinks = () => {
     <Flex
       as='nav'
       display={['none', 'none', 'none', 'flex']}
-      w='70%'
+      w='60%'
       align='center'
       justify='flex-end'
-      style={{ gap: '3rem' }}
     >
       <MenuItem href='/'>HOME</MenuItem>
+      <Spacer />
       <MenuItem href='/products'>ALL PRODUCTS</MenuItem>
+      <Spacer />
       {links.map((link) => {
         return (
-          <MenuItem key={link.handle} href={`/collections/${link.handle}`}>
-            {link.title.toUpperCase()}
-          </MenuItem>
+          <>
+            <MenuItem key={link.handle} href={`/collections/${link.handle}`}>
+              {link.title.toUpperCase()}
+            </MenuItem>
+            <Spacer />
+          </>
         );
       })}
       <MenuItem href='/cart'>

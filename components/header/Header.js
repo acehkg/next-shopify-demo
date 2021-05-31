@@ -31,7 +31,6 @@ const Header = () => {
       <Flex
         direction={['column', 'column', 'row']}
         align='center'
-        style={{ gap: '.5rem' }}
         d={['flex', 'flex', 'flex', 'none']}
       >
         <Burger />
