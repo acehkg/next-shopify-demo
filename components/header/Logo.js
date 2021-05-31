@@ -1,16 +1,10 @@
-import styled from 'styled-components';
+import { Box, Image } from '@chakra-ui/react';
 
-const Wrapper = styled.div`
-  img {
-    width: 100px;
-    height: auto;
-  }
-`;
-const Logo = ({ image, alt }) => {
+const Logo = (props) => {
   return (
-    <Wrapper>
-      <img src={image} alt={alt} />
-    </Wrapper>
+    <Box {...props}>
+      <Image boxSize='100px' src='/images/logo.png' alt='Better Beer Co' />
+    </Box>
   );
 };
 export default Logo;

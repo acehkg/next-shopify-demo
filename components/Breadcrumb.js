@@ -1,46 +1,46 @@
 import { useRouter } from 'next/router';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  Text,
+} from '@chakra-ui/react';
 import Link from 'next/link';
-import styled from 'styled-components';
-import { Icon } from 'semantic-ui-react';
+import { FaChevronRight } from 'react-icons/fa';
 
-const Breadcrumb = () => {
+const Breadcrumbs = () => {
   const { asPath } = useRouter();
   const pathnames = asPath.split('/').filter((x) => x);
 
   return (
-    <BreadcrumbWrapper>
-      <Link href='/'>
-        <a>HOME</a>
-      </Link>
-
+    <Breadcrumb
+      p={8}
+      spacing='8px'
+      separator={<FaChevronRight />}
+      fontSize='sm'
+    >
+      <BreadcrumbItem>
+        <Link href='/'>
+          <BreadcrumbLink>HOME</BreadcrumbLink>
+        </Link>
+      </BreadcrumbItem>
       {pathnames.map((name, index) => {
         const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
         const isLast = index === pathnames.length - 1;
         return isLast ? (
-          <>
-            <Icon name='angle right' />
-            <p>{name.toUpperCase()}</p>
-          </>
+          <BreadcrumbItem key={name}>
+            <Text fontSize='sm'>{name.toUpperCase()}</Text>
+          </BreadcrumbItem>
         ) : (
-          <>
-            <Icon name='angle right' />
+          <BreadcrumbItem key={name}>
             <Link href={routeTo}>
-              <a>{name.toUpperCase()}</a>
+              <BreadcrumbLink>{name.toUpperCase()}</BreadcrumbLink>
             </Link>
-          </>
+          </BreadcrumbItem>
         );
       })}
-    </BreadcrumbWrapper>
+    </Breadcrumb>
   );
 };
-const BreadcrumbWrapper = styled.nav`
-  display: flex;
-  width: 80%;
-  margin: 0 auto;
-  gap: 1rem;
-  padding-bottom: 1rem;
-  padding-left: 1rem;
-  flex-wrap: wrap;
-  font-size: 0.75rem;
-`;
-export default Breadcrumb;
+
+export default Breadcrumbs;

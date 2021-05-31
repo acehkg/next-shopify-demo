@@ -1,17 +1,8 @@
-import styled from 'styled-components';
-import Link from 'next/link';
+import { Flex } from '@chakra-ui/react';
 import useNav from '../../hooks/useNav';
 import links from '../../utils/links.json';
+import MenuItem from '../header/MenuItem';
 
-const Wrapper = styled.nav`
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  color: var(--link-color);
-`;
 const MobileLinks = () => {
   const { open, setOpen } = useNav();
 
@@ -20,21 +11,31 @@ const MobileLinks = () => {
   };
 
   return (
-    <Wrapper>
-      <Link href={'/'}>
-        <a onClick={handleNav}>HOME</a>
-      </Link>
-      <Link href={'/products'}>
-        <a onClick={handleNav}>ALL PRODUCTS</a>
-      </Link>
+    <Flex
+      as='nav'
+      direction='column'
+      justify='space-evenly'
+      align='center'
+      h='100%'
+    >
+      <MenuItem href={'/'} onClick={handleNav}>
+        HOME
+      </MenuItem>
+      <MenuItem href={'/products'} onClick={handleNav}>
+        ALL PRODUCTS
+      </MenuItem>
       {links.map((link) => {
         return (
-          <Link key={link.handle} href={`/collections/${link.handle}`}>
-            <a onClick={handleNav}>{link.title.toUpperCase()}</a>
-          </Link>
+          <MenuItem
+            key={link.handle}
+            href={`/collections/${link.handle}`}
+            onClick={handleNav}
+          >
+            {link.title.toUpperCase()}
+          </MenuItem>
         );
       })}
-    </Wrapper>
+    </Flex>
   );
 };
 
