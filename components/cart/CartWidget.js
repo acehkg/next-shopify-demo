@@ -21,7 +21,7 @@ const CartWidget = () => {
     <Flex
       direction='column'
       align='center'
-      pt={[4, 4, 0, 0]}
+      pt={[2, 2, 0, 0]}
       pl={[0, 0, 4, 0]}
       aria-label='cart'
     >
