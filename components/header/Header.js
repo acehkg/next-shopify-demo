@@ -29,7 +29,7 @@ const Header = () => {
 
   return (
     <Head open={open}>
-      <Logo image='/images/logo.jpg' alt='logo' />
+      <Logo image='/images/logo.png' alt='Better Beer Co' />
       <BurgerWrapper>
         <MobileCartDisplay />
         <Burger />

@@ -8,7 +8,7 @@ const Waiting = () => {
   return <Zero>$0.00</Zero>;
 };
 const Zero = styled.p`
-  color: #fff;
+  color: var(--link-color);
   @media (min-width: 769px) {
     display: none;
   }
@@ -45,7 +45,7 @@ const WidgetWrapper = styled.a`
 const Total = styled.p`
   padding-top: 0.6rem;
   font-size: 1rem;
-  color: #fff;
+  color: var(--link-color);
 `;
 
 export default MobileCartDisplay;

@@ -77,10 +77,10 @@ a {
     --background-color:#fff;
     --dark-background:grey;
     --light-background:lightgrey;
-    --burger-color:#fff;
+    --burger-color:black;
     --slider-color:grey;
-    --header-color:black;
-    --link-color:#fff;
+    --header-color:#fff;
+    --link-color:black;
   
 
 
