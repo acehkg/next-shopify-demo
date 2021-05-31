@@ -16,6 +16,8 @@ const DesktopLinks = () => {
       <Spacer />
       <MenuItem href='/collections'>COLLECTIONS</MenuItem>
       <Spacer />
+      <MenuItem href='/products'>ALL PRODUCTS</MenuItem>
+      <Spacer />
       {links.map((link) => {
         return (
           <>

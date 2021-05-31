@@ -4,40 +4,44 @@ import Link from 'next/link';
 import useCartContext from '../../hooks/useCartContext';
 import { mutate } from 'swr';
 //styling
+import {
+  LinkBox,
+  LinkOverlay,
+  Heading,
+  Text,
+  Image,
+  Box,
+  Flex,
+  Button,
+  Radio,
+  RadioGroup,
+  Stack,
+} from '@chakra-ui/react';
 import styled from 'styled-components';
-import { Select, Button, Icon } from 'semantic-ui-react';
+import { Select, Icon } from 'semantic-ui-react';
 
 const CardImage = ({ product, variant }) => {
   //filter for and display image of selected variant
   const variantSelected = product.variants.filter((v) => v.id === variant);
 
-  return <Image src={variantSelected[0].image.src} />;
+  return <CustomImage src={variantSelected[0].image.src} alt={product.title} />;
 };
 
-const Image = styled.img`
+const CustomImage = styled.img`
   width: 100%;
   height: auto;
 `;
+
 const CardContent = ({ title, description }) => {
   return (
-    <ContentWrapper>
-      <Title>{title}</Title>
-      <Description>{description}</Description>
-    </ContentWrapper>
+    <Box textAlign='center'>
+      <Heading as='h2' pb={'2rem'}>
+        {title}
+      </Heading>
+      <Text pb={'2rem'}>{description}</Text>
+    </Box>
   );
 };
-
-const ContentWrapper = styled.div`
-  text-align: center;
-`;
-const Title = styled.h3`
-  font-size: 1.5rem;
-  padding: 1rem;
-`;
-
-const Description = styled.p`
-  padding: 1rem;
-`;
 
 const OptionsSelect = ({ options, onChange }) => {
   return (
@@ -82,6 +86,7 @@ const BuyNow = ({ options, onChange, onClick, variants, oneVariant }) => {
       </OneWrapper>
     );
   }
+
   return (
     <BuyWrapper>
       <OptionsSelect options={options} onChange={onChange} />
@@ -147,44 +152,42 @@ const ProductCard = ({ product }) => {
     setSelected(id);
   };
   return (
-    <Wrapper>
+    <Flex
+      maxW='20rem'
+      direction='column'
+      justify='space-between'
+      align='center'
+      boxShadow={['none', 'md', 'md']}
+      _hover={[
+        { boxShadow: 'none' },
+        { boxShadow: 'lg' },
+        { boxShadow: 'lg' },
+        { boxShadow: 'lg' },
+      ]}
+      rounded='md'
+      p={4}
+    >
       <CardImage product={product} variant={selected} />
 
       <CardContent title={product.title} description={product.description} />
-      <DetailsWrapper>
+      <Box pb={'1rem'}>
         <Link href={`/products/${product.handle}`}>
-          <Button as='a'>PRODUCT DETAILS</Button>
+          <Button as='a' colorScheme='gray' mb={'2rem'} size='lg'>
+            PRODUCT DETAILS
+          </Button>
         </Link>
-      </DetailsWrapper>
+      </Box>
       <BuyNow
         options={selectOptions}
         onChange={selectChange}
         onClick={handleClick}
         variants={variants}
         oneVariant={oneVariant}
+        selected={selected}
       />
-    </Wrapper>
+    </Flex>
   );
 };
-
-const Wrapper = styled.div`
-  width: 20rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-
-  @media (min-width: 375px) {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    transition: 0.3s;
-  }
-
-  @media (min-width: 1024px) {
-    &:hover {
-      box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-    }
-  }
-`;
 
 const DetailsWrapper = styled.div`
   padding-bottom: 1rem;

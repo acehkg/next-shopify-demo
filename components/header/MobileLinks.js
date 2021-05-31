@@ -24,6 +24,9 @@ const MobileLinks = () => {
       <MenuItem href={'/collections'} onClick={handleNav}>
         COLLECTIONS
       </MenuItem>
+      <MenuItem href={'/products'} onClick={handleNav}>
+        ALL PRODUCTS
+      </MenuItem>
       {links.map((link) => {
         return (
           <MenuItem

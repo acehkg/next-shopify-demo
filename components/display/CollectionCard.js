@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import Link from 'next/link';
 import { LinkBox, LinkOverlay, Heading, Text, Image } from '@chakra-ui/react';
 
@@ -24,23 +23,4 @@ const CollectionCard = ({ collection }) => {
   );
 };
 
-const Wrapper = styled.a`
-  width: 20rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-
-  @media (min-width: 375px) {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    transition: 0.3s;
-  }
-
-  @media (min-width: 1024px) {
-    &:hover {
-      box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
-    }
-  }
-`;
 export default CollectionCard;
