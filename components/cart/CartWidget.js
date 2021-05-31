@@ -7,7 +7,7 @@ const Waiting = () => {
   return <Zero>$0.00</Zero>;
 };
 const Zero = styled.p`
-  color: #fff;
+  color: var(--link-color);
 `;
 const CartWidget = () => {
   const { checkoutId } = useCartContext();
@@ -34,7 +34,7 @@ const WidgetWrapper = styled.div`
   justify-content: space-evenly;
 `;
 const Total = styled.p`
-  color: #fff;
+  color: var(--link-color);
 `;
 
 export default CartWidget;
