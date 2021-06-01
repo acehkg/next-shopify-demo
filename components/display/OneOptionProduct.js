@@ -1,71 +1,186 @@
 import { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import { useRouter } from 'next/router';
 //cart context and data
 import useCartContext from '../../hooks/useCartContext';
 import { mutate } from 'swr';
 //chakra ui
-import { Flex, Text, Heading, Radio, RadioGroup } from '@chakra-ui/react';
+import {
+  Flex,
+  Stack,
+  Text,
+  Heading,
+  Radio,
+  RadioGroup,
+  IconButton,
+  Button,
+} from '@chakra-ui/react';
+//icons
+import { FiPlusSquare, FiMinusSquare } from 'react-icons/fi';
+import { FaCartPlus } from 'react-icons/fa';
 
-const Selector = ({ values, selectOne, setSelectOne }) => {
+const ImageGroup = ({ product, selected }) => {
   return (
-    <RadioGroup value={selectOne} onChange={setSelectOne}>
-      {values.map((value) => {
-        return <Radio value={value.value}>{value.value}</Radio>;
-      })}
-    </RadioGroup>
+    <Flex>
+      <img
+        src={selected.image.src}
+        alt={product.title}
+        style={{ width: '100%', height: 'auto' }}
+      />
+    </Flex>
   );
 };
 
-const ImageGroup = ({ product, selected }) => {
-  return <Flex></Flex>;
+const RadioSelect = ({ filter, setFilter, optionOne, variants }) => {
+  return (
+    <RadioGroup defaultValue={filter} value={filter} onChange={setFilter}>
+      <Stack direction='row' spacing={4}>
+        {optionOne.values.map((value) => {
+          return (
+            <Radio key={value.value} value={value.value} colorScheme='gray'>
+              {value.value}
+            </Radio>
+          );
+        })}
+      </Stack>
+      <Stack direction='row' spacing={4}>
+        {variants.map((variant) => {
+          return (
+            <Text>
+              ${variant.price}
+              {variant.priceV2.currencyCode}
+            </Text>
+          );
+        })}
+      </Stack>
+    </RadioGroup>
+  );
+};
+const Quantity = ({ quantity, incrementQty, decrementQty }) => {
+  return (
+    <Stack direction='row' spacing={4} pt={'2rem'}>
+      <IconButton
+        aria-label='Increase Quantity'
+        icon={<FiPlusSquare />}
+        size='xs'
+        onClick={incrementQty}
+      />
+      <Text>{quantity}</Text>
+      <IconButton
+        aria-label='Decrease Quantity'
+        icon={<FiMinusSquare />}
+        size='xs'
+        onClick={decrementQty}
+      />
+    </Stack>
+  );
+};
+
+const BuyGroup = ({ totalPrice, currencyCode, handleClick }) => {
+  return (
+    <Button
+      rightIcon={<FaCartPlus />}
+      mt={'2rem'}
+      mb={'2rem'}
+      minWidth={['50%', '50%', '100%', '80%']}
+      onClick={handleClick}
+    >
+      ${totalPrice}
+      {currencyCode}
+    </Button>
+  );
 };
 const OneOptionProduct = ({ product }) => {
   //for a product with to options render selectors and filter selections for target variantId
   const [selected, setSelected] = useState(product.variants[0]);
-  const [selectOne, setSelectOne] = useState();
-  const [filter, setFilter] = useState('');
+  const [filter, setFilter] = useState(product.options[0].values[0].value);
   const [quantity, setQuantity] = useState(1);
   //checkoutid
   const { checkoutId, addItemToCart } = useCartContext();
   //seperate the two options arrays
   const optionOne = product.options[0];
 
-  //create filter from the two selections
-  useEffect(() => {
-    setFilter(() => selectOne);
-  }, [selectOne]);
-
   //filter the array of variants for the created filter and return selected varaiant
   useEffect(() => {
     const filtered = product.variants.filter((variant) => {
       return variant.title.includes(filter);
     });
-    setSelected(() => filtered);
+    setSelected(() => filtered[0]);
   }, [filter]);
+
+  const incrementQty = () => {
+    setQuantity(() => quantity + 1);
+  };
+
+  const decrementQty = () => {
+    quantity === 1 ? setQuantity(1) : setQuantity(() => quantity - 1);
+  };
+
+  const totalPrice = quantity * selected.price;
+
+  const router = useRouter();
 
   const handleClick = async () => {
     try {
-      await addItemToCart(selected[0].id, quantity, checkoutId);
+      await addItemToCart(selected.id, quantity, checkoutId);
       mutate([`/api/existingCheckout/`, checkoutId]);
+      router.push('/cart');
     } catch (e) {
       console.log('Error adding item to cart...');
       console.log(e);
     }
   };
 
-  const handleQty = (e) => {
-    setQuantity(() => e.value);
-  };
-  console.log(selected);
   return (
-    <Flex direction='column' align='center'>
-      <ImageGroup product={product} selected={selected} />
-      <Selector
-        values={optionOne.values}
-        selectOne={selectOne}
-        setSelectOne={setSelectOne}
-      />
-    </Flex>
+    <>
+      <Heading
+        textAlign='center'
+        width={'90%'}
+        ml={'auto'}
+        mr={'auto'}
+        pt={'2rem'}
+      >
+        {product.title}
+      </Heading>
+      <Flex
+        direction={['column', 'column', 'row', 'row']}
+        align='center'
+        width={'90%'}
+        ml={'auto'}
+        mr={'auto'}
+      >
+        <ImageGroup product={product} selected={selected} />
+
+        <Flex
+          direction='column'
+          align='center'
+          width={['100%', '100%', '50%', '50%']}
+        >
+          <Text
+            pt={'2rem'}
+            pb={'2rem'}
+            align={['center', 'center', 'left', 'left']}
+          >
+            {product.description}
+          </Text>
+          <RadioSelect
+            optionOne={optionOne}
+            filter={filter}
+            setFilter={setFilter}
+            variants={product.variants}
+          />
+          <Quantity
+            quantity={quantity}
+            incrementQty={incrementQty}
+            decrementQty={decrementQty}
+          />
+          <BuyGroup
+            totalPrice={totalPrice}
+            currencyCode={selected.priceV2.currencyCode}
+            handleClick={handleClick}
+          />
+        </Flex>
+      </Flex>
+    </>
   );
 };
 
