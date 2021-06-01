@@ -1,161 +1,58 @@
-import { useState, useEffect } from 'react';
 import Link from 'next/link';
-//cart context and data
-import useCartContext from '../../hooks/useCartContext';
-import { mutate } from 'swr';
 //styling
-import {
-  LinkBox,
-  LinkOverlay,
-  Heading,
-  Text,
-  Image,
-  Box,
-  Flex,
-  Button,
-  Radio,
-  RadioGroup,
-  Stack,
-} from '@chakra-ui/react';
-import styled from 'styled-components';
-import { Select, Icon } from 'semantic-ui-react';
+import { Heading, Text, Box, Flex, Button } from '@chakra-ui/react';
+import { HiChevronDoubleRight } from 'react-icons/hi';
 
-const CardImage = ({ product, variant }) => {
-  //filter for and display image of selected variant
-  const variantSelected = product.variants.filter((v) => v.id === variant);
-
-  return <CustomImage src={variantSelected[0].image.src} alt={product.title} />;
+const CardImage = ({ product }) => {
+  return (
+    <img
+      src={product.images[0].src}
+      alt={product.title}
+      style={{ width: '100%', height: 'auto' }}
+    />
+  );
 };
-
-const CustomImage = styled.img`
-  width: 100%;
-  height: auto;
-`;
 
 const CardContent = ({ title, description }) => {
   return (
     <Box textAlign='center'>
-      <Heading as='h2' pb={'2rem'}>
+      <Heading as='h2' pb={'2rem'} fontSize='2xl'>
         {title}
       </Heading>
-      <Text pb={'2rem'}>{description}</Text>
+      <Heading as='h4' fontSize='lg' fontWeight='regular'>
+        {description}
+      </Heading>
     </Box>
   );
 };
 
-const OptionsSelect = ({ options, onChange }) => {
-  return (
-    <SelectWrapper>
-      <Select
-        placeholder='Select Options'
-        options={options}
-        onChange={onChange}
-        aria-label='select options'
-      />
-    </SelectWrapper>
-  );
-};
-const SelectWrapper = styled.div`
-  padding: 0 1rem;
-`;
-
-const BuyButton = ({ onClick }) => {
-  return (
-    <ButtonWrapper>
-      <Button icon onClick={onClick} aria-label='Buy Now'>
-        <Icon name='add to cart' />
-      </Button>
-    </ButtonWrapper>
-  );
-};
-const ButtonWrapper = styled.div`
-  padding-right: 0.75rem;
-`;
-
-const BuyNow = ({ options, onChange, onClick, variants, oneVariant }) => {
-  //if no variants render a buy button only else render the select
-  if (variants.length === 1) {
-    useEffect(() => {
-      oneVariant(variants[0].id);
-    }, []);
-
-    return (
-      <OneWrapper>
-        <OnePrice>${variants[0].price}</OnePrice>
-        <BuyButton onClick={onClick} />
-      </OneWrapper>
-    );
-  }
-
-  return (
-    <BuyWrapper>
-      <OptionsSelect options={options} onChange={onChange} />
-      <BuyButton onClick={onClick} />
-    </BuyWrapper>
-  );
-};
-
-const BuyWrapper = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  padding-bottom: 1rem;
-`;
-
-const OneWrapper = styled.div`
-  display: flex;
-  width: 50%;
-  justify-content: space-evenly;
-  align-items: center;
-  padding-bottom: 1rem;
-`;
-const OnePrice = styled.p``;
-const ProductCard = ({ product }) => {
-  //retrieve checkout ID and funtions from cart context for adding to cart
-  const { addItemToCart, checkoutId } = useCartContext();
-
-  //function to create the options array for the semantic UI react select component
-  const selectOptions = product.variants.map((variant) => {
-    return {
-      key: variant.id,
-      value: variant.id,
-      text:
-        variant.title +
-        ' ' +
-        '$' +
-        variant.price +
-        variant.priceV2.currencyCode,
-    };
+const Price = ({ variants }) => {
+  //create an array of prices
+  const prices = variants.map((variant) => {
+    return variant.price;
   });
+  //determin whether all prices are the same or not and render appropriate information (price or From Price)
+  const allEqual = (arr) => arr.every((v) => v === arr[0]);
+  return (
+    <Flex pb={'1rem'} pt={'1rem'}>
+      {allEqual(prices) ? (
+        <Text>${prices[0]}</Text>
+      ) : (
+        <Text>FROM ${Math.min(...prices)}</Text>
+      )}
+    </Flex>
+  );
+};
 
-  //set state of selected variant
-  const variants = product.variants;
-  const [selected, setSelected] = useState(variants[0].id);
-
-  //evetn handler for add to cart button
-  const handleClick = async () => {
-    try {
-      await addItemToCart(selected, 1, checkoutId);
-      mutate([`/api/existingCheckout/`, checkoutId]);
-    } catch (e) {
-      console.log('Error adding item to cart...');
-      console.log(e);
-    }
-  };
-  //evetn handler for change dropdown value
-  const selectChange = (e, data) => {
-    e.preventDefault();
-    setSelected(data.value);
-  };
-
-  //only one variant
-  const oneVariant = (id) => {
-    setSelected(id);
-  };
+const ProductCard = ({ product }) => {
+  //product description should include h3 tagged short desciption at the top
+  const filteredDescription = /<h3>(.*?)<\/h3>/.exec(product.descriptionHtml);
+  const shortDescription = filteredDescription[1];
   return (
     <Flex
       maxW='20rem'
       direction='column'
-      justify='space-between'
+      justify='space-evenly'
       align='center'
       boxShadow={['none', 'md', 'md']}
       _hover={[
@@ -167,29 +64,24 @@ const ProductCard = ({ product }) => {
       rounded='md'
       p={4}
     >
-      <CardImage product={product} variant={selected} />
+      <CardImage product={product} />
 
-      <CardContent title={product.title} description={product.description} />
+      <CardContent title={product.title} description={shortDescription} />
+      <Price variants={product.variants} />
       <Box pb={'1rem'}>
         <Link href={`/products/${product.handle}`}>
-          <Button as='a' colorScheme='gray' mb={'2rem'} size='lg'>
-            PRODUCT DETAILS
+          <Button
+            as='a'
+            rightIcon={<HiChevronDoubleRight />}
+            variant='outline'
+            borderRadius='0'
+          >
+            BUY NOW
           </Button>
         </Link>
       </Box>
-      <BuyNow
-        options={selectOptions}
-        onChange={selectChange}
-        onClick={handleClick}
-        variants={variants}
-        oneVariant={oneVariant}
-        selected={selected}
-      />
     </Flex>
   );
 };
 
-const DetailsWrapper = styled.div`
-  padding-bottom: 1rem;
-`;
 export default ProductCard;
