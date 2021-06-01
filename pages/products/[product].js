@@ -1,8 +1,10 @@
 import { shopifyClient } from '../../utils/client';
-import ProductPage from '../../components/display/ProductPage';
+import NoOptionProduct from '../../components/display/NoOptionProduct';
+import OneOptionProduct from '../../components/display/OneOptionProduct';
+import TwoOptionProduct from '../../components/display/TwoOptionProduct';
 
 const Product = ({ product }) => {
-  /*if (product.variants.length === 1) {
+  if (product.variants.length === 1) {
     return <NoOptionProduct product={product} />;
   }
   if (product.options.length === 1) {
@@ -11,9 +13,8 @@ const Product = ({ product }) => {
   if (product.options.length === 2) {
     return <TwoOptionProduct product={product} />;
   }
-};*/
-  return <ProductPage product={product} />;
 };
+
 export default Product;
 
 export async function getStaticPaths() {
