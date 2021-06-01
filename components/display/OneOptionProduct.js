@@ -16,6 +16,7 @@ import {
   IconButton,
   Button,
   VisuallyHidden,
+  Image,
 } from '@chakra-ui/react';
 //icons
 import { FiPlusSquare, FiMinusSquare } from 'react-icons/fi';
@@ -23,9 +24,9 @@ import { FaCartPlus } from 'react-icons/fa';
 
 const ImageGroup = ({ product, selected }) => {
   return (
-    <Flex>
+    <div>
       <CustomImage src={selected.image.src} alt={product.title} />
-    </Flex>
+    </div>
   );
 };
 const CustomImage = styled.img`
