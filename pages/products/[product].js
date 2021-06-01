@@ -1,7 +1,7 @@
 import { shopifyClient } from '../../utils/client';
 import NoOptionProduct from '../../components/display/NoOptionProduct';
 import OneOptionProduct from '../../components/display/OneOptionProduct';
-import TwoOptionProduct from '../../components/display/TwoOptionProduct';
+import TwoOptionProduct from '../../components/display/TwoOptionsProduct';
 
 const Product = ({ product }) => {
   if (product.variants.length === 1) {

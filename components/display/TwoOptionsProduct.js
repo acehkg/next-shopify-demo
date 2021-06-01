@@ -9,10 +9,9 @@ import {
   Stack,
   Text,
   Heading,
-  Radio,
-  RadioGroup,
   IconButton,
   Button,
+  Select,
 } from '@chakra-ui/react';
 //icons
 import { FiPlusSquare, FiMinusSquare } from 'react-icons/fi';
@@ -30,29 +29,17 @@ const ImageGroup = ({ product, selected }) => {
   );
 };
 
-const RadioSelect = ({ filter, setFilter, optionOne, variants }) => {
+const SelectGroup = ({ values, onChange }) => {
   return (
-    <RadioGroup defaultValue={filter} value={filter} onChange={setFilter}>
-      <Stack direction='row' spacing={4}>
-        {optionOne.values.map((value) => {
-          return (
-            <Radio key={value.value} value={value.value} colorScheme='gray'>
-              {value.value}
-            </Radio>
-          );
-        })}
-      </Stack>
-      <Stack direction='row' spacing={4}>
-        {variants.map((variant) => {
-          return (
-            <Text key={variant.id}>
-              ${variant.price}
-              {variant.priceV2.currencyCode}
-            </Text>
-          );
-        })}
-      </Stack>
-    </RadioGroup>
+    <Select size='lg' onChange={onChange}>
+      {values.map((value) => {
+        return (
+          <option key={value.value} value={value.value}>
+            {value.value}
+          </option>
+        );
+      })}
+    </Select>
   );
 };
 const Quantity = ({ quantity, incrementQty, decrementQty }) => {
@@ -89,17 +76,27 @@ const BuyGroup = ({ totalPrice, currencyCode, handleClick }) => {
     </Button>
   );
 };
-const OneOptionProduct = ({ product }) => {
-  //for a product with to options render selectors and filter selections for target variantId
-  const [selected, setSelected] = useState(product.variants[0]);
-  const [filter, setFilter] = useState(product.options[0].values[0].value);
-  const [quantity, setQuantity] = useState(1);
+const TwoOptionProduct = ({ product }) => {
   //checkoutid
   const { checkoutId, addItemToCart } = useCartContext();
+  //for a product with to options render selectors and filter selections for target variantId
+
+  const [quantity, setQuantity] = useState(1);
+
   //seperate the two options arrays
   const optionOne = product.options[0];
+  const [selectOne, setSelectOne] = useState('');
+  const optionTwo = product.options[1];
+  const [selectTwo, setSelectTwo] = useState('');
+
+  //create filter from the two selections
+  const [filter, setFilter] = useState('');
+  useEffect(() => {
+    setFilter(() => selectOne + ' ' + '/' + ' ' + selectTwo);
+  }, [selectOne, selectTwo]);
 
   //filter the array of variants for the created filter and return selected varaiant
+  const [selected, setSelected] = useState(product.variants[0]);
   useEffect(() => {
     const filtered = product.variants.filter((variant) => {
       return variant.title.includes(filter);
@@ -107,21 +104,12 @@ const OneOptionProduct = ({ product }) => {
     setSelected(() => filtered[0]);
   }, [filter]);
 
-  const incrementQty = () => {
-    setQuantity(() => quantity + 1);
-  };
-
-  const decrementQty = () => {
-    quantity === 1 ? setQuantity(1) : setQuantity(() => quantity - 1);
-  };
-
   //calculate totaprice when selected changes
   const [totalPrice, setTotalPrice] = useState(0.0);
   useEffect(() => {
     const price = selected.price;
     setTotalPrice(price * quantity);
   }, [quantity]);
-
   const router = useRouter();
 
   const handleClick = async () => {
@@ -133,6 +121,25 @@ const OneOptionProduct = ({ product }) => {
       console.log('Error adding item to cart...');
       console.log(e);
     }
+  };
+
+  //set respective states from the individual selects
+  const handleChangeOne = (e) => {
+    e.preventDefault();
+    setSelectOne(() => e.target.value);
+  };
+
+  const handleChangeTwo = (e) => {
+    e.preventDefault();
+    setSelectTwo(() => e.target.value);
+  };
+
+  const incrementQty = () => {
+    setQuantity(() => quantity + 1);
+  };
+
+  const decrementQty = () => {
+    quantity === 1 ? setQuantity(1) : setQuantity(() => quantity - 1);
   };
 
   return (
@@ -154,7 +161,6 @@ const OneOptionProduct = ({ product }) => {
         mr={'auto'}
       >
         <ImageGroup product={product} selected={selected} />
-
         <Flex
           direction='column'
           align='center'
@@ -167,12 +173,15 @@ const OneOptionProduct = ({ product }) => {
           >
             {product.description}
           </Text>
-          <RadioSelect
-            optionOne={optionOne}
-            filter={filter}
-            setFilter={setFilter}
-            variants={product.variants}
-          />
+          <Stack
+            direction='row'
+            spacing={2}
+            width={['19rem', '19rem', '20rem', '20rem']}
+          >
+            <SelectGroup values={optionOne.values} onChange={handleChangeOne} />
+            <SelectGroup values={optionTwo.values} onChange={handleChangeTwo} />
+          </Stack>
+
           <Quantity
             quantity={quantity}
             incrementQty={incrementQty}
@@ -189,4 +198,4 @@ const OneOptionProduct = ({ product }) => {
   );
 };
 
-export default OneOptionProduct;
+export default TwoOptionProduct;
