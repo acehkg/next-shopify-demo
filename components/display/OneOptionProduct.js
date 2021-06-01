@@ -3,6 +3,8 @@ import { useRouter } from 'next/router';
 //cart context and data
 import useCartContext from '../../hooks/useCartContext';
 import { mutate } from 'swr';
+//styled components for image component
+import styled from 'styled-components';
 //chakra ui
 import {
   Flex,
@@ -13,6 +15,7 @@ import {
   RadioGroup,
   IconButton,
   Button,
+  VisuallyHidden,
 } from '@chakra-ui/react';
 //icons
 import { FiPlusSquare, FiMinusSquare } from 'react-icons/fi';
@@ -21,15 +24,14 @@ import { FaCartPlus } from 'react-icons/fa';
 const ImageGroup = ({ product, selected }) => {
   return (
     <Flex>
-      <img
-        src={selected.image.src}
-        alt={product.title}
-        style={{ width: '100%', height: 'auto' }}
-      />
+      <CustomImage src={selected.image.src} alt={product.title} />
     </Flex>
   );
 };
-
+const CustomImage = styled.img`
+  width: 100%;
+  height: auto;
+`;
 const RadioSelect = ({ filter, setFilter, optionOne, variants }) => {
   return (
     <RadioGroup defaultValue={filter} value={filter} onChange={setFilter}>
@@ -57,25 +59,31 @@ const RadioSelect = ({ filter, setFilter, optionOne, variants }) => {
 };
 const Quantity = ({ quantity, incrementQty, decrementQty }) => {
   return (
-    <Stack direction='row' spacing={4} pt={'2rem'}>
+    <Stack direction='row' spacing={8} pt={'2rem'}>
       <IconButton
         aria-label='Increase Quantity'
         icon={<FiPlusSquare />}
-        size='xs'
+        size='sm'
         onClick={incrementQty}
       />
       <Text>{quantity}</Text>
       <IconButton
         aria-label='Decrease Quantity'
         icon={<FiMinusSquare />}
-        size='xs'
+        size='sm'
         onClick={decrementQty}
       />
     </Stack>
   );
 };
 
-const BuyGroup = ({ totalPrice, currencyCode, handleClick }) => {
+const BuyGroup = ({
+  totalPrice,
+  currencyCode,
+  handleClick,
+  quantity,
+  title,
+}) => {
   return (
     <Button
       rightIcon={<FaCartPlus />}
@@ -84,6 +92,9 @@ const BuyGroup = ({ totalPrice, currencyCode, handleClick }) => {
       minWidth={['50%', '50%', '100%', '80%']}
       onClick={handleClick}
     >
+      <VisuallyHidden>
+        Add {quantity} {title} to your cart
+      </VisuallyHidden>
       ${totalPrice}
       {currencyCode}
     </Button>
@@ -120,7 +131,7 @@ const OneOptionProduct = ({ product }) => {
   useEffect(() => {
     const price = selected.price;
     setTotalPrice(price * quantity);
-  }, [quantity]);
+  }, [quantity, selected]);
 
   const router = useRouter();
 
@@ -182,6 +193,8 @@ const OneOptionProduct = ({ product }) => {
             totalPrice={totalPrice}
             currencyCode={selected.priceV2.currencyCode}
             handleClick={handleClick}
+            quantity={quantity}
+            title={product.title}
           />
         </Flex>
       </Flex>

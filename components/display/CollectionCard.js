@@ -4,6 +4,7 @@ import { LinkBox, LinkOverlay, Heading, Text, Image } from '@chakra-ui/react';
 const CollectionCard = ({ collection }) => {
   return (
     <LinkBox
+      aria-label='Visit Item in Collection'
       display='flex'
       flexDirection='column'
       maxWidth='20rem'

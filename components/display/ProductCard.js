@@ -1,16 +1,10 @@
 import Link from 'next/link';
 //styling
-import { Heading, Text, Box, Flex, Button } from '@chakra-ui/react';
+import { Heading, Text, Box, Flex, Button, Image } from '@chakra-ui/react';
 import { HiChevronDoubleRight } from 'react-icons/hi';
 
 const CardImage = ({ product }) => {
-  return (
-    <img
-      src={product.images[0].src}
-      alt={product.title}
-      style={{ width: '100%', height: 'auto' }}
-    />
-  );
+  return <Image src={product.images[0].src} alt={product.title} />;
 };
 
 const CardContent = ({ title, description }) => {
@@ -75,6 +69,7 @@ const ProductCard = ({ product }) => {
             rightIcon={<HiChevronDoubleRight />}
             variant='outline'
             borderRadius='0'
+            aria-label='Buy Now'
           >
             BUY NOW
           </Button>
