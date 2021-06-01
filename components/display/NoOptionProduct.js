@@ -1,149 +1,147 @@
 import { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import { useRouter } from 'next/router';
 //cart context and data
 import useCartContext from '../../hooks/useCartContext';
 import { mutate } from 'swr';
-import { Select, Icon } from 'semantic-ui-react';
-import { createNumberOptions } from '../../utils/utils';
+//chakra ui
+import {
+  Flex,
+  Stack,
+  Text,
+  Heading,
+  IconButton,
+  Button,
+} from '@chakra-ui/react';
+//icons
+import { FiPlusSquare, FiMinusSquare } from 'react-icons/fi';
+import { FaCartPlus } from 'react-icons/fa';
 
-const QtyBuy = ({ quantity, handleQty, number, handleClick }) => {
-  const options = createNumberOptions(number);
-
+const ImageGroup = ({ product, selected }) => {
   return (
-    <BuyWrapper>
-      <InputWrapper>
-        <Select
-          aria-label='Quantity'
-          options={options}
-          placeholder={`${quantity}`}
-          onChange={handleQty}
-          fluid={true}
-        />
-      </InputWrapper>
-      <ButtonWrapper>
-        <BuyButton onClick={handleClick}>
-          <Icon name='add to cart' />
-        </BuyButton>
-      </ButtonWrapper>
-    </BuyWrapper>
+    <Flex>
+      <img
+        src={selected.image.src}
+        alt={product.title}
+        style={{ width: '100%', height: 'auto' }}
+      />
+    </Flex>
   );
 };
 
-const BuyWrapper = styled.div`
-  width: 100%;
-  margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const InputWrapper = styled.div``;
-
-const ButtonWrapper = styled.div``;
-
-const BuyButton = styled.button`
-  padding-top: 0.25rem;
-  width: 3rem;
-  height: 2.8rem;
-  text-align: center;
-  background: lightgrey;
-  border: none;
-  border-radius: 0.25rem;
-`;
-
-const SelectedImage = ({ selected }) => {
-  return <Image src={selected.images[0].src} alt={selected.title} />;
-};
-const Image = styled.img`
-  width: 100%;
-  height: auto;
-`;
-
-const ProductDescription = ({ product }) => {
+const Quantity = ({ quantity, incrementQty, decrementQty }) => {
   return (
-    <DescriptionWrapper>
-      <Title>{product.title}</Title>
-      <Description>{product.description}</Description>
-    </DescriptionWrapper>
+    <Stack direction='row' spacing={4} pt={'2rem'}>
+      <IconButton
+        aria-label='Increase Quantity'
+        icon={<FiPlusSquare />}
+        size='xs'
+        onClick={incrementQty}
+      />
+      <Text>{quantity}</Text>
+      <IconButton
+        aria-label='Decrease Quantity'
+        icon={<FiMinusSquare />}
+        size='xs'
+        onClick={decrementQty}
+      />
+    </Stack>
   );
 };
 
-const DescriptionWrapper = styled.div`
-  padding: 2rem 0;
-  width: 80%;
-  margin: 0 auto;
-`;
-const Title = styled.h3`
-  font-size: 1.5rem;
-  text-align: center;
-  padding: 1rem 0;
-`;
-const Description = styled.p`
-  line-height: 1.45;
-  text-align: center;
-`;
+const BuyGroup = ({ totalPrice, currencyCode, handleClick }) => {
+  return (
+    <Button
+      rightIcon={<FaCartPlus />}
+      mt={'2rem'}
+      mb={'2rem'}
+      minWidth={['50%', '50%', '100%', '80%']}
+      onClick={handleClick}
+    >
+      ${totalPrice}
+      {currencyCode}
+    </Button>
+  );
+};
 const NoOptionProduct = ({ product }) => {
-  const [quantity, setQuantity] = useState(1);
   //checkoutid
   const { checkoutId, addItemToCart } = useCartContext();
+  //handle quantity
+  const [quantity, setQuantity] = useState(1);
+
+  const incrementQty = () => {
+    setQuantity(() => quantity + 1);
+  };
+
+  const decrementQty = () => {
+    quantity === 1 ? setQuantity(1) : setQuantity(() => quantity - 1);
+  };
+
+  //calculate totaprice when selected changes
+  const [totalPrice, setTotalPrice] = useState(0.0);
+  useEffect(() => {
+    const price = product.variants[0].price;
+    setTotalPrice(price * quantity);
+  }, [quantity]);
+
+  const router = useRouter();
 
   const handleClick = async () => {
     try {
       await addItemToCart(product.variants[0].id, quantity, checkoutId);
       mutate([`/api/existingCheckout/`, checkoutId]);
+      router.push('/cart');
     } catch (e) {
       console.log('Error adding item to cart...');
       console.log(e);
     }
   };
 
-  //set respective states from the individual selects
-
-  const handleQty = (e, data) => {
-    e.preventDefault();
-    setQuantity(() => data.value);
-  };
-
   return (
-    <PageWrapper>
-      <SelectedImage selected={product} />
-      <DescriptionBuyWrapper>
-        <ProductDescription product={product} />
-        <FilterBuyWrapper>
-          <QtyBuy
+    <>
+      <Heading
+        textAlign='center'
+        width={'90%'}
+        ml={'auto'}
+        mr={'auto'}
+        pt={'2rem'}
+      >
+        {product.title}
+      </Heading>
+      <Flex
+        direction={['column', 'column', 'row', 'row']}
+        align='center'
+        width={'90%'}
+        ml={'auto'}
+        mr={'auto'}
+      >
+        <ImageGroup product={product} selected={product.variants[0]} />
+
+        <Flex
+          direction='column'
+          align='center'
+          width={['100%', '100%', '50%', '50%']}
+        >
+          <Text
+            pt={'2rem'}
+            pb={'2rem'}
+            align={['center', 'center', 'left', 'left']}
+          >
+            {product.description}
+          </Text>
+          <Quantity
             quantity={quantity}
-            handleQty={handleQty}
-            number={10}
+            incrementQty={incrementQty}
+            decrementQty={decrementQty}
+          />
+          <BuyGroup
+            totalPrice={totalPrice}
+            currencyCode={product.variants[0].priceV2.currencyCode}
             handleClick={handleClick}
           />
-        </FilterBuyWrapper>
-      </DescriptionBuyWrapper>
-    </PageWrapper>
+        </Flex>
+      </Flex>
+    </>
   );
 };
-
-const FilterBuyWrapper = styled.div`
-  width: 80%;
-  padding-top: 2rem;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-`;
-
-const PageWrapper = styled.div`
-  @media (min-width: 768px) {
-    width: 80%;
-    margin: 0 auto;
-    display: flex;
-  }
-`;
-
-const DescriptionBuyWrapper = styled.div`
-  @media (min-width: 768px) {
-    display: flex;
-    flex-direction: column;
-  }
-`;
 
 export default NoOptionProduct;

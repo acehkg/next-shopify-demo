@@ -90,16 +90,15 @@ const BuyGroup = ({ totalPrice, currencyCode, handleClick }) => {
   );
 };
 const OneOptionProduct = ({ product }) => {
-  //for a product with to options render selectors and filter selections for target variantId
-  const [selected, setSelected] = useState(product.variants[0]);
-  const [filter, setFilter] = useState(product.options[0].values[0].value);
-  const [quantity, setQuantity] = useState(1);
   //checkoutid
   const { checkoutId, addItemToCart } = useCartContext();
+  //for a product with to options render selectors and filter selections for target variantId
   //seperate the two options arrays
   const optionOne = product.options[0];
 
   //filter the array of variants for the created filter and return selected varaiant
+  const [filter, setFilter] = useState(product.options[0].values[0].value);
+  const [selected, setSelected] = useState(product.variants[0]);
   useEffect(() => {
     const filtered = product.variants.filter((variant) => {
       return variant.title.includes(filter);
@@ -107,6 +106,7 @@ const OneOptionProduct = ({ product }) => {
     setSelected(() => filtered[0]);
   }, [filter]);
 
+  const [quantity, setQuantity] = useState(1);
   const incrementQty = () => {
     setQuantity(() => quantity + 1);
   };
