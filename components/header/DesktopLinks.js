@@ -1,50 +1,37 @@
-import styled from 'styled-components';
-import Link from 'next/link';
+import { Flex, Spacer } from '@chakra-ui/react';
+import MenuItem from '../header/MenuItem';
 import CartWidget from '../cart/CartWidget';
 import links from '../../utils/links.json';
 
-const Wrapper = styled.nav`
-  height: 100%;
-  width: 50%;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding-right: 1rem;
-  color: var(--link-color);
-  font-size: 1rem;
-
-  a {
-    &:not(:first-child) {
-      padding-left: 2rem;
-    }
-  }
-
-  @media (max-width: 768px) {
-    display: none;
-  }
-`;
 const DesktopLinks = () => {
   return (
-    <Wrapper>
-      <Link href='/'>
-        <a>HOME</a>
-      </Link>
-      <Link href='/products'>
-        <a>ALL PRODUCTS</a>
-      </Link>
+    <Flex
+      as='nav'
+      display={['none', 'none', 'none', 'flex']}
+      w='60%'
+      align='center'
+      justify='flex-end'
+    >
+      <MenuItem href='/'>HOME</MenuItem>
+      <Spacer />
+      <MenuItem href='/collections'>COLLECTIONS</MenuItem>
+      <Spacer />
+      <MenuItem href='/products'>ALL PRODUCTS</MenuItem>
+      <Spacer />
       {links.map((link) => {
         return (
-          <Link key={link.handle} href={`/collections/${link.handle}`}>
-            <a>{link.title.toUpperCase()}</a>
-          </Link>
+          <>
+            <MenuItem key={link.handle} href={`/collections/${link.handle}`}>
+              {link.title.toUpperCase()}
+            </MenuItem>
+            <Spacer />
+          </>
         );
       })}
-      <Link href='/cart'>
-        <a>
-          <CartWidget />
-        </a>
-      </Link>
-    </Wrapper>
+      <MenuItem href='/cart'>
+        <CartWidget />
+      </MenuItem>
+    </Flex>
   );
 };
 

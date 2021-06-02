@@ -1,263 +1,206 @@
 import { useState, useEffect } from 'react';
-import styled from 'styled-components';
+import { useRouter } from 'next/router';
 //cart context and data
 import useCartContext from '../../hooks/useCartContext';
 import { mutate } from 'swr';
-import { Select, Icon } from 'semantic-ui-react';
-import { createNumberOptions } from '../../utils/utils';
+//styled components for image component
+import styled from 'styled-components';
+//chakra ui
+import {
+  Flex,
+  Stack,
+  Text,
+  Heading,
+  Radio,
+  RadioGroup,
+  IconButton,
+  Button,
+  VisuallyHidden,
+  Image,
+} from '@chakra-ui/react';
+//icons
+import { FiPlusSquare, FiMinusSquare } from 'react-icons/fi';
+import { FaCartPlus } from 'react-icons/fa';
 
-const SelectorOne = ({ values, title, handleChange }) => {
-  //construct options object for the select
-  const options = values.map((value) => {
-    return {
-      key: value.value,
-      value: value.value,
-      text: value.value,
-    };
-  });
+const ImageGroup = ({ product, selected }) => {
   return (
-    <Select
-      aria-label={title}
-      options={options}
-      placeholder={title}
-      onChange={handleChange}
-      fluid={true}
-    />
+    <div>
+      <CustomImage src={selected.image.src} alt={product.title} />
+    </div>
   );
 };
-
-const QtyBuy = ({ quantity, handleQty, number, handleClick }) => {
-  const options = createNumberOptions(number);
-
-  return (
-    <BuyWrapper>
-      <InputWrapper>
-        <Select
-          aria-label='Quantity'
-          options={options}
-          placeholder={`${quantity}`}
-          onChange={handleQty}
-          fluid={true}
-        />
-      </InputWrapper>
-      <ButtonWrapper>
-        <BuyButton onClick={handleClick}>
-          <Icon name='add to cart' />
-        </BuyButton>
-      </ButtonWrapper>
-    </BuyWrapper>
-  );
-};
-
-const BuyWrapper = styled.div`
+const CustomImage = styled.img`
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  height: auto;
 `;
-
-const InputWrapper = styled.div``;
-
-const ButtonWrapper = styled.div``;
-
-const BuyButton = styled.button`
-  padding-top: 0.25rem;
-  width: 3rem;
-  height: 2.8rem;
-  text-align: center;
-  background: lightgrey;
-  border: none;
-  border-radius: 0.25rem;
-`;
-
-const SelectedImage = ({ selected, original, images }) => {
-  if (selected === undefined) {
-    return (
-      <ImagesWrapper>
-        <FeatureWrapper>
-          <Image src={original.image.src} alt={original.title} />
-        </FeatureWrapper>
-        <ThumbnailWrapper>
-          {images.map((image) => {
-            return (
-              <Thumb key={image.id} src={image.src} alt={original.title} />
-            );
-          })}
-        </ThumbnailWrapper>
-      </ImagesWrapper>
-    );
-  }
+const RadioSelect = ({ filter, setFilter, optionOne, variants }) => {
   return (
-    <ImagesWrapper>
-      <FeatureWrapper>
-        <Image src={selected.image.src} alt={selected.title} />
-      </FeatureWrapper>
-      <ThumbnailWrapper>
-        {images.map((image) => {
-          return <Thumb key={image.id} src={image.src} alt={original.title} />;
+    <RadioGroup defaultValue={filter} value={filter} onChange={setFilter}>
+      <Stack direction='row' spacing={4}>
+        {optionOne.values.map((value) => {
+          return (
+            <Radio key={value.value} value={value.value} colorScheme='gray'>
+              {value.value}
+            </Radio>
+          );
         })}
-      </ThumbnailWrapper>
-    </ImagesWrapper>
+      </Stack>
+      <Stack direction='row' spacing={4}>
+        {variants.map((variant) => {
+          return (
+            <Text key={variant.id}>
+              ${variant.price}
+              {variant.priceV2.currencyCode}
+            </Text>
+          );
+        })}
+      </Stack>
+    </RadioGroup>
   );
 };
-const Image = styled.img`
-  width: 100%;
-  height: auto;
-  @media (min-width: 768px) {
-    width: 70%;
-  }
-`;
-
-const Thumb = styled.img`
-  width: 8rem;
-  height: auto;
-  // border: lightgrey solid 2px;
-  //border-radius: 2px;
-`;
-const ThumbnailWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  align-self: center;
-`;
-const ImagesWrapper = styled.div`
-  width: 90%;
-  margin: 0 auto;
-  padding: 2rem 0;
-  display: flex;
-`;
-
-const FeatureWrapper = styled.div`
-  align-self: center;
-`;
-
-const ProductDescription = ({ product }) => {
+const Quantity = ({ quantity, incrementQty, decrementQty }) => {
   return (
-    <DescriptionWrapper>
-      <Title>{product.title}</Title>
-      <Description>{product.description}</Description>
-    </DescriptionWrapper>
+    <Stack direction='row' spacing={8} pt={'2rem'}>
+      <IconButton
+        aria-label='Increase Quantity'
+        icon={<FiPlusSquare />}
+        size='sm'
+        onClick={incrementQty}
+      />
+      <Text>{quantity}</Text>
+      <IconButton
+        aria-label='Decrease Quantity'
+        icon={<FiMinusSquare />}
+        size='sm'
+        onClick={decrementQty}
+      />
+    </Stack>
   );
 };
 
-const DescriptionWrapper = styled.div`
-  padding: 2rem 0;
-  width: 80%;
-  margin: 0 auto;
-`;
-const Title = styled.h3`
-  font-size: 1.5rem;
-  text-align: center;
-  padding: 1rem 0;
-`;
-const Description = styled.p`
-  line-height: 1.45;
-  text-align: center;
-`;
+const BuyGroup = ({
+  totalPrice,
+  currencyCode,
+  handleClick,
+  quantity,
+  title,
+}) => {
+  return (
+    <Button
+      rightIcon={<FaCartPlus />}
+      mt={'2rem'}
+      mb={'2rem'}
+      minWidth={['50%', '50%', '100%', '80%']}
+      onClick={handleClick}
+    >
+      <VisuallyHidden>
+        Add {quantity} {title} to your cart
+      </VisuallyHidden>
+      ${totalPrice}
+      {currencyCode}
+    </Button>
+  );
+};
 const OneOptionProduct = ({ product }) => {
-  //for a product with to options render selectors and filter selections for target variantId
-  const [selected, setSelected] = useState(product.variants);
-  const [selectOne, setSelectOne] = useState();
-  const [filter, setFilter] = useState('');
-  const [quantity, setQuantity] = useState(1);
   //checkoutid
   const { checkoutId, addItemToCart } = useCartContext();
+  //for a product with to options render selectors and filter selections for target variantId
   //seperate the two options arrays
   const optionOne = product.options[0];
 
-  //create filter from the two selections
-  useEffect(() => {
-    setFilter(() => selectOne);
-  }, [selectOne]);
-
   //filter the array of variants for the created filter and return selected varaiant
+  const [filter, setFilter] = useState(product.options[0].values[0].value);
+  const [selected, setSelected] = useState(product.variants[0]);
   useEffect(() => {
     const filtered = product.variants.filter((variant) => {
       return variant.title.includes(filter);
     });
-    setSelected(() => filtered);
+    setSelected(() => filtered[0]);
   }, [filter]);
+
+  const [quantity, setQuantity] = useState(1);
+  const incrementQty = () => {
+    setQuantity(() => quantity + 1);
+  };
+
+  const decrementQty = () => {
+    quantity === 1 ? setQuantity(1) : setQuantity(() => quantity - 1);
+  };
+
+  //calculate totaprice when selected changes
+  const [totalPrice, setTotalPrice] = useState(0.0);
+  useEffect(() => {
+    const price = selected.price;
+    setTotalPrice(price * quantity);
+  }, [quantity, selected]);
+
+  const router = useRouter();
 
   const handleClick = async () => {
     try {
-      await addItemToCart(selected[0].id, quantity, checkoutId);
+      await addItemToCart(selected.id, quantity, checkoutId);
       mutate([`/api/existingCheckout/`, checkoutId]);
+      router.push('/cart');
     } catch (e) {
       console.log('Error adding item to cart...');
       console.log(e);
     }
   };
 
-  //set respective states from the individual selects
-  const handleChangeOne = (e, data) => {
-    e.preventDefault();
-    setSelectOne(() => data.value);
-  };
-
-  const handleQty = (e, data) => {
-    e.preventDefault();
-    setQuantity(() => data.value);
-  };
-
   return (
-    <PageWrapper>
-      <SelectedImage
-        selected={selected[0]}
-        original={product.variants[0]}
-        images={product.images}
-      />
-      <DescriptionBuyWrapper>
-        <ProductDescription product={product} />
-        <SelectorWrapper>
-          <SelectorOne
-            values={optionOne.values}
-            title={optionOne.name}
-            handleChange={handleChangeOne}
+    <>
+      <Heading
+        textAlign='center'
+        width={'90%'}
+        ml={'auto'}
+        mr={'auto'}
+        pt={'2rem'}
+      >
+        {product.title}
+      </Heading>
+      <Flex
+        direction={['column', 'column', 'row', 'row']}
+        align='center'
+        width={'90%'}
+        ml={'auto'}
+        mr={'auto'}
+      >
+        <ImageGroup product={product} selected={selected} />
+
+        <Flex
+          direction='column'
+          align='center'
+          width={['100%', '100%', '50%', '50%']}
+        >
+          <Text
+            pt={'2rem'}
+            pb={'2rem'}
+            align={['center', 'center', 'left', 'left']}
+          >
+            {product.description}
+          </Text>
+          <RadioSelect
+            optionOne={optionOne}
+            filter={filter}
+            setFilter={setFilter}
+            variants={product.variants}
           />
-        </SelectorWrapper>
-        <FilterBuyWrapper>
-          <QtyBuy
+          <Quantity
             quantity={quantity}
-            handleQty={handleQty}
-            number={10}
-            handleClick={handleClick}
+            incrementQty={incrementQty}
+            decrementQty={decrementQty}
           />
-        </FilterBuyWrapper>
-      </DescriptionBuyWrapper>
-    </PageWrapper>
+          <BuyGroup
+            totalPrice={totalPrice}
+            currencyCode={selected.priceV2.currencyCode}
+            handleClick={handleClick}
+            quantity={quantity}
+            title={product.title}
+          />
+        </Flex>
+      </Flex>
+    </>
   );
 };
-const SelectorWrapper = styled.div`
-  width: 80%;
-  margin: 0 auto;
-  display: flex;
-  gap: 1rem;
-`;
 
-const FilterBuyWrapper = styled.div`
-  width: 80%;
-  padding-top: 2rem;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-`;
-const PageWrapper = styled.div`
-  @media (min-width: 1024px) {
-    width: 80%;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-  }
-`;
-
-const DescriptionBuyWrapper = styled.div`
-  @media (min-width: 768px) {
-    display: flex;
-    flex-direction: column;
-    @media (min-width: 1024px) {
-      width: 50%;
-    }
-  }
-`;
 export default OneOptionProduct;

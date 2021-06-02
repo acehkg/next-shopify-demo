@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 //cart context and data
 import useCartContext from '../../hooks/useCartContext';
 import { mutate } from 'swr';
-//styled components for custom image component
+//styled components for custom image components
 import styled from 'styled-components';
 //chakra ui
 import {
@@ -13,6 +13,7 @@ import {
   Heading,
   IconButton,
   Button,
+  Select,
   VisuallyHidden,
 } from '@chakra-ui/react';
 //icons
@@ -31,14 +32,27 @@ const CustomImage = styled.img`
   height: auto;
 `;
 
+const SelectGroup = ({ values, onChange }) => {
+  return (
+    <Select size='lg' onChange={onChange}>
+      {values.map((value) => {
+        return (
+          <option key={value.value} value={value.value}>
+            {value.value}
+          </option>
+        );
+      })}
+    </Select>
+  );
+};
 const Quantity = ({ quantity, incrementQty, decrementQty }) => {
   return (
     <Stack direction='row' spacing={8} pt={'2rem'}>
       <IconButton
         aria-label='Increase Quantity'
         icon={<FiPlusSquare />}
-        onClick={incrementQty}
         size='sm'
+        onClick={incrementQty}
       />
       <Text>{quantity}</Text>
       <IconButton
@@ -67,18 +81,71 @@ const BuyGroup = ({
       onClick={handleClick}
     >
       <VisuallyHidden>
-        Add {quantity} {title} to your cart
+        Add {quantity}
+        {title} to your cart
       </VisuallyHidden>
       ${totalPrice}
       {currencyCode}
     </Button>
   );
 };
-const NoOptionProduct = ({ product }) => {
+const TwoOptionProduct = ({ product }) => {
   //checkoutid
   const { checkoutId, addItemToCart } = useCartContext();
-  //handle quantity
+  //for a product with to options render selectors and filter selections for target variantId
+
   const [quantity, setQuantity] = useState(1);
+
+  //seperate the two options arrays
+  const optionOne = product.options[0];
+  const [selectOne, setSelectOne] = useState('');
+  const optionTwo = product.options[1];
+  const [selectTwo, setSelectTwo] = useState('');
+
+  //create filter from the two selections
+  const [filter, setFilter] = useState('');
+  useEffect(() => {
+    setFilter(() => selectOne + ' ' + '/' + ' ' + selectTwo);
+  }, [selectOne, selectTwo]);
+
+  //filter the array of variants for the created filter and return selected varaiant
+  const [selected, setSelected] = useState(product.variants[0]);
+  useEffect(() => {
+    const filtered = product.variants.filter((variant) => {
+      return variant.title.includes(filter);
+    });
+    setSelected(() => filtered[0]);
+  }, [filter]);
+
+  //calculate totaprice when selected changes
+  const [totalPrice, setTotalPrice] = useState(0.0);
+  useEffect(() => {
+    const price = selected.price;
+    setTotalPrice(price * quantity);
+  }, [quantity, selected]);
+  const router = useRouter();
+
+  const handleClick = async () => {
+    try {
+      await addItemToCart(selected.id, quantity, checkoutId);
+      mutate([`/api/existingCheckout/`, checkoutId]);
+      router.push('/cart');
+    } catch (e) {
+      console.log('Error adding item to cart...');
+      console.log(e);
+    }
+  };
+
+  //set respective states from the individual selects
+  const handleChangeOne = (e) => {
+    e.preventDefault();
+    setSelectOne(() => e.target.value);
+  };
+
+  const handleChangeTwo = (e) => {
+    e.preventDefault();
+    setSelectTwo(() => e.target.value);
+  };
 
   const incrementQty = () => {
     setQuantity(() => quantity + 1);
@@ -86,26 +153,6 @@ const NoOptionProduct = ({ product }) => {
 
   const decrementQty = () => {
     quantity === 1 ? setQuantity(1) : setQuantity(() => quantity - 1);
-  };
-
-  //calculate totaprice when selected changes
-  const [totalPrice, setTotalPrice] = useState(0.0);
-  useEffect(() => {
-    const price = product.variants[0].price;
-    setTotalPrice(price * quantity);
-  }, [quantity]);
-
-  const router = useRouter();
-
-  const handleClick = async () => {
-    try {
-      await addItemToCart(product.variants[0].id, quantity, checkoutId);
-      mutate([`/api/existingCheckout/`, checkoutId]);
-      router.push('/cart');
-    } catch (e) {
-      console.log('Error adding item to cart...');
-      console.log(e);
-    }
   };
 
   return (
@@ -126,8 +173,7 @@ const NoOptionProduct = ({ product }) => {
         ml={'auto'}
         mr={'auto'}
       >
-        <ImageGroup product={product} selected={product.variants[0]} />
-
+        <ImageGroup product={product} selected={selected} />
         <Flex
           direction='column'
           align='center'
@@ -140,6 +186,15 @@ const NoOptionProduct = ({ product }) => {
           >
             {product.description}
           </Text>
+          <Stack
+            direction='row'
+            spacing={2}
+            width={['19rem', '19rem', '20rem', '20rem']}
+          >
+            <SelectGroup values={optionOne.values} onChange={handleChangeOne} />
+            <SelectGroup values={optionTwo.values} onChange={handleChangeTwo} />
+          </Stack>
+
           <Quantity
             quantity={quantity}
             incrementQty={incrementQty}
@@ -147,7 +202,7 @@ const NoOptionProduct = ({ product }) => {
           />
           <BuyGroup
             totalPrice={totalPrice}
-            currencyCode={product.variants[0].priceV2.currencyCode}
+            currencyCode={selected.priceV2.currencyCode}
             handleClick={handleClick}
             quantity={quantity}
             title={product.title}
@@ -158,4 +213,4 @@ const NoOptionProduct = ({ product }) => {
   );
 };
 
-export default NoOptionProduct;
+export default TwoOptionProduct;

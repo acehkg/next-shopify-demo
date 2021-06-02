@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 //global styles and styles for components
 import GlobalStyles from '../style/GlobalStyles';
 import Font from '../style/Font';
 import 'semantic-ui-css/semantic.min.css';
+//Chakra UI
+import { ChakraProvider } from '@chakra-ui/react';
+import theme from '../style/theme';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/700.css';
 //Context for navbar state on mobile
 import NavOpenProvider from '../context/MenuContext';
 //Cart Context
@@ -49,16 +53,18 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <>
-      <CookiesProvider>
-        <CartProvider checkoutId={checkout}>
-          <NavOpenProvider>
-            <Slider />
-            <Header />
-            <Breadcumb />
-            <Component {...pageProps} />
-          </NavOpenProvider>
-        </CartProvider>
-      </CookiesProvider>
+      <ChakraProvider theme={theme}>
+        <CookiesProvider>
+          <CartProvider checkoutId={checkout}>
+            <NavOpenProvider>
+              <Header />
+              <Slider />
+              <Breadcumb />
+              <Component {...pageProps} />
+            </NavOpenProvider>
+          </CartProvider>
+        </CookiesProvider>
+      </ChakraProvider>
       <Font />
       <GlobalStyles />
     </>

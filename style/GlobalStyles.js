@@ -78,7 +78,7 @@ a {
     --dark-background:grey;
     --light-background:lightgrey;
     --burger-color:black;
-    --slider-color:grey;
+    --slider-color:#E2E8F0;
     --header-color:#fff;
     --link-color:black;
   

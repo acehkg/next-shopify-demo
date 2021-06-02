@@ -1,21 +1,12 @@
 import { useEffect } from 'react';
 import useNav from '../../hooks/useNav';
-import styled from 'styled-components';
+import { Flex } from '@chakra-ui/react';
 import Logo from './Logo';
 import DesktopLinks from './DesktopLinks';
 import Burger from '../header/Burger';
-import MobileCartDisplay from '../cart/MobileCartDIsplay';
+import CartWidget from '../cart/CartWidget';
+import MenuItem from '../header/MenuItem';
 
-const Head = styled.header`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  width: 100%;
-  margin: 0 auto;
-  height: 8rem;
-  background-color: var(--header-color);
-  margin-bottom: 2rem;
-`;
 const Header = () => {
   const { open } = useNav();
   useEffect(() => {
@@ -28,19 +19,28 @@ const Header = () => {
   }, [open]);
 
   return (
-    <Head open={open}>
+    <Flex
+      as='header'
+      w='100%'
+      align='center'
+      justify='space-between'
+      p={8}
+      open={open}
+    >
       <Logo image='/images/logo.png' alt='Better Beer Co' />
-      <BurgerWrapper>
-        <MobileCartDisplay />
+      <Flex
+        direction={['column', 'column', 'row']}
+        align='center'
+        d={['flex', 'flex', 'flex', 'none']}
+      >
         <Burger />
-      </BurgerWrapper>
+        <MenuItem href='/cart'>
+          <CartWidget />
+        </MenuItem>
+      </Flex>
       <DesktopLinks />
-    </Head>
+    </Flex>
   );
 };
-const BurgerWrapper = styled.div`
-  display: flex;
-  width: 10rem;
-  justify-content: space-between;
-`;
+
 export default Header;

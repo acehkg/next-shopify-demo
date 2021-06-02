@@ -3,9 +3,8 @@ export const createNumberOptions = (number) => {
   let i = 1;
   while (i < number) {
     const option = {
-      key: i,
       value: i,
-      text: i,
+      label: i,
     };
 
     i++;
