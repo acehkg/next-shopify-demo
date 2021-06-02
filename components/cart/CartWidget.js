@@ -1,10 +1,14 @@
 import useCart from '../../hooks/useCart';
 import useCartContext from '../../hooks/useCartContext';
-import { Flex, Text } from '@chakra-ui/react';
+import { Flex, Text, Spinner, Box } from '@chakra-ui/react';
 import { RiShoppingCart2Line } from 'react-icons/ri';
 
 const Waiting = () => {
-  return <Text>$0.00</Text>;
+  return (
+    <Box pl={'1rem'} pt={'0.5rem'}>
+      <Spinner size='md' />
+    </Box>
+  );
 };
 
 const CartWidget = () => {

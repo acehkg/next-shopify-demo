@@ -1,117 +1,114 @@
 import { useState, useEffect } from 'react';
 import useCart from '../hooks/useCart';
 import useCartContext from '../hooks/useCartContext';
-import { Dimmer, Loader, Button, Icon } from 'semantic-ui-react';
-import styled from 'styled-components';
+//chakra ui
+import {
+  Box,
+  Flex,
+  Badge,
+  Image,
+  Stack,
+  Text,
+  IconButton,
+  Spinner,
+  Button,
+} from '@chakra-ui/react';
+//icons
+import { FiPlusSquare, FiMinusSquare, FiTrash2 } from 'react-icons/fi';
 import { mutate } from 'swr';
 
 const Loading = () => {
   return (
-    <LoadingWrapper>
-      <Dimmer active>
-        <Loader size='large'>Loading</Loader>
-      </Dimmer>
-    </LoadingWrapper>
+    <Flex pt={'10rem'} justify='center' align='center'>
+      <Spinner size='xl' />
+    </Flex>
   );
 };
 
-const LoadingWrapper = styled.div`
-  height: 100%;
-`;
-
-const CartImage = ({ src, alt, count, handleIncrease, handleDecrease }) => {
+const ItemImage = ({ src, alt, quantity }) => {
   return (
-    <ImageWrapper>
-      <Image src={src} alt={alt} />
-      <Count>{count}</Count>
-      <UpdateWrapper>
-        <Button
-          aria-label='Add One and Update Cart'
-          onClick={handleIncrease}
-          style={{
-            padding: '.25rem',
-            height: '1.5rem',
-            width: '1.5rem',
-            margin: '0',
-          }}
+    <Flex pt={'2rem'}>
+      <Image
+        src={src}
+        alt={alt}
+        borderRadius={'50%'}
+        boxSize='100px'
+        objectFit='cover'
+      />
+      <Box>
+        <Badge
+          colorScheme='gray'
+          fontSize={'1rem'}
+          px={'1rem'}
+          py={'0.5rem'}
+          borderRadius={'50%'}
         >
-          <Increment>+</Increment>
-        </Button>
-        <Button
-          aria-label='Remove One and Update Cart'
-          onClick={handleDecrease}
-          style={{
-            padding: '.25rem',
-            height: '1.5rem',
-            width: '1.5rem',
-            margin: '0',
-          }}
-        >
-          <Increment>-</Increment>
-        </Button>
-      </UpdateWrapper>
-    </ImageWrapper>
+          {quantity}
+        </Badge>
+      </Box>
+    </Flex>
   );
 };
 
-const Increment = styled.span`
-  font-size: 1rem;
-  font-weight: 700;
-`;
-const UpdateWrapper = styled.div`
-  position: absolute;
-  bottom: 10%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  display: flex;
-  justify-content: space-between;
-`;
-const ImageWrapper = styled.div`
-  position: relative;
-`;
-
-const Count = styled.p`
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 1.5rem;
-  width: 1.5rem;
-  background: lightgrey;
-  border-radius: 50%;
-  text-align: center;
-  line-height: 1.5rem;
-`;
-
-const Image = styled.img`
-  width: 8rem;
-  height: auto;
-`;
-
-const CartItem = ({
-  title,
-  quantity,
-  price,
-  size,
-  src,
-  alt,
-  id,
-  variantId,
-}) => {
+const ItemInfo = ({ title, price }) => {
+  return (
+    <Stack direction='row' spacing={4}>
+      <Text>{title}</Text>
+      <Text>${price}</Text>
+    </Stack>
+  );
+};
+const AdjustQuantity = ({ incrementQty, decrementQty, handleTrash }) => {
+  return (
+    <Stack direction='row' spacing={8} pt={'1rem'}>
+      <IconButton
+        aria-label='Increase Quantity'
+        icon={<FiPlusSquare />}
+        size='sm'
+        onClick={incrementQty}
+      />
+      <IconButton
+        aria-label='Decrease Quantity'
+        icon={<FiMinusSquare />}
+        size='sm'
+        onClick={decrementQty}
+      />
+      <IconButton
+        aria-label='Delete Item'
+        icon={<FiTrash2 color={'red'} />}
+        size='sm'
+        onClick={handleTrash}
+      />
+    </Stack>
+  );
+};
+const CartItem = ({ src, alt, qty, title, price, id, variantId }) => {
   const { checkoutId, removeItemFromCart, updateItemInCart } = useCartContext();
-  const [qty, setQty] = useState(quantity);
+  const [quantity, setQuantity] = useState(qty);
+  const incrementQty = () => {
+    setQuantity(() => quantity + 1);
+  };
+
+  const decrementQty = () => {
+    quantity === 1 ? setQuantity(1) : setQuantity(() => quantity - 1);
+  };
+  //calculate price when qty changes
+  const [totalPrice, setTotalPrice] = useState(price);
+  useEffect(() => {
+    setTotalPrice(price * quantity);
+  }, [quantity]);
 
   useEffect(async () => {
     try {
-      await updateItemInCart(id, variantId, qty, checkoutId);
+      await updateItemInCart(id, variantId, quantity, checkoutId);
       mutate([`/api/existingCheckout/`, checkoutId]);
     } catch (e) {
       console.log('Error updating cart...');
       console.log(e);
     }
-  }, [qty]);
+  }, [quantity]);
 
-  const handleClick = async () => {
+  const handleTrash = async () => {
     try {
       await removeItemFromCart(id, checkoutId);
       mutate([`/api/existingCheckout/`, checkoutId]);
@@ -121,101 +118,48 @@ const CartItem = ({
     }
   };
 
-  const handleIncrease = () => {
-    setQty((qty) => qty + 1);
-  };
-
-  const handleDecrease = () => {
-    setQty((qty) => qty - 1);
-  };
-  const subTotal = (price * quantity).toFixed(2);
   return (
-    <ItemWrapper>
-      <CartImage
-        src={src}
-        alt={alt}
-        count={qty}
-        handleIncrease={handleIncrease}
-        handleDecrease={handleDecrease}
+    <Flex direction='column' align='center'>
+      <ItemImage src={src} alt={alt} quantity={quantity} />
+      <ItemInfo title={title} price={totalPrice} />
+      <AdjustQuantity
+        incrementQty={incrementQty}
+        decrementQty={decrementQty}
+        handleTrash={handleTrash}
       />
-      <TextWrapper>
-        <Title>{title}</Title>
-        {size === 'Default Title' ? <div></div> : <Size>{size}</Size>}
-        <SubTotal>${subTotal}</SubTotal>
-      </TextWrapper>
-      <Button
-        icon
-        compact
-        size='tiny'
-        style={{ margin: '0' }}
-        onClick={handleClick}
-        aria-label='Remove Item'
-      >
-        <Icon name='remove' size='small' style={{ lineHeight: '1.45' }} />
-      </Button>
-    </ItemWrapper>
+    </Flex>
   );
 };
-const ItemWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  width: 90%;
-  margin: 0 auto;
-`;
-
-const Title = styled.p`
-  display: none;
-  @media (min-width: 768px) {
-    display: block;
-    width: 8rem;
-  }
-`;
-const Size = styled.p``;
-const SubTotal = styled.p``;
-
-const TextWrapper = styled.div`
-  display: flex;
-  justify-content: space-evenly;
-  width: 50%;
-  text-align: left;
-`;
 
 const Checkout = ({ total, currency, url }) => {
   const price = (total * 1).toFixed(2);
   return (
-    <CheckoutWrapper>
-      <Total>${`${price}${currency}`}</Total>
-      <a href={url}>
-        <Button>CHECKOUT</Button>
-      </a>
-    </CheckoutWrapper>
+    <Box textAlign='center' pt={'2rem'}>
+      <Text pb={'1rem'}>${`${price}${currency}`}</Text>
+      <Button as='a' href={url}>
+        CHECKOUT
+      </Button>
+    </Box>
   );
 };
-
-const CheckoutWrapper = styled.div`
-  text-align: center;
-`;
-const Total = styled.p`
-  padding: 1rem;
-`;
 
 const Cart = () => {
   const { checkoutId } = useCartContext();
   const cartData = useCart(checkoutId);
+
   if (cartData.isLoading === true) {
     return <Loading />;
   }
 
   return (
-    <>
+    <Flex direction='column' align='center'>
       {cartData.checkout.lineItems.map((item) => (
         <CartItem
           key={item.variant.id}
           id={item.id}
           title={item.title}
-          quantity={item.quantity}
-          price={item.variant.priceV2.amount}
+          qty={item.quantity}
+          price={item.variant.price}
           currency={item.variant.priceV2.currencyCode}
           size={item.variant.title}
           src={item.variant.image.src}
@@ -228,7 +172,7 @@ const Cart = () => {
         currency={cartData.checkout.totalPriceV2.currencyCode}
         url={cartData.checkout.webUrl}
       />
-    </>
+    </Flex>
   );
 };
 
