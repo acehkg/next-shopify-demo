@@ -9,12 +9,12 @@ import {
   Image,
   Stack,
   Text,
-  IconButton,
   Spinner,
   Button,
 } from '@chakra-ui/react';
-//icons
-import { FiPlusSquare, FiMinusSquare, FiTrash2 } from 'react-icons/fi';
+//components
+import QuantityAdjust from '../components/interface/QuantityAdjust';
+import BackButton from '../components/interface/BackButton';
 import { mutate } from 'swr';
 
 const Loading = () => {
@@ -58,30 +58,7 @@ const ItemInfo = ({ title, price }) => {
     </Stack>
   );
 };
-const AdjustQuantity = ({ incrementQty, decrementQty, handleTrash }) => {
-  return (
-    <Stack direction='row' spacing={8} pt={'1rem'}>
-      <IconButton
-        aria-label='Increase Quantity'
-        icon={<FiPlusSquare />}
-        size='sm'
-        onClick={incrementQty}
-      />
-      <IconButton
-        aria-label='Decrease Quantity'
-        icon={<FiMinusSquare />}
-        size='sm'
-        onClick={decrementQty}
-      />
-      <IconButton
-        aria-label='Delete Item'
-        icon={<FiTrash2 color={'red'} />}
-        size='sm'
-        onClick={handleTrash}
-      />
-    </Stack>
-  );
-};
+
 const CartItem = ({ src, alt, qty, title, price, id, variantId }) => {
   const { checkoutId, removeItemFromCart, updateItemInCart } = useCartContext();
   const [quantity, setQuantity] = useState(qty);
@@ -122,7 +99,9 @@ const CartItem = ({ src, alt, qty, title, price, id, variantId }) => {
     <Flex direction='column' align='center'>
       <ItemImage src={src} alt={alt} quantity={quantity} />
       <ItemInfo title={title} price={totalPrice} />
-      <AdjustQuantity
+      <QuantityAdjust
+        withTrash={true}
+        paddingTop='1rem'
         incrementQty={incrementQty}
         decrementQty={decrementQty}
         handleTrash={handleTrash}
@@ -152,27 +131,32 @@ const Cart = () => {
   }
 
   return (
-    <Flex direction='column' align='center'>
-      {cartData.checkout.lineItems.map((item) => (
-        <CartItem
-          key={item.variant.id}
-          id={item.id}
-          title={item.title}
-          qty={item.quantity}
-          price={item.variant.price}
-          currency={item.variant.priceV2.currencyCode}
-          size={item.variant.title}
-          src={item.variant.image.src}
-          alt={item.title}
-          variantId={item.variant.id}
+    <>
+      <Box width='100px' marginLeft='auto' marginRight='auto'>
+        <BackButton size='lg' color='current' />
+      </Box>
+      <Flex direction='column' align='center'>
+        {cartData.checkout.lineItems.map((item) => (
+          <CartItem
+            key={item.variant.id}
+            id={item.id}
+            title={item.title}
+            qty={item.quantity}
+            price={item.variant.price}
+            currency={item.variant.priceV2.currencyCode}
+            size={item.variant.title}
+            src={item.variant.image.src}
+            alt={item.title}
+            variantId={item.variant.id}
+          />
+        ))}
+        <Checkout
+          total={cartData.checkout.totalPriceV2.amount}
+          currency={cartData.checkout.totalPriceV2.currencyCode}
+          url={cartData.checkout.webUrl}
         />
-      ))}
-      <Checkout
-        total={cartData.checkout.totalPriceV2.amount}
-        currency={cartData.checkout.totalPriceV2.currencyCode}
-        url={cartData.checkout.webUrl}
-      />
-    </Flex>
+      </Flex>
+    </>
   );
 };
 

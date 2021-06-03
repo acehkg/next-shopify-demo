@@ -3,92 +3,14 @@ import { useRouter } from 'next/router';
 //cart context and data
 import useCartContext from '../../hooks/useCartContext';
 import { mutate } from 'swr';
-//styled components for custom image components
-import styled from 'styled-components';
 //chakra ui
-import {
-  Flex,
-  Stack,
-  Text,
-  Heading,
-  IconButton,
-  Button,
-  Select,
-  VisuallyHidden,
-} from '@chakra-ui/react';
-//icons
-import { FiPlusSquare, FiMinusSquare } from 'react-icons/fi';
-import { FaCartPlus } from 'react-icons/fa';
+import { Flex, Stack, Text, Heading } from '@chakra-ui/react';
+//components
+import ProductImage from '../images/ProductImage';
+import QuantityAdjust from '../interface/QuantityAdjust';
+import SelectGroup from '../interface/SelectGroup';
+import BuyButton from '../interface/BuyButton';
 
-const ImageGroup = ({ product, selected }) => {
-  return (
-    <div>
-      <CustomImage src={selected.image.src} alt={product.title} />
-    </div>
-  );
-};
-const CustomImage = styled.img`
-  width: 100%;
-  height: auto;
-`;
-
-const SelectGroup = ({ values, onChange }) => {
-  return (
-    <Select size='lg' onChange={onChange}>
-      {values.map((value) => {
-        return (
-          <option key={value.value} value={value.value}>
-            {value.value}
-          </option>
-        );
-      })}
-    </Select>
-  );
-};
-const Quantity = ({ quantity, incrementQty, decrementQty }) => {
-  return (
-    <Stack direction='row' spacing={8} pt={'2rem'}>
-      <IconButton
-        aria-label='Increase Quantity'
-        icon={<FiPlusSquare />}
-        size='sm'
-        onClick={incrementQty}
-      />
-      <Text>{quantity}</Text>
-      <IconButton
-        aria-label='Decrease Quantity'
-        icon={<FiMinusSquare />}
-        size='sm'
-        onClick={decrementQty}
-      />
-    </Stack>
-  );
-};
-
-const BuyGroup = ({
-  totalPrice,
-  currencyCode,
-  handleClick,
-  quantity,
-  title,
-}) => {
-  return (
-    <Button
-      rightIcon={<FaCartPlus />}
-      mt={'2rem'}
-      mb={'2rem'}
-      minWidth={['50%', '50%', '100%', '80%']}
-      onClick={handleClick}
-    >
-      <VisuallyHidden>
-        Add {quantity}
-        {title} to your cart
-      </VisuallyHidden>
-      ${totalPrice}
-      {currencyCode}
-    </Button>
-  );
-};
 const TwoOptionProduct = ({ product }) => {
   //checkoutid
   const { checkoutId, addItemToCart } = useCartContext();
@@ -173,7 +95,7 @@ const TwoOptionProduct = ({ product }) => {
         ml={'auto'}
         mr={'auto'}
       >
-        <ImageGroup product={product} selected={selected} />
+        <ProductImage product={product} selected={selected} />
         <Flex
           direction='column'
           align='center'
@@ -191,21 +113,32 @@ const TwoOptionProduct = ({ product }) => {
             spacing={2}
             width={['19rem', '19rem', '20rem', '20rem']}
           >
-            <SelectGroup values={optionOne.values} onChange={handleChangeOne} />
-            <SelectGroup values={optionTwo.values} onChange={handleChangeTwo} />
+            <SelectGroup
+              values={optionOne.values}
+              onChange={handleChangeOne}
+              size='lg'
+            />
+            <SelectGroup
+              values={optionTwo.values}
+              onChange={handleChangeTwo}
+              size='lg'
+            />
           </Stack>
 
-          <Quantity
+          <QuantityAdjust
+            withTrash={false}
+            paddingTop='2rem'
             quantity={quantity}
             incrementQty={incrementQty}
             decrementQty={decrementQty}
           />
-          <BuyGroup
+          <BuyButton
             totalPrice={totalPrice}
             currencyCode={selected.priceV2.currencyCode}
             handleClick={handleClick}
             quantity={quantity}
             title={product.title}
+            marginY='2rem'
           />
         </Flex>
       </Flex>

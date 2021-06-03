@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 //global styles and styles for components
 import GlobalStyles from '../style/GlobalStyles';
 import Font from '../style/Font';
-import 'semantic-ui-css/semantic.min.css';
 //Chakra UI
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from '../style/theme';
@@ -16,7 +15,7 @@ import CartProvider from '../context/CartContext';
 import { CookiesProvider, useCookies } from 'react-cookie';
 //Layout Components
 import Header from '../components/header/Header';
-import Breadcumb from '../components/Breadcrumb';
+import Breadcumb from '../components/interface/Breadcrumb';
 import Slider from '../components/header/Slider';
 
 function MyApp({ Component, pageProps }) {
