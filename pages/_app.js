@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 //global styles and styles for components
 import GlobalStyles from '../style/GlobalStyles';
-import Font from '../style/Font';
 //Chakra UI
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from '../style/theme';
@@ -64,7 +63,6 @@ function MyApp({ Component, pageProps }) {
           </CartProvider>
         </CookiesProvider>
       </ChakraProvider>
-      <Font />
       <GlobalStyles />
     </>
   );
