@@ -12,22 +12,30 @@ const DesktopLinks = () => {
       align='center'
       justify='flex-end'
     >
-      <MenuItem href='/'>HOME</MenuItem>
-      <Spacer />
-      <MenuItem href='/collections'>COLLECTIONS</MenuItem>
-      <Spacer />
-      <MenuItem href='/products'>ALL PRODUCTS</MenuItem>
-      <Spacer />
+      <MenuItem href='/' mr='5%'>
+        HOME
+      </MenuItem>
+
+      <MenuItem href='/collections' mr='5%'>
+        COLLECTIONS
+      </MenuItem>
+
+      <MenuItem href='/products' mr='5%'>
+        ALL PRODUCTS
+      </MenuItem>
+
       {links.map((link) => {
         return (
-          <>
-            <MenuItem key={link.handle} href={`/collections/${link.handle}`}>
-              {link.title.toUpperCase()}
-            </MenuItem>
-            <Spacer />
-          </>
+          <MenuItem
+            key={link.handle}
+            href={`/collections/${link.handle}`}
+            mr='5%'
+          >
+            {link.title.toUpperCase()}
+          </MenuItem>
         );
       })}
+
       <MenuItem href='/cart'>
         <CartWidget />
       </MenuItem>

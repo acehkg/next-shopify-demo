@@ -1,16 +1,74 @@
-const HomePage = ({ height }) => {
+//storefront API Client
+import { shopifyClient } from '../utils/client';
+import Link from 'next/link';
+//chakra ui
+import { Box, Flex, Grid, GridItem, Text } from '@chakra-ui/react';
+import GridLink from '../components/layout/GridLink';
+import GridImage from '../components/images/GridImage';
+
+const HomePage = ({ products, collections }) => {
   return (
     <>
-      <h1>Test</h1>
-      <p>
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Similique sed
-        dignissimos nostrum numquam quod in iure beatae rerum, distinctio cum
-        voluptatibus commodi ullam quam debitis libero est voluptas temporibus
-        tempora asperiores blanditiis, neque ex. Rem dolore laboriosam quia
-        quisquam placeat?
-      </p>
+      <Grid
+        templateRows='repeat(4, 1fr)'
+        templateColumns='repeat(4, 1fr)'
+        gap={4}
+        ml='5%'
+        mr='5%'
+      >
+        <GridLink
+          href={`/collections/${collections[0].handle}`}
+          colSpan={4}
+          rowSpan={2}
+        >
+          <GridImage
+            src={collections[0].image.src}
+            alt={collections[0].title}
+          />
+        </GridLink>
+        <GridLink
+          href={`/collections/${collections[1].handle}`}
+          colSpan={2}
+          rowSpan={1}
+        >
+          <GridImage
+            src={collections[1].image.src}
+            alt={collections[1].title}
+          />
+        </GridLink>
+        <GridLink
+          href={`/collections/${collections[2].handle}`}
+          colSpan={2}
+          rowSpan={1}
+        >
+          <GridImage
+            src={collections[2].image.src}
+            alt={collections[2].title}
+          />
+        </GridLink>
+        <GridLink href='/products' colSpan={4} rowSpan={1} bg='gray.200'>
+          <Flex justify='center' align='center' width='100%' height='100%'>
+            <Text fontSize='1.5rem'>ALL PRODUCTS</Text>
+          </Flex>
+        </GridLink>
+      </Grid>
     </>
   );
 };
 
 export default HomePage;
+
+export async function getStaticProps() {
+  //query storefront API and fetch all products in shop
+  const products = await shopifyClient.product.fetchAll();
+  //query storefront API and fetch all collections in shop
+  const collections = await shopifyClient.collection.fetchAll();
+
+  return {
+    //data needs to be properly formatted
+    props: {
+      products: JSON.parse(JSON.stringify(products)),
+      collections: JSON.parse(JSON.stringify(collections)),
+    },
+  };
+}
