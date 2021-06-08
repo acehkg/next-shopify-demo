@@ -1,45 +1,35 @@
-import { useEffect } from 'react';
-import useNav from '../../hooks/useNav';
-import { Flex } from '@chakra-ui/react';
+import { Flex, useDisclosure, IconButton } from '@chakra-ui/react';
 import Logo from './Logo';
 import DesktopLinks from './DesktopLinks';
-import Burger from '../header/Burger';
 import CartWidget from '../cart/CartWidget';
 import MenuItem from '../header/MenuItem';
+import MenuDrawer from '../header/MenuDrawer';
+import { RiMenu4Line } from 'react-icons/ri';
 
 const Header = () => {
-  const { open } = useNav();
-  useEffect(() => {
-    if (open === true) {
-      document.body.style.overflow = 'hidden';
-    }
-    if (open !== true) {
-      document.body.style.overflow = '';
-    }
-  }, [open]);
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   return (
-    <Flex
-      as='header'
-      w='100%'
-      align='center'
-      justify='space-between'
-      p={8}
-      open={open}
-    >
-      <Logo image='/images/logo.png' alt='Better Beer Co' />
-      <Flex
-        direction={['column', 'column', 'row']}
-        align='center'
-        d={['flex', 'flex', 'flex', 'none']}
-      >
-        <Burger />
-        <MenuItem href='/cart'>
-          <CartWidget />
-        </MenuItem>
+    <>
+      <Flex as='header' w='100%' align='center' justify='space-between' p={8}>
+        <Logo image='/images/logo.png' alt='Better Beer Co' />
+
+        <Flex align='center' d={['flex', 'flex', 'flex', 'none']}>
+          <MenuItem href='/cart'>
+            <CartWidget />
+          </MenuItem>
+          <IconButton
+            aria-label='Open Nav Menu'
+            onClick={onOpen}
+            icon={<RiMenu4Line size={32} />}
+            variant='outline'
+            border='none'
+          />
+        </Flex>
+        <DesktopLinks />
       </Flex>
-      <DesktopLinks />
-    </Flex>
+      <MenuDrawer onClose={onClose} isOpen={isOpen} />
+    </>
   );
 };
 

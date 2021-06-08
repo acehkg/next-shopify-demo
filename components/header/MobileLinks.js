@@ -1,15 +1,8 @@
 import { Flex } from '@chakra-ui/react';
-import useNav from '../../hooks/useNav';
 import links from '../../utils/links.json';
 import MenuItem from '../header/MenuItem';
 
 const MobileLinks = () => {
-  const { open, setOpen } = useNav();
-
-  const handleNav = () => {
-    setOpen(!open);
-  };
-
   return (
     <Flex
       as='nav'
@@ -18,22 +11,12 @@ const MobileLinks = () => {
       align='center'
       h='100%'
     >
-      <MenuItem href={'/'} onClick={handleNav}>
-        HOME
-      </MenuItem>
-      <MenuItem href={'/collections'} onClick={handleNav}>
-        COLLECTIONS
-      </MenuItem>
-      <MenuItem href={'/products'} onClick={handleNav}>
-        ALL PRODUCTS
-      </MenuItem>
+      <MenuItem href={'/'}>HOME</MenuItem>
+      <MenuItem href={'/collections'}>COLLECTIONS</MenuItem>
+      <MenuItem href={'/products'}>ALL PRODUCTS</MenuItem>
       {links.map((link) => {
         return (
-          <MenuItem
-            key={link.handle}
-            href={`/collections/${link.handle}`}
-            onClick={handleNav}
-          >
+          <MenuItem key={link.handle} href={`/collections/${link.handle}`}>
             {link.title.toUpperCase()}
           </MenuItem>
         );

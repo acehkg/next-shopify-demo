@@ -2,13 +2,14 @@ import { Flex, Spacer } from '@chakra-ui/react';
 import MenuItem from '../header/MenuItem';
 import CartWidget from '../cart/CartWidget';
 import links from '../../utils/links.json';
+import DarkMode from '../interface/DarkMode';
 
 const DesktopLinks = () => {
   return (
     <Flex
       as='nav'
       display={['none', 'none', 'none', 'flex']}
-      w='60%'
+      w='100%'
       align='center'
       justify='flex-end'
     >
@@ -36,9 +37,10 @@ const DesktopLinks = () => {
         );
       })}
 
-      <MenuItem href='/cart'>
+      <MenuItem href='/cart' mr='2%'>
         <CartWidget />
       </MenuItem>
+      <DarkMode variant='outline' border='none' />
     </Flex>
   );
 };

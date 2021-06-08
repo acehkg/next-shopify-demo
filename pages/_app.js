@@ -6,8 +6,6 @@ import { ChakraProvider } from '@chakra-ui/react';
 import theme from '../style/theme';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/700.css';
-//Context for navbar state on mobile
-import NavOpenProvider from '../context/MenuContext';
 //Cart Context
 import CartProvider from '../context/CartContext';
 //cookies provider
@@ -15,7 +13,6 @@ import { CookiesProvider, useCookies } from 'react-cookie';
 //Layout Components
 import Header from '../components/header/Header';
 import Breadcumb from '../components/interface/Breadcrumb';
-import Slider from '../components/header/Slider';
 
 function MyApp({ Component, pageProps }) {
   const [checkout, setCheckout] = useState();
@@ -54,12 +51,9 @@ function MyApp({ Component, pageProps }) {
       <ChakraProvider theme={theme}>
         <CookiesProvider>
           <CartProvider checkoutId={checkout}>
-            <NavOpenProvider>
-              <Header />
-              <Slider />
-              <Breadcumb />
-              <Component {...pageProps} />
-            </NavOpenProvider>
+            <Header />
+            <Breadcumb />
+            <Component {...pageProps} />
           </CartProvider>
         </CookiesProvider>
       </ChakraProvider>
