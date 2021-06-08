@@ -10,9 +10,10 @@ import ProductImage from '../images/ProductImage';
 import QuantityAdjust from '../interface/QuantityAdjust';
 import SelectGroup from '../interface/SelectGroup';
 import BuyButton from '../interface/BuyButton';
+import ColorRadio from '../interface/Radio/ColorRadio';
+import LabelRadio from '../interface/Radio/LabelRadio';
 
 const TwoOptionProduct = ({ product }) => {
-  console.log(product);
   //checkoutid
   const { checkoutId, addItemToCart } = useCartContext();
   //for a product with to options render selectors and filter selections for target variantId
@@ -60,14 +61,12 @@ const TwoOptionProduct = ({ product }) => {
   };
 
   //set respective states from the individual selects
-  const handleChangeOne = (e) => {
-    e.preventDefault();
-    setSelectOne(() => e.target.value);
+  const handleChangeOne = (value) => {
+    setSelectOne(() => value);
   };
 
-  const handleChangeTwo = (e) => {
-    e.preventDefault();
-    setSelectTwo(() => e.target.value);
+  const handleChangeTwo = (value) => {
+    setSelectTwo(() => value);
   };
 
   const incrementQty = () => {
@@ -110,22 +109,24 @@ const TwoOptionProduct = ({ product }) => {
             {product.description}
           </Text>
           <Stack
-            direction='row'
+            direction='column'
             spacing={2}
             width={['19rem', '19rem', '20rem', '20rem']}
+            align='center'
           >
-            <SelectGroup
-              values={optionOne.values}
+            <ColorRadio
+              options={optionOne.values}
+              name={optionOne.name}
               onChange={handleChangeOne}
-              size='lg'
             />
-            <SelectGroup
-              values={optionTwo.values}
+
+            <LabelRadio
+              options={optionTwo.values}
+              name={optionTwo.name}
               onChange={handleChangeTwo}
-              size='lg'
             />
           </Stack>
-
+          <Text pt='2rem'>{selected.title}</Text>
           <QuantityAdjust
             withTrash={false}
             paddingTop='2rem'

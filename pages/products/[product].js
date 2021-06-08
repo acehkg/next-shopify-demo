@@ -1,7 +1,8 @@
 import { shopifyClient } from '../../utils/client';
 import NoOptionProduct from '../../components/display/NoOptionProduct';
 import OneOptionProduct from '../../components/display/OneOptionProduct';
-import TwoOptionProduct from '../../components/display/TwoOptionsProduct';
+import TwoOptionsProduct from '../../components/display/TwoOptionsProduct';
+import PageWithRadioSelectors from '../../components/display/PageWithRadioSelectors';
 
 const Product = ({ product }) => {
   if (product.variants.length === 1) {
@@ -11,7 +12,7 @@ const Product = ({ product }) => {
     return <OneOptionProduct product={product} />;
   }
   if (product.options.length === 2) {
-    return <TwoOptionProduct product={product} />;
+    return <PageWithRadioSelectors product={product} />;
   }
 };
 
