@@ -9,7 +9,7 @@ import { Flex, Text, Heading } from '@chakra-ui/react';
 import ProductImage from '../images/ProductImage';
 import QuantityAdjust from '../interface/QuantityAdjust';
 import BuyButton from '../interface/BuyButton';
-import RadioSelect from '../interface/RadioSelect';
+import LabelRadio from '../interface/Radio/LabelRadio';
 
 const OneOptionProduct = ({ product }) => {
   //checkoutid
@@ -65,36 +65,43 @@ const OneOptionProduct = ({ product }) => {
         ml={'auto'}
         mr={'auto'}
         pt={'2rem'}
+        pb='2rem'
       >
         {product.title}
       </Heading>
       <Flex
-        direction={['column', 'column', 'row', 'row']}
-        align='center'
+        direction={['column', 'column', 'column', 'row']}
+        align={['center', 'center', 'center', 'unset']}
         width={'90%'}
         ml={'auto'}
         mr={'auto'}
       >
-        <ProductImage product={product} selected={selected} />
+        <ProductImage
+          selected={selected}
+          product={product}
+          mt={['2rem', '2rem', '2rem', '0']}
+          mb='2rem'
+          width={['90%', '90%', '80%', '80%']}
+          mr={['0', '0', '0', '2%']}
+        />
 
         <Flex
           direction='column'
           align='center'
-          width={['100%', '100%', '50%', '50%']}
+          width={['100%', '100%', '80%', '50%']}
         >
           <Text
-            pt={'2rem'}
+            pt={['2rem', '2rem', '2rem', '0']}
             pb={'2rem'}
             align={['center', 'center', 'left', 'left']}
           >
             {product.description}
           </Text>
-          <RadioSelect
-            optionOne={optionOne}
-            filter={filter}
-            setFilter={setFilter}
-            variants={product.variants}
-            spacing={4}
+
+          <LabelRadio
+            options={optionOne.values}
+            name={optionOne.name}
+            onChange={setFilter}
           />
           <QuantityAdjust
             withTrash={false}
@@ -109,7 +116,8 @@ const OneOptionProduct = ({ product }) => {
             handleClick={handleClick}
             quantity={quantity}
             title={product.title}
-            marginY='2rem'
+            mt='2rem'
+            mb='2rem'
           />
         </Flex>
       </Flex>

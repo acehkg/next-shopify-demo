@@ -96,7 +96,17 @@ const CartItem = ({ src, alt, qty, title, price, id, variantId }) => {
   };
 
   return (
-    <Flex direction='column' align='center'>
+    <Flex
+      direction='column'
+      align='center'
+      borderColor='gray.700'
+      borderWidth={1}
+      borderStyle='solid'
+      py='2rem'
+      px='20%'
+      mb='2rem'
+      rounded='md'
+    >
       <ItemImage src={src} alt={alt} quantity={quantity} />
       <ItemInfo title={title} price={totalPrice} />
       <QuantityAdjust
@@ -113,7 +123,7 @@ const CartItem = ({ src, alt, qty, title, price, id, variantId }) => {
 const Checkout = ({ total, currency, url }) => {
   const price = (total * 1).toFixed(2);
   return (
-    <Box textAlign='center' pt={'2rem'}>
+    <Box textAlign='center'>
       <Text pb={'1rem'}>${`${price}${currency}`}</Text>
       <Button as='a' href={url}>
         CHECKOUT
@@ -133,7 +143,7 @@ const Cart = () => {
   return (
     <>
       <Box width='100px' marginLeft='auto' marginRight='auto'>
-        <BackButton size='lg' color='current' />
+        <BackButton size='lg' color='current' mb='2rem' />
       </Box>
       <Flex direction='column' align='center'>
         {cartData.checkout.lineItems.map((item) => (

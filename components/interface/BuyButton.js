@@ -10,15 +10,14 @@ const BuyButton = ({
   handleClick,
   quantity,
   title,
-  marginY,
+  ...rest
 }) => {
   return (
     <Button
       rightIcon={<FaCartPlus />}
-      mt={marginY}
-      mb={marginY}
-      minWidth={['50%', '50%', '100%', '80%']}
+      minWidth={['50%', '50%', '50%', '80%']}
       onClick={handleClick}
+      {...rest}
     >
       <VisuallyHidden>
         Add {quantity}

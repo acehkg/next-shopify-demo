@@ -8,12 +8,11 @@ import { Flex, Stack, Text, Heading } from '@chakra-ui/react';
 //components
 import ProductImage from '../images/ProductImage';
 import QuantityAdjust from '../interface/QuantityAdjust';
-import SelectGroup from '../interface/SelectGroup';
 import BuyButton from '../interface/BuyButton';
 import ColorRadio from '../interface/Radio/ColorRadio';
 import LabelRadio from '../interface/Radio/LabelRadio';
 
-const TwoOptionProduct = ({ product }) => {
+const TwoRadioSelectors = ({ product }) => {
   //checkoutid
   const { checkoutId, addItemToCart } = useCartContext();
   //for a product with to options render selectors and filter selections for target variantId
@@ -85,24 +84,32 @@ const TwoOptionProduct = ({ product }) => {
         ml={'auto'}
         mr={'auto'}
         pt={'2rem'}
+        pb='2rem'
       >
         {product.title}
       </Heading>
       <Flex
-        direction={['column', 'column', 'row', 'row']}
-        align='center'
+        direction={['column', 'column', 'column', 'row']}
+        align={['center', 'center', 'center', 'unset']}
         width={'90%'}
         ml={'auto'}
         mr={'auto'}
       >
-        <ProductImage product={product} selected={selected} />
+        <ProductImage
+          selected={selected}
+          product={product}
+          mt={['2rem', '2rem', '2rem', '0']}
+          mb='2rem'
+          width={['90%', '90%', '80%', '80%']}
+          mr={['0', '0', '0', '2%']}
+        />
         <Flex
           direction='column'
           align='center'
-          width={['100%', '100%', '50%', '50%']}
+          width={['100%', '100%', '80%', '50%']}
         >
           <Text
-            pt={'2rem'}
+            pt={['2rem', '2rem', '2rem', '0']}
             pb={'2rem'}
             align={['center', 'center', 'left', 'left']}
           >
@@ -140,7 +147,8 @@ const TwoOptionProduct = ({ product }) => {
             handleClick={handleClick}
             quantity={quantity}
             title={product.title}
-            marginY='2rem'
+            mt='2rem'
+            mb='2rem'
           />
         </Flex>
       </Flex>
@@ -148,4 +156,4 @@ const TwoOptionProduct = ({ product }) => {
   );
 };
 
-export default TwoOptionProduct;
+export default TwoRadioSelectors;

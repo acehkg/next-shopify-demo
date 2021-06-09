@@ -52,25 +52,33 @@ const NoOptionProduct = ({ product }) => {
         ml={'auto'}
         mr={'auto'}
         pt={'2rem'}
+        pb='2rem'
       >
         {product.title}
       </Heading>
       <Flex
-        direction={['column', 'column', 'row', 'row']}
-        align='center'
+        direction={['column', 'column', 'column', 'row']}
+        align={['center', 'center', 'center', 'unset']}
         width={'90%'}
         ml={'auto'}
         mr={'auto'}
       >
-        <ProductImage product={product} selected={product.variants[0]} />
+        <ProductImage
+          product={product}
+          selected={product.variants[0]}
+          mt={['2rem', '2rem', '2rem', '0']}
+          mb='2rem'
+          width={['90%', '90%', '80%', '80%']}
+          mr={['0', '0', '0', '2%']}
+        />
 
         <Flex
           direction='column'
           align='center'
-          width={['100%', '100%', '50%', '50%']}
+          width={['100%', '100%', '80%', '50%']}
         >
           <Text
-            pt={'2rem'}
+            pt={['2rem', '2rem', '2rem', '0']}
             pb={'2rem'}
             align={['center', 'center', 'left', 'left']}
           >
@@ -89,7 +97,8 @@ const NoOptionProduct = ({ product }) => {
             handleClick={handleClick}
             quantity={quantity}
             title={product.title}
-            marginY='2rem'
+            mt='2rem'
+            mb='2rem'
           />
         </Flex>
       </Flex>
