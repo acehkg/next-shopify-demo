@@ -85,8 +85,8 @@ const NoOptionProduct = ({ product }) => {
             {product.description}
           </Text>
           <QuantityAdjust
-            withTrash={false}
-            paddingTop='2rem'
+            pt='2rem'
+            spacing={8}
             quantity={quantity}
             incrementQty={incrementQty}
             decrementQty={decrementQty}

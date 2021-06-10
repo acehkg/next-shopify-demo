@@ -2,20 +2,10 @@ import { useState, useEffect } from 'react';
 import useCart from '../hooks/useCart';
 import useCartContext from '../hooks/useCartContext';
 //chakra ui
-import {
-  Box,
-  Flex,
-  Image,
-  Stack,
-  Text,
-  Spinner,
-  Button,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { Box, Flex, Image, Text, Spinner, Button } from '@chakra-ui/react';
 //components
 import QuantityAdjust from '../components/interface/QuantityAdjust';
 import BackButton from '../components/interface/BackButton';
-import QuantityDisplay from '../components/cart/QuantityDispaly';
 import TrashButton from '../components/interface/TrashButton';
 //
 import { mutate } from 'swr';
