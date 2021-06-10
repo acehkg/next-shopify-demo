@@ -135,8 +135,8 @@ const TwoRadioSelectors = ({ product }) => {
           </Stack>
           <Text pt='2rem'>{selected.title}</Text>
           <QuantityAdjust
-            withTrash={false}
-            paddingTop='2rem'
+            pt='2rem'
+            spacing={8}
             quantity={quantity}
             incrementQty={incrementQty}
             decrementQty={decrementQty}

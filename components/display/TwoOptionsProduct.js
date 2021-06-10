@@ -139,7 +139,6 @@ const TwoOptionProduct = ({ product }) => {
             handleClick={handleClick}
             quantity={quantity}
             title={product.title}
-            marginY='2rem'
           />
         </Flex>
       </Flex>

@@ -101,6 +101,7 @@ const CartItem = ({
       borderStyle='solid'
       rounded='md'
       py='1rem'
+      mb='2rem'
     >
       <Flex align='center' width='18rem' justify='space-around'>
         <ItemImage src={src} alt={alt} quantity={quantity} />
@@ -126,7 +127,7 @@ const CartItem = ({
 const Checkout = ({ total, currency, url }) => {
   const price = (total * 1).toFixed(2);
   return (
-    <Box textAlign='center' mt='2rem'>
+    <Box textAlign='center' mb='2rem'>
       <Text fontSize='1.25rem' pb={'2rem'}>
         TOTAL ${`${price}${currency}`}
       </Text>
