@@ -4,7 +4,14 @@ import { Heading, Text, Box, Flex, Button, Image } from '@chakra-ui/react';
 import { HiChevronDoubleRight } from 'react-icons/hi';
 
 const CardImage = ({ product }) => {
-  return <Image src={product.images[0].src} alt={product.title} />;
+  return (
+    <Image
+      src={product.images[0].src}
+      alt={product.title}
+      rounded='md'
+      mb='2rem'
+    />
+  );
 };
 
 const CardContent = ({ title, description }) => {

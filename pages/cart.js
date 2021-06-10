@@ -2,19 +2,12 @@ import { useState, useEffect } from 'react';
 import useCart from '../hooks/useCart';
 import useCartContext from '../hooks/useCartContext';
 //chakra ui
-import {
-  Box,
-  Flex,
-  Badge,
-  Image,
-  Stack,
-  Text,
-  Spinner,
-  Button,
-} from '@chakra-ui/react';
+import { Box, Flex, Image, Text, Spinner, Button } from '@chakra-ui/react';
 //components
 import QuantityAdjust from '../components/interface/QuantityAdjust';
 import BackButton from '../components/interface/BackButton';
+import TrashButton from '../components/interface/TrashButton';
+//
 import { mutate } from 'swr';
 
 const Loading = () => {
@@ -25,9 +18,9 @@ const Loading = () => {
   );
 };
 
-const ItemImage = ({ src, alt, quantity }) => {
+const ItemImage = ({ src, alt }) => {
   return (
-    <Flex pt={'2rem'}>
+    <Flex>
       <Image
         src={src}
         alt={alt}
@@ -35,31 +28,35 @@ const ItemImage = ({ src, alt, quantity }) => {
         boxSize='100px'
         objectFit='cover'
       />
-      <Box>
-        <Badge
-          colorScheme='gray'
-          fontSize={'1rem'}
-          px={'1rem'}
-          py={'0.5rem'}
-          borderRadius={'50%'}
-        >
-          {quantity}
-        </Badge>
-      </Box>
     </Flex>
   );
 };
 
-const ItemInfo = ({ title, price }) => {
+const ItemInfo = ({ title, variant }) => {
   return (
-    <Stack direction='row' spacing={4}>
+    <Flex
+      direction='column'
+      textAlign='center'
+      boxSize='100px'
+      justify='center'
+    >
       <Text>{title}</Text>
-      <Text>${price}</Text>
-    </Stack>
+      <Text>{variant}</Text>
+    </Flex>
   );
 };
 
-const CartItem = ({ src, alt, qty, title, price, id, variantId }) => {
+const CartItem = ({
+  src,
+  alt,
+  qty,
+  title,
+  price,
+  id,
+  variantId,
+  variant,
+  currency,
+}) => {
   const { checkoutId, removeItemFromCart, updateItemInCart } = useCartContext();
   const [quantity, setQuantity] = useState(qty);
   const incrementQty = () => {
@@ -72,7 +69,7 @@ const CartItem = ({ src, alt, qty, title, price, id, variantId }) => {
   //calculate price when qty changes
   const [totalPrice, setTotalPrice] = useState(price);
   useEffect(() => {
-    setTotalPrice(price * quantity);
+    setTotalPrice((price * quantity).toFixed(2));
   }, [quantity]);
 
   useEffect(async () => {
@@ -96,16 +93,33 @@ const CartItem = ({ src, alt, qty, title, price, id, variantId }) => {
   };
 
   return (
-    <Flex direction='column' align='center'>
-      <ItemImage src={src} alt={alt} quantity={quantity} />
-      <ItemInfo title={title} price={totalPrice} />
-      <QuantityAdjust
-        withTrash={true}
-        paddingTop='1rem'
-        incrementQty={incrementQty}
-        decrementQty={decrementQty}
-        handleTrash={handleTrash}
-      />
+    <Flex
+      direction='column'
+      align='center'
+      borderColor='gray.700'
+      borderWidth={1}
+      borderStyle='solid'
+      rounded='md'
+      py='1rem'
+      mb='2rem'
+    >
+      <Flex align='center' width='18rem' justify='space-around'>
+        <ItemImage src={src} alt={alt} quantity={quantity} />
+
+        <ItemInfo title={title} price={totalPrice} variant={variant} />
+      </Flex>
+      <Flex align='center' width='18rem' justify='space-around' pt='1rem'>
+        <QuantityAdjust
+          incrementQty={incrementQty}
+          decrementQty={decrementQty}
+          quantity={quantity}
+        />
+        <Text>
+          ${totalPrice}
+          {currency}
+        </Text>
+        <TrashButton handleTrash={handleTrash} />
+      </Flex>
     </Flex>
   );
 };
@@ -113,9 +127,11 @@ const CartItem = ({ src, alt, qty, title, price, id, variantId }) => {
 const Checkout = ({ total, currency, url }) => {
   const price = (total * 1).toFixed(2);
   return (
-    <Box textAlign='center' pt={'2rem'}>
-      <Text pb={'1rem'}>${`${price}${currency}`}</Text>
-      <Button as='a' href={url}>
+    <Box textAlign='center' mb='2rem'>
+      <Text fontSize='1.25rem' pb={'2rem'}>
+        TOTAL ${`${price}${currency}`}
+      </Text>
+      <Button as='a' href={url} size='lg'>
         CHECKOUT
       </Button>
     </Box>
@@ -133,7 +149,7 @@ const Cart = () => {
   return (
     <>
       <Box width='100px' marginLeft='auto' marginRight='auto'>
-        <BackButton size='lg' color='current' />
+        <BackButton size='lg' color='current' mb='2rem' />
       </Box>
       <Flex direction='column' align='center'>
         {cartData.checkout.lineItems.map((item) => (
@@ -148,6 +164,7 @@ const Cart = () => {
             src={item.variant.image.src}
             alt={item.title}
             variantId={item.variant.id}
+            variant={item.variant.title}
           />
         ))}
         <Checkout

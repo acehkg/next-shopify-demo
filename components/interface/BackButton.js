@@ -2,17 +2,16 @@ import { useRouter } from 'next/router';
 import { Button } from '@chakra-ui/react';
 import { RiArrowGoBackFill } from 'react-icons/ri';
 
-const BackButton = ({ size, color }) => {
+const BackButton = ({ ...rest }) => {
   const router = useRouter();
   const handleClick = () => {
     router.back();
   };
   return (
     <Button
-      size={size}
-      color={color}
+      {...rest}
       variant='link'
-      leftIcon={<RiArrowGoBackFill color={color} />}
+      leftIcon={<RiArrowGoBackFill />}
       onClick={handleClick}
     >
       BACK

@@ -12,6 +12,7 @@ import SelectGroup from '../interface/SelectGroup';
 import BuyButton from '../interface/BuyButton';
 
 const TwoOptionProduct = ({ product }) => {
+  console.log(product);
   //checkoutid
   const { checkoutId, addItemToCart } = useCartContext();
   //for a product with to options render selectors and filter selections for target variantId
@@ -126,8 +127,8 @@ const TwoOptionProduct = ({ product }) => {
           </Stack>
 
           <QuantityAdjust
-            withTrash={false}
-            paddingTop='2rem'
+            pt='2rem'
+            spacing={8}
             quantity={quantity}
             incrementQty={incrementQty}
             decrementQty={decrementQty}
@@ -138,7 +139,6 @@ const TwoOptionProduct = ({ product }) => {
             handleClick={handleClick}
             quantity={quantity}
             title={product.title}
-            marginY='2rem'
           />
         </Flex>
       </Flex>

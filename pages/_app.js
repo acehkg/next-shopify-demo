@@ -2,12 +2,10 @@ import { useEffect, useState } from 'react';
 //global styles and styles for components
 import GlobalStyles from '../style/GlobalStyles';
 //Chakra UI
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, useDisclosure } from '@chakra-ui/react';
 import theme from '../style/theme';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/700.css';
-//Context for navbar state on mobile
-import NavOpenProvider from '../context/MenuContext';
 //Cart Context
 import CartProvider from '../context/CartContext';
 //cookies provider
@@ -15,11 +13,13 @@ import { CookiesProvider, useCookies } from 'react-cookie';
 //Layout Components
 import Header from '../components/header/Header';
 import Breadcumb from '../components/interface/Breadcrumb';
-import Slider from '../components/header/Slider';
+import CookiePop from '../components/modals/CookiePop';
 
 function MyApp({ Component, pageProps }) {
   const [checkout, setCheckout] = useState();
   const [cookies, setCookie] = useCookies(['checkoutId']);
+  const [shouldPop, setShouldPop] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   //retrieve existing checkout from cookies or create a new checkout
   useEffect(async () => {
@@ -49,17 +49,24 @@ function MyApp({ Component, pageProps }) {
     }
   }, []);
 
+  useEffect(() => {
+    let pop_status = localStorage.getItem('pop_status');
+    if (!pop_status) {
+      setShouldPop(true);
+      localStorage.setItem('pop_status', 1);
+      onOpen();
+    }
+  }, []);
+
   return (
     <>
       <ChakraProvider theme={theme}>
         <CookiesProvider>
           <CartProvider checkoutId={checkout}>
-            <NavOpenProvider>
-              <Header />
-              <Slider />
-              <Breadcumb />
-              <Component {...pageProps} />
-            </NavOpenProvider>
+            <Header />
+            <Breadcumb />
+            <Component {...pageProps} />
+            {shouldPop ? <CookiePop isOpen={isOpen} onClose={onClose} /> : null}
           </CartProvider>
         </CookiesProvider>
       </ChakraProvider>

@@ -1,8 +1,7 @@
 //storefront API Client
 import { shopifyClient } from '../utils/client';
-import Link from 'next/link';
 //chakra ui
-import { Box, Flex, Grid, GridItem, Text } from '@chakra-ui/react';
+import { Box, Flex, Grid, Image, Text } from '@chakra-ui/react';
 import GridLink from '../components/layout/GridLink';
 import GridImage from '../components/images/GridImage';
 
@@ -21,9 +20,10 @@ const HomePage = ({ products, collections }) => {
           colSpan={4}
           rowSpan={2}
         >
-          <GridImage
+          <Image
             src={collections[0].image.src}
             alt={collections[0].title}
+            rounded='md'
           />
         </GridLink>
         <GridLink
@@ -31,9 +31,10 @@ const HomePage = ({ products, collections }) => {
           colSpan={2}
           rowSpan={1}
         >
-          <GridImage
+          <Image
             src={collections[1].image.src}
             alt={collections[1].title}
+            rounded='md'
           />
         </GridLink>
         <GridLink
@@ -41,9 +42,10 @@ const HomePage = ({ products, collections }) => {
           colSpan={2}
           rowSpan={1}
         >
-          <GridImage
+          <Image
             src={collections[2].image.src}
             alt={collections[2].title}
+            rounded='md'
           />
         </GridLink>
         <GridLink href='/products' colSpan={4} rowSpan={1} bg='gray.200'>
