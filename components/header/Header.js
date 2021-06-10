@@ -5,6 +5,7 @@ import CartWidget from '../cart/CartWidget';
 import MenuItem from '../header/MenuItem';
 import MenuDrawer from '../header/MenuDrawer';
 import { RiMenu4Line } from 'react-icons/ri';
+import DarkMode from '../interface/DarkMode';
 
 const Header = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
@@ -15,6 +16,7 @@ const Header = () => {
         <Logo image='/images/logo.png' alt='Better Beer Co' />
 
         <Flex align='center' d={['flex', 'flex', 'flex', 'none']}>
+          <DarkMode mr='0.5rem' size='sm' />
           <MenuItem href='/cart'>
             <CartWidget />
           </MenuItem>
@@ -24,6 +26,7 @@ const Header = () => {
             icon={<RiMenu4Line size={32} />}
             variant='outline'
             border='none'
+            ml='.5rem'
           />
         </Flex>
         <DesktopLinks />
