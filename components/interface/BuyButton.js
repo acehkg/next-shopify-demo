@@ -10,8 +10,18 @@ const BuyButton = ({
   handleClick,
   quantity,
   title,
+  stock,
   ...rest
 }) => {
+  if (stock === false) {
+    return (
+      <Button isDisabled minWidth={['50%', '50%', '50%', '80%']} {...rest}>
+        <VisuallyHidden>OUT OF STOCK</VisuallyHidden>
+        OUT OF STOCK
+      </Button>
+    );
+  }
+
   return (
     <Button
       rightIcon={<FaCartPlus />}

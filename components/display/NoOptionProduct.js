@@ -43,7 +43,11 @@ const NoOptionProduct = ({ product }) => {
       console.log(e);
     }
   };
+  const [stock, setStock] = useState(true);
 
+  useEffect(() => {
+    product.variants[0].available ? setStock(true) : setStock(false);
+  }, []);
   return (
     <>
       <Heading
@@ -92,6 +96,7 @@ const NoOptionProduct = ({ product }) => {
             decrementQty={decrementQty}
           />
           <BuyButton
+            stock={stock}
             totalPrice={totalPrice}
             currencyCode={product.variants[0].priceV2.currencyCode}
             handleClick={handleClick}

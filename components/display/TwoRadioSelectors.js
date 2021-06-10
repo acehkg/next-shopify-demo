@@ -75,6 +75,11 @@ const TwoRadioSelectors = ({ product }) => {
   const decrementQty = () => {
     quantity === 1 ? setQuantity(1) : setQuantity(() => quantity - 1);
   };
+  const [stock, setStock] = useState(true);
+
+  useEffect(() => {
+    selected.available ? setStock(true) : setStock(false);
+  }, [selected]);
 
   return (
     <>
@@ -142,6 +147,7 @@ const TwoRadioSelectors = ({ product }) => {
             decrementQty={decrementQty}
           />
           <BuyButton
+            stock={stock}
             totalPrice={totalPrice}
             currencyCode={selected.priceV2.currencyCode}
             handleClick={handleClick}

@@ -57,6 +57,12 @@ const OneOptionProduct = ({ product }) => {
     }
   };
 
+  const [stock, setStock] = useState(true);
+
+  useEffect(() => {
+    selected.available ? setStock(true) : setStock(false);
+  }, [selected]);
+
   return (
     <>
       <Heading
@@ -111,6 +117,7 @@ const OneOptionProduct = ({ product }) => {
             decrementQty={decrementQty}
           />
           <BuyButton
+            stock={stock}
             totalPrice={totalPrice}
             currencyCode={selected.priceV2.currencyCode}
             handleClick={handleClick}
