@@ -14,6 +14,7 @@ import { CookiesProvider, useCookies } from 'react-cookie';
 import Header from '../components/header/Header';
 import Breadcumb from '../components/interface/Breadcrumb';
 import CookiePop from '../components/modals/CookiePop';
+import Footer from '../components/footer/Footer';
 
 function MyApp({ Component, pageProps }) {
   const [checkout, setCheckout] = useState();
@@ -66,6 +67,7 @@ function MyApp({ Component, pageProps }) {
             <Header />
             <Breadcumb />
             <Component {...pageProps} />
+            <Footer />
             {shouldPop ? <CookiePop isOpen={isOpen} onClose={onClose} /> : null}
           </CartProvider>
         </CookiesProvider>

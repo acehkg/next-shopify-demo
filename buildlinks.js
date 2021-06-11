@@ -24,4 +24,20 @@ const getLinks = async () => {
     console.log(error);
   }
 };
+
+const getPolicies = async () => {
+  //query Shopify API to receive category slugs
+  try {
+    const policies = await shopifyClient.shop.fetchPolicies();
+    const formattedPolicies = JSON.parse(JSON.stringify(policies));
+
+    //write output to a links.json file
+    const filepath = `${process.cwd()}/utils/policies.json`;
+    fs.writeFileSync(filepath, JSON.stringify(formattedPolicies));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+getPolicies();
 getLinks();
