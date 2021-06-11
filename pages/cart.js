@@ -25,7 +25,7 @@ const Cart = () => {
   }
 
   return (
-    <>
+    <Box as='main' minHeight='65%' pb='2rem'>
       <Box width='100px' marginLeft='auto' marginRight='auto'>
         <BackButton size='lg' color='current' mb='2rem' />
       </Box>
@@ -51,7 +51,7 @@ const Cart = () => {
           url={cartData.checkout.webUrl}
         />
       </Flex>
-    </>
+    </Box>
   );
 };
 

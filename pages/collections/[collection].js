@@ -20,6 +20,8 @@ const Collection = ({ collection }) => {
 const PageWrapper = styled.div`
   width: 90%;
   margin: 0 auto;
+  min-height: 65%;
+  padding-bottom: 2rem;
 `;
 
 export default Collection;

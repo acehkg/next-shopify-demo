@@ -19,7 +19,9 @@ const Products = ({ products }) => {
 
 const PageWrapper = styled.div`
   width: 90%;
+  min-height: 65%;
   margin: 0 auto;
+  padding-bottom: 2rem;
 `;
 
 export default Products;

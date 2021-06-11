@@ -12,7 +12,15 @@ const Header = () => {
 
   return (
     <>
-      <Flex as='header' w='100%' align='center' justify='space-between' p={8}>
+      <Flex
+        as='header'
+        w='100%'
+        align='center'
+        justify='space-between'
+        height='20%'
+        pl='5%'
+        pr='5%'
+      >
         <Logo image='/images/logo.png' alt='Better Beer Co' />
 
         <Flex align='center' d={['flex', 'flex', 'flex', 'none']}>

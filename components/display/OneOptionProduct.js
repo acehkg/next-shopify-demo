@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import useCartContext from '../../hooks/useCartContext';
 import { mutate } from 'swr';
 //chakra ui
-import { Flex, Text, Heading } from '@chakra-ui/react';
+import { Flex, Text, Heading, Box } from '@chakra-ui/react';
 //components
 import ProductImage from '../images/ProductImage';
 import QuantityAdjust from '../interface/QuantityAdjust';
@@ -64,7 +64,7 @@ const OneOptionProduct = ({ product }) => {
   }, [selected]);
 
   return (
-    <>
+    <Box minHeight='65%'>
       <Heading
         textAlign='center'
         width={'90%'}
@@ -128,7 +128,7 @@ const OneOptionProduct = ({ product }) => {
           />
         </Flex>
       </Flex>
-    </>
+    </Box>
   );
 };
 

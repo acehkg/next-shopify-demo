@@ -16,8 +16,7 @@ const Footer = () => {
       width='100%'
       align='center'
       justify='space-evenly'
-      pt='1rem'
-      mb='1rem'
+      height='15%'
       borderTop='solid'
       borderColor={borderColor}
       borderWidth='1px'

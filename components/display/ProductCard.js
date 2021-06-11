@@ -1,33 +1,45 @@
 import Link from 'next/link';
 //styling
-import { Heading, Text, Box, Flex, Button, Image } from '@chakra-ui/react';
+import {
+  Heading,
+  Text,
+  Box,
+  Flex,
+  Button,
+  Image,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import { HiChevronDoubleRight } from 'react-icons/hi';
 
-const CardImage = ({ product }) => {
+const CardImage = ({ product, ...rest }) => {
   return (
-    <Image
-      src={product.images[0].src}
-      alt={product.title}
-      rounded='md'
-      mb='2rem'
-    />
-  );
-};
-
-const CardContent = ({ title, description }) => {
-  return (
-    <Box textAlign='center'>
-      <Heading as='h2' pb={'2rem'} fontSize='2xl'>
-        {title}
-      </Heading>
-      <Heading as='h4' fontSize='lg' fontWeight='regular'>
-        {description}
-      </Heading>
+    <Box {...rest}>
+      <Image src={product.images[0].src} alt={product.title} rounded='md' />
     </Box>
   );
 };
 
-const Price = ({ variants }) => {
+const CardContent = ({ title, description, ...rest }) => {
+  return (
+    <Flex
+      direction='column'
+      align='center'
+      justify='flex-start'
+      textAlign='center'
+      height='8rem'
+      {...rest}
+    >
+      <Heading as='h2' fontSize='md' py='.5rem'>
+        {title}
+      </Heading>
+      <Heading as='h4' fontSize='sm' fontWeight='regular'>
+        {description}
+      </Heading>
+    </Flex>
+  );
+};
+
+const Price = ({ variants, ...rest }) => {
   //create an array of prices
   const prices = variants.map((variant) => {
     return variant.price;
@@ -35,7 +47,7 @@ const Price = ({ variants }) => {
   //determin whether all prices are the same or not and render appropriate information (price or From Price)
   const allEqual = (arr) => arr.every((v) => v === arr[0]);
   return (
-    <Flex pb={'1rem'} pt={'1rem'}>
+    <Flex {...rest}>
       {allEqual(prices) ? (
         <Text>${prices[0]}</Text>
       ) : (
@@ -46,42 +58,48 @@ const Price = ({ variants }) => {
 };
 
 const ProductCard = ({ product }) => {
+  const bg = useColorModeValue('gray.100', 'gray.700');
+  const buttonBorder = useColorModeValue('gray.700', 'gray.100');
   //product description should include h3 tagged short desciption at the top
   const filteredDescription = /<h3>(.*?)<\/h3>/.exec(product.descriptionHtml);
   const shortDescription = filteredDescription[1];
   return (
-    <Flex
-      maxW='20rem'
-      direction='column'
-      justify='space-evenly'
-      align='center'
-      boxShadow={['none', 'md', 'md']}
-      _hover={[
-        { boxShadow: 'none' },
-        { boxShadow: 'lg' },
-        { boxShadow: 'lg' },
-        { boxShadow: 'lg' },
-      ]}
-      rounded='md'
-      p={4}
-    >
-      <CardImage product={product} />
+    <Flex justify='space-evenly' align='center' bg={bg} p='1rem' rounded='md'>
+      <Flex direction='column' width='100%' align='center' justify='center'>
+        <CardImage
+          product={product}
+          width={['8.75rem', '9rem', '9rem', '10rem']}
+        />
+        <Price variants={product.variants} pt='1rem' />
+      </Flex>
 
-      <CardContent title={product.title} description={shortDescription} />
-      <Price variants={product.variants} />
-      <Box pb={'1rem'}>
-        <Link href={`/products/${product.handle}`}>
-          <Button
-            as='a'
-            rightIcon={<HiChevronDoubleRight />}
-            variant='outline'
-            borderRadius='0'
-            aria-label='Buy Now'
-          >
-            BUY NOW
-          </Button>
-        </Link>
-      </Box>
+      <Flex
+        direction='column'
+        align='center'
+        justify='space-between'
+        pl='.5rem'
+      >
+        <CardContent
+          title={product.title}
+          description={shortDescription}
+          width={['8.75rem', '9rem', '9rem', '10rem']}
+        />
+
+        <Box>
+          <Link href={`/products/${product.handle}`}>
+            <Button
+              as='a'
+              rightIcon={<HiChevronDoubleRight />}
+              variant='outline'
+              rounded='md'
+              borderColor={buttonBorder}
+              aria-label='Buy Now'
+            >
+              BUY NOW
+            </Button>
+          </Link>
+        </Box>
+      </Flex>
     </Flex>
   );
 };

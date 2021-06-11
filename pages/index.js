@@ -1,13 +1,22 @@
 //storefront API Client
 import { shopifyClient } from '../utils/client';
 //chakra ui
-import { Box, Flex, Grid, Image, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Flex,
+  Grid,
+  Image,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react';
 import GridLink from '../components/layout/GridLink';
 import GridImage from '../components/images/GridImage';
 
 const HomePage = ({ products, collections }) => {
+  const bg = useColorModeValue('gray.200', 'gray.700');
+
   return (
-    <>
+    <Box minHeight='65%' pb='2rem'>
       <Grid
         templateRows='repeat(4, 1fr)'
         templateColumns='repeat(4, 1fr)'
@@ -48,13 +57,13 @@ const HomePage = ({ products, collections }) => {
             rounded='md'
           />
         </GridLink>
-        <GridLink href='/products' colSpan={4} rowSpan={1} bg='gray.200'>
+        <GridLink href='/products' colSpan={4} rowSpan={1} bg={bg} rounded='md'>
           <Flex justify='center' align='center' width='100%' height='100%'>
             <Text fontSize='1.5rem'>ALL PRODUCTS</Text>
           </Flex>
         </GridLink>
       </Grid>
-    </>
+    </Box>
   );
 };
 
