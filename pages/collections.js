@@ -1,26 +1,21 @@
 //storefront API Client
 import { shopifyClient } from '../utils/client';
 //styling
-import styled from 'styled-components';
 import GridContainer from '../components/layout/GridContainer';
 import CollectionCard from '../components/display/CollectionCard';
+import { Box } from '@chakra-ui/layout';
 
 const Collections = ({ collections }) => {
   return (
-    <PageWrapper>
+    <Box width='90%' mx='auto' pb='2rem'>
       <GridContainer>
         {collections.map((collection) => {
           return <CollectionCard key={collection.id} collection={collection} />;
         })}
       </GridContainer>
-    </PageWrapper>
+    </Box>
   );
 };
-
-const PageWrapper = styled.div`
-  width: 90%;
-  margin: 0 auto;
-`;
 
 export default Collections;
 

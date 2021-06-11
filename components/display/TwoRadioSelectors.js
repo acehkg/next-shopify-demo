@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import useCartContext from '../../hooks/useCartContext';
 import { mutate } from 'swr';
 //chakra ui
-import { Flex, Stack, Text, Heading } from '@chakra-ui/react';
+import { Flex, Stack, Text, Heading, Box } from '@chakra-ui/react';
 //components
 import ProductImage from '../images/ProductImage';
 import QuantityAdjust from '../interface/QuantityAdjust';
@@ -82,7 +82,7 @@ const TwoRadioSelectors = ({ product }) => {
   }, [selected]);
 
   return (
-    <>
+    <Box>
       <Heading
         textAlign='center'
         width={'90%'}
@@ -158,7 +158,7 @@ const TwoRadioSelectors = ({ product }) => {
           />
         </Flex>
       </Flex>
-    </>
+    </Box>
   );
 };
 
