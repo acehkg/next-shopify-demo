@@ -7,10 +7,12 @@ import {
   Grid,
   Image,
   Text,
+  GridItem,
   useColorModeValue,
 } from '@chakra-ui/react';
 import GridLink from '../components/layout/GridLink';
-import GridImage from '../components/images/GridImage';
+import ProductCard from '../components/display/ProductCard';
+import GridContainer from '../components/layout/GridContainer';
 
 const HomePage = ({ products, collections }) => {
   const bg = useColorModeValue('gray.200', 'gray.700');
@@ -18,16 +20,17 @@ const HomePage = ({ products, collections }) => {
   return (
     <Box minHeight='65%' pb='2rem'>
       <Grid
-        templateRows='repeat(4, 1fr)'
-        templateColumns='repeat(4, 1fr)'
-        gap={4}
+        templateRows={['repeat(6, 1fr)', 'repeat(6, 1fr)', 'repeat(2,1fr)']}
+        templateColumns={['repeat(4, 1fr)', 'repeat(4, 1fr)', 'repeat(4, 1fr)']}
+        gap={8}
         ml='5%'
         mr='5%'
+        pb='2rem'
       >
         <GridLink
           href={`/collections/${collections[0].handle}`}
-          colSpan={4}
-          rowSpan={2}
+          colSpan={[4, 4, 2]}
+          rowSpan={[2, 2, 1]}
         >
           <Image
             src={collections[0].image.src}
@@ -57,12 +60,37 @@ const HomePage = ({ products, collections }) => {
             rounded='md'
           />
         </GridLink>
-        <GridLink href='/products' colSpan={4} rowSpan={1} bg={bg} rounded='md'>
-          <Flex justify='center' align='center' width='100%' height='100%'>
-            <Text fontSize='1.5rem'>ALL PRODUCTS</Text>
-          </Flex>
-        </GridLink>
+        <GridItem
+          colSpan={[4, 4, 2]}
+          rowSpan={[3, 3, 1]}
+          bg={bg}
+          rounded='md'
+          position='relative'
+        >
+          <Text
+            fontSize='1rem'
+            position='absolute'
+            p='1rem'
+            textAlign='center'
+            top='50%'
+            left='50%'
+            transform='translate(-50%, -50%)'
+            width='100%'
+          >
+            THIS SAMPLE APPLICATION BRINGS THE SPEED, POWER AND ACCESSABILITY OF
+            AN ADVANCED FRAMEWORK TO SHOPIFY. THIS IS A LIVE DEMO CONNECTED TO A
+            DEVELOPMENT STORE. PLEASE EXPLORE AND ENJOY. THE STYLING IS BASIC
+            BUT IS 100% CUSTOMIZABLE TO ANY DESIGN YOU WOULD LIKE.
+          </Text>
+        </GridItem>
       </Grid>
+      <Box mr={('0', '5%')} ml={('0', '5%')}>
+        <GridContainer>
+          {products.map((product) => {
+            return <ProductCard key={product.id} product={product} />;
+          })}
+        </GridContainer>
+      </Box>
     </Box>
   );
 };
