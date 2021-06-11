@@ -1,15 +1,22 @@
 import Link from 'next/link';
-import { LinkBox, LinkOverlay, Heading, Text, Image } from '@chakra-ui/react';
+import {
+  LinkBox,
+  LinkOverlay,
+  Heading,
+  Text,
+  Image,
+  useColorModeValue,
+} from '@chakra-ui/react';
 
 const CollectionCard = ({ collection }) => {
+  const bg = useColorModeValue('gray.100', 'gray.700');
   return (
     <LinkBox
       aria-label='Visit Item in Collection'
       display='flex'
       flexDirection='column'
       maxWidth='20rem'
-      boxShadow='md'
-      _hover={{ boxShadow: 'lg' }}
+      bg={bg}
       rounded='md'
       p={2}
     >

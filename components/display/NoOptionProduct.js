@@ -49,7 +49,7 @@ const NoOptionProduct = ({ product }) => {
     product.variants[0].available ? setStock(true) : setStock(false);
   }, []);
   return (
-    <Box minHeight='65%'>
+    <Box>
       <Heading
         textAlign='center'
         width={'90%'}

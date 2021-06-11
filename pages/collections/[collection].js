@@ -1,28 +1,21 @@
 import { shopifyClient } from '../../utils/client';
 //styling
-import styled from 'styled-components';
 import GridContainer from '../../components/layout/GridContainer';
 import ProductCard from '../../components/display/ProductCard';
+import { Box } from '@chakra-ui/layout';
 
 const Collection = ({ collection }) => {
   const products = collection.products;
   return (
-    <PageWrapper>
+    <Box as='main' width='90%' mx='auto' pb='2rem'>
       <GridContainer>
         {products.map((product) => {
           return <ProductCard key={product.id} product={product} />;
         })}
       </GridContainer>
-    </PageWrapper>
+    </Box>
   );
 };
-
-const PageWrapper = styled.div`
-  width: 90%;
-  margin: 0 auto;
-  min-height: 65%;
-  padding-bottom: 2rem;
-`;
 
 export default Collection;
 export async function getStaticPaths() {

@@ -64,7 +64,7 @@ const OneOptionProduct = ({ product }) => {
   }, [selected]);
 
   return (
-    <Box minHeight='65%'>
+    <Box>
       <Heading
         textAlign='center'
         width={'90%'}
