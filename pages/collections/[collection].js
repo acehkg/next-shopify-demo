@@ -1,19 +1,28 @@
+import { useRouter } from 'next/router';
 import { shopifyClient } from '../../utils/client';
 //styling
 import GridContainer from '../../components/layout/GridContainer';
 import ProductCard from '../../components/display/ProductCard';
 import { Box } from '@chakra-ui/layout';
+import CollectionSeo from '../../components/seo/CollectionSeo';
 
 const Collection = ({ collection }) => {
+  const { asPath } = useRouter();
+  const siteName = 'NEXT JS and Shopify';
+
   const products = collection.products;
+  console.log(asPath);
   return (
-    <Box as='main' width='90%' mx='auto' pb='2rem'>
-      <GridContainer>
-        {products.map((product) => {
-          return <ProductCard key={product.id} product={product} />;
-        })}
-      </GridContainer>
-    </Box>
+    <>
+      <CollectionSeo collection={collection} url={asPath} siteName={siteName} />
+      <Box as='main' width='90%' mx='auto' pb='2rem'>
+        <GridContainer>
+          {products.map((product) => {
+            return <ProductCard key={product.id} product={product} />;
+          })}
+        </GridContainer>
+      </Box>
+    </>
   );
 };
 

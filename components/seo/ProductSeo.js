@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-const PageSeo = ({ metadata }) => {
+const ProductSeo = ({ metadata }) => {
   return (
     <Head>
       <meta name='viewport' content='width=device-width, initial-scale=1' />
@@ -35,4 +35,4 @@ const PageSeo = ({ metadata }) => {
   );
 };
 
-export default PageSeo;
+export default ProductSeo;
