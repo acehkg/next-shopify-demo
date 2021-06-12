@@ -40,7 +40,7 @@ const CardContent = ({ title, description, ...rest }) => {
       <Heading as='h2' fontSize='md' py='.5rem'>
         {title}
       </Heading>
-      <Heading as='h4' fontSize='sm' fontWeight='regular'>
+      <Heading as='h3' fontSize='sm' fontWeight='regular'>
         {description}
       </Heading>
     </Flex>

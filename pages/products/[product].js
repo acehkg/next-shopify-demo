@@ -1,17 +1,38 @@
+import { useRouter } from 'next/router';
 import { shopifyClient } from '../../utils/client';
 import NoOptionProduct from '../../components/display/NoOptionProduct';
 import OneOptionProduct from '../../components/display/OneOptionProduct';
 import TwoRadioSelectors from '../../components/display/TwoRadioSelectors';
+import ProductSeo from '../../components/seo/ProductSeo';
 
 const Product = ({ product }) => {
+  const { asPath } = useRouter();
+  const siteName = 'NEXT JS and Shopify';
+  const url = `https://next-shopify-demo-three.vercel.app${asPath}`;
+
   if (product.variants.length === 1) {
-    return <NoOptionProduct product={product} />;
+    return (
+      <>
+        <ProductSeo product={product} url={url} siteName={siteName} />
+        <NoOptionProduct product={product} />
+      </>
+    );
   }
   if (product.options.length === 1) {
-    return <OneOptionProduct product={product} />;
+    return (
+      <>
+        <ProductSeo product={product} url={url} siteName={siteName} />
+        <OneOptionProduct product={product} />
+      </>
+    );
   }
   if (product.options.length === 2) {
-    return <TwoRadioSelectors product={product} />;
+    return (
+      <>
+        <ProductSeo product={product} url={url} siteName={siteName} />
+        <TwoRadioSelectors product={product} />
+      </>
+    );
   }
 };
 
