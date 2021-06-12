@@ -8,11 +8,11 @@ import { Box } from '@chakra-ui/layout';
 import PageSeo from '../components/seo/PageSeo';
 
 const Collections = ({ collections }) => {
-  const { pathname } = useRouter();
+  const { asPath } = useRouter();
   const metadata = {
     pageTitle: 'Collections',
     description: 'All the collections featured in our store',
-    currentURL: `${pathname}`,
+    currentURL: `https://next-shopify-demo-three.vercel.app${asPath}`,
     previewImage: `${collections[0].image.src}`,
     siteName: 'NEXT JS and Shopify Demo',
   };

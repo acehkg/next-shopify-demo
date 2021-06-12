@@ -9,12 +9,13 @@ import CollectionSeo from '../../components/seo/CollectionSeo';
 const Collection = ({ collection }) => {
   const { asPath } = useRouter();
   const siteName = 'NEXT JS and Shopify';
+  const url = `https://next-shopify-demo-three.vercel.app${asPath}`;
 
   const products = collection.products;
-  console.log(asPath);
+
   return (
     <>
-      <CollectionSeo collection={collection} url={asPath} siteName={siteName} />
+      <CollectionSeo collection={collection} url={url} siteName={siteName} />
       <Box as='main' width='90%' mx='auto' pb='2rem'>
         <GridContainer>
           {products.map((product) => {

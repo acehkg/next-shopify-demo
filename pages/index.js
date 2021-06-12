@@ -10,11 +10,11 @@ import { useRouter } from 'next/router';
 
 const HomePage = ({ products, collections }) => {
   const bg = useColorModeValue('gray.200', 'gray.700');
-  const { pathname } = useRouter();
+  const { asPath } = useRouter();
   const metadata = {
     pageTitle: 'Home',
     description: 'The Home Page of the Better Beer App',
-    currentURL: `${pathname}`,
+    currentURL: `https://next-shopify-demo-three.vercel.app${asPath}`,
     previewImage: '/images/logo.png',
     siteName: 'NEXT JS and Shopify Demo',
   };
