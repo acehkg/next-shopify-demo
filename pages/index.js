@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import GridLink from '../components/layout/GridLink';
 import ProductCard from '../components/display/ProductCard';
-import GridContainer from '../components/layout/GridContainer';
+import NextImage from '../components/images/NextImage';
 
 const HomePage = ({ products, collections }) => {
   const bg = useColorModeValue('gray.200', 'gray.700');
@@ -32,24 +32,33 @@ const HomePage = ({ products, collections }) => {
         pb='2rem'
       >
         <GridLink href={`/collections/${collections[0].handle}`}>
-          <Image
+          <NextImage
             src={collections[0].image.src}
             alt={collections[0].title}
-            rounded='md'
+            rounding='var(--chakra-radii-md)'
+            height={512}
+            width={768}
+            layout='responsive'
           />
         </GridLink>
         <GridLink href={`/collections/${collections[1].handle}`}>
-          <Image
+          <NextImage
             src={collections[1].image.src}
             alt={collections[1].title}
-            rounded='md'
+            rounding='var(--chakra-radii-md)'
+            height={512}
+            width={768}
+            layout='responsive'
           />
         </GridLink>
         <GridLink href={`/collections/${collections[2].handle}`}>
-          <Image
+          <NextImage
             src={collections[2].image.src}
             alt={collections[2].title}
-            rounded='md'
+            rounding='var(--chakra-radii-md)'
+            height={512}
+            width={768}
+            layout='responsive'
           />
         </GridLink>
         <GridItem>

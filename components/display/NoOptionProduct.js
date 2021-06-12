@@ -6,9 +6,16 @@ import { mutate } from 'swr';
 //chakra ui
 import { Flex, Text, Heading, Box } from '@chakra-ui/react';
 //components
-import ProductImage from '../images/ProductImage';
 import QuantityAdjust from '../interface/QuantityAdjust';
 import BuyButton from '../interface/BuyButton';
+import Image from 'next/image';
+import styled from 'styled-components';
+
+const ImageWrapper = styled.div`
+  img {
+    border-radius: var(--chakra-radii-md);
+  }
+`;
 
 const NoOptionProduct = ({ product }) => {
   //checkoutid
@@ -67,14 +74,23 @@ const NoOptionProduct = ({ product }) => {
         ml={'auto'}
         mr={'auto'}
       >
-        <ProductImage
-          product={product}
-          selected={product.variants[0]}
+        <Box
           mt={['2rem', '2rem', '2rem', '0']}
           mb='2rem'
           width={['90%', '90%', '80%', '80%']}
           mr={['0', '0', '0', '2%']}
-        />
+        >
+          <ImageWrapper>
+            <Image
+              src={product.variants[0].image.src}
+              alt={product.title}
+              height={577}
+              width={768}
+              layout='responsive'
+              quality={100}
+            />
+          </ImageWrapper>
+        </Box>
 
         <Flex
           direction='column'

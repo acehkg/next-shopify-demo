@@ -6,15 +6,23 @@ import {
   Box,
   Flex,
   Button,
-  Image,
   useColorModeValue,
 } from '@chakra-ui/react';
 import { HiChevronDoubleRight } from 'react-icons/hi';
+import NextImage from '../images/NextImage';
 
 const CardImage = ({ product, ...rest }) => {
   return (
     <Box {...rest}>
-      <Image src={product.images[0].src} alt={product.title} rounded='md' />
+      <NextImage
+        src={product.images[0].src}
+        alt={product.title}
+        height={577}
+        width={768}
+        layout='responsive'
+        rounding='var(--chakra-radii-md)'
+        quality={50}
+      />
     </Box>
   );
 };
