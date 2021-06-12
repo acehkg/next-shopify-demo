@@ -5,6 +5,7 @@ const InstaButton = ({ url, size, ...rest }) => {
   return (
     <IconButton
       as='a'
+      aria-label='Instagram'
       href={url}
       {...rest}
       icon={<RiInstagramLine size={size} />}

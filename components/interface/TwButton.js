@@ -5,6 +5,7 @@ const TwButton = ({ url, size, ...rest }) => {
   return (
     <IconButton
       as='a'
+      aria-label='Twitter'
       href={url}
       {...rest}
       icon={<RiTwitterLine size={size} />}

@@ -5,6 +5,7 @@ const FbButton = ({ url, size, ...rest }) => {
   return (
     <IconButton
       as='a'
+      aria-label='Facebook'
       href={url}
       {...rest}
       icon={<RiFacebookBoxLine size={size} />}
