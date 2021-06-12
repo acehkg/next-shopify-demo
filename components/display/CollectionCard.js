@@ -7,6 +7,7 @@ import {
   Image,
   useColorModeValue,
 } from '@chakra-ui/react';
+import NextImage from '../images/NextImage';
 
 const CollectionCard = ({ collection }) => {
   const bg = useColorModeValue('gray.100', 'gray.700');
@@ -20,7 +21,15 @@ const CollectionCard = ({ collection }) => {
       rounded='md'
       p={2}
     >
-      <Image src={collection.image.src} alt={collection.title} rounded='md' />
+      <NextImage
+        src={collection.image.src}
+        alt={collection.title}
+        rounding='var(--chakra-radii-md)'
+        height={512}
+        width={768}
+        layout='responsive'
+        quality={50}
+      />
       <Link href={`/collections/${collection.handle}`}>
         <Heading as='h2' size='md' pt={4} pb={4} textAlign='center'>
           <LinkOverlay>{collection.title.toUpperCase()}</LinkOverlay>

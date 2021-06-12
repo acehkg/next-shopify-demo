@@ -1,15 +1,27 @@
-import { Flex, Image } from '@chakra-ui/react';
+import { Flex } from '@chakra-ui/react';
+import Image from 'next/image';
+import styled from 'styled-components';
+
+const Wrapper = styled.div`
+  width: 150px;
+  img {
+    border-radius: var(--chakra-radii-md);
+  }
+`;
 
 const ItemImage = ({ src, alt, ...rest }) => {
   return (
     <Flex {...rest}>
-      <Image
-        src={src}
-        alt={alt}
-        borderRadius={'50%'}
-        boxSize='100px'
-        objectFit='cover'
-      />
+      <Wrapper>
+        <Image
+          src={src}
+          alt={alt}
+          height={577}
+          width={768}
+          layout='responsive'
+          quality={50}
+        />
+      </Wrapper>
     </Flex>
   );
 };
