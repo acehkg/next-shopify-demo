@@ -22,7 +22,11 @@ const CollectionCard = ({ collection }) => {
       p={2}
     >
       <NextImage
-        src={collection.image.src}
+        src={
+          collection.image === null
+            ? '/images/comingsoon.jpg'
+            : `${collection.image.src}`
+        }
         alt={collection.title}
         rounding='var(--chakra-radii-md)'
         height={512}

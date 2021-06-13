@@ -1,6 +1,10 @@
 import Head from 'next/head';
 
 const CollectionSeo = ({ collection, url, siteName }) => {
+  let src;
+  collection.image === null
+    ? (src = '/images/comingsoon.jpg')
+    : (src = `${collection.image.src}`);
   return (
     <Head>
       <link
@@ -39,7 +43,7 @@ const CollectionSeo = ({ collection, url, siteName }) => {
 
       {/* Open Graph */}
       <meta property='og:url' content={url} key='ogurl' />
-      <meta property='og:image' content={collection.image.src} key='ogimage' />
+      <meta property='og:image' content={src} key='ogimage' />
       <meta property='og:site_name' content={siteName} key='ogsitename' />
       <meta property='og:title' content={collection.title} key='ogtitle' />
       <meta
