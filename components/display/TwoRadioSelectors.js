@@ -114,14 +114,25 @@ const TwoRadioSelectors = ({ product }) => {
           mr={['0', '0', '0', '2%']}
         >
           <ImageWrapper>
-            <Image
-              src={selected.image.src}
-              alt={product.title}
-              height={577}
-              width={768}
-              layout='responsive'
-              quality={100}
-            />
+            {selected.image === null ? (
+              <Image
+                src='/images/comingsoon.jpg'
+                alt={product.title}
+                height={512}
+                width={768}
+                layout='responsive'
+                quality={100}
+              />
+            ) : (
+              <Image
+                src={selected.image.src}
+                alt={product.title}
+                height={577}
+                width={768}
+                layout='responsive'
+                quality={100}
+              />
+            )}
           </ImageWrapper>
         </Box>
         <Flex

@@ -12,6 +12,22 @@ import { HiChevronDoubleRight } from 'react-icons/hi';
 import NextImage from '../images/NextImage';
 
 const CardImage = ({ product, ...rest }) => {
+  //if no product image return a placeholder
+  if (product.images.length === 0) {
+    return (
+      <Box {...rest}>
+        <NextImage
+          src='/images/comingsoon.jpg'
+          alt={product.title}
+          height={512}
+          width={768}
+          layout='responsive'
+          rounding='var(--chakra-radii-md)'
+          quality={50}
+        />
+      </Box>
+    );
+  }
   return (
     <Box {...rest}>
       <NextImage
@@ -70,7 +86,14 @@ const ProductCard = ({ product }) => {
   const buttonBorder = useColorModeValue('gray.700', 'gray.100');
   //product description should include h3 tagged short desciption at the top
   const filteredDescription = /<h3>(.*?)<\/h3>/.exec(product.descriptionHtml);
-  const shortDescription = filteredDescription[1];
+  //if no h3 tage return the title
+  let shortDescription;
+  if (filteredDescription === null) {
+    shortDescription = product.title;
+  } else {
+    shortDescription = filteredDescription[1];
+  }
+
   return (
     <Flex justify='space-evenly' align='center' bg={bg} p='1rem' rounded='md'>
       <Flex direction='column' width='100%' align='center' justify='center'>

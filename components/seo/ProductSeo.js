@@ -1,6 +1,10 @@
 import Head from 'next/head';
 
 const ProductSeo = ({ product, url, siteName }) => {
+  let src;
+  product.images.length === 0
+    ? (src = '/images/comingsoon.jpg')
+    : (src = `${product.variants[0].image.src}`);
   return (
     <Head>
       <link
@@ -39,7 +43,7 @@ const ProductSeo = ({ product, url, siteName }) => {
 
       {/* Open Graph */}
       <meta property='og:url' content={url} key='ogurl' />
-      <meta property='og:image' content={product.images[0].src} key='ogimage' />
+      <meta property='og:image' content={src} key='ogimage' />
       <meta property='og:site_name' content={siteName} key='ogsitename' />
       <meta property='og:title' content={product.title} key='ogtitle' />
       <meta

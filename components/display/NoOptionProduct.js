@@ -55,6 +55,7 @@ const NoOptionProduct = ({ product }) => {
   useEffect(() => {
     product.variants[0].available ? setStock(true) : setStock(false);
   }, []);
+
   return (
     <Box>
       <Heading
@@ -81,14 +82,25 @@ const NoOptionProduct = ({ product }) => {
           mr={['0', '0', '0', '2%']}
         >
           <ImageWrapper>
-            <Image
-              src={product.variants[0].image.src}
-              alt={product.title}
-              height={577}
-              width={768}
-              layout='responsive'
-              quality={100}
-            />
+            {product.variants[0].image === null ? (
+              <Image
+                src='/images/comingsoon.jpg'
+                alt={product.title}
+                height={512}
+                width={768}
+                layout='responsive'
+                quality={100}
+              />
+            ) : (
+              <Image
+                src={product.variants[0].image.src}
+                alt={product.title}
+                height={577}
+                width={768}
+                layout='responsive'
+                quality={100}
+              />
+            )}
           </ImageWrapper>
         </Box>
 

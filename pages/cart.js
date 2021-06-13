@@ -50,11 +50,18 @@ const Cart = () => {
               qty={item.quantity}
               price={item.variant.price}
               currency={item.variant.priceV2.currencyCode}
-              size={item.variant.title}
-              src={item.variant.image.src}
+              src={
+                item.variant.image === null
+                  ? '/images/comingsoon.jpg'
+                  : `${item.variant.image.src}`
+              }
               alt={item.title}
               variantId={item.variant.id}
-              variant={item.variant.title}
+              variant={
+                item.variant.title === 'Default Title'
+                  ? ` `
+                  : `${item.variant.title}`
+              }
             />
           ))}
           <Checkout
