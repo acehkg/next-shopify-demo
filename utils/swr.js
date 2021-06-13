@@ -7,6 +7,6 @@ export const fetcherWithCheckout = async (url, checkoutId) => {
     const checkout = await res.json();
     return checkout;
   } catch (e) {
-    //SWR will try again when checkoutId is set
+    console.log(e);
   }
 };

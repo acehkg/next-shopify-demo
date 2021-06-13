@@ -37,17 +37,9 @@ function MyApp({ Component, pageProps }) {
         });
         setCheckout(createdCheckout.id);
       } else {
-        const res = await fetch('/api/existingCheckout', {
-          method: 'POST',
-          body: checkoutId.checkoutId,
-        });
-        const existingCheckout = await res.json();
-        setCheckout(existingCheckout.id);
+        setCheckout(checkoutId.checkoutId);
       }
-    } catch (e) {
-      console.log('Error creating or restrieving checkout!');
-      console.log(e);
-    }
+    } catch (e) {}
   }, []);
 
   useEffect(() => {
