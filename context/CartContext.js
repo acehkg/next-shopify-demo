@@ -5,36 +5,48 @@ export const CartContext = createContext();
 
 const Cart = ({ children, checkoutId }) => {
   const addItemToCart = async (variantId, quantity, checkoutId) => {
-    await fetch('/api/addLineItem', {
-      method: 'POST',
-      body: JSON.stringify({
-        variantId,
-        quantity,
-        checkoutId,
-      }),
-    });
+    try {
+      await fetch('/api/addLineItem', {
+        method: 'POST',
+        body: JSON.stringify({
+          variantId,
+          quantity,
+          checkoutId,
+        }),
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const removeItemFromCart = async (variantId, checkoutId) => {
-    await fetch('/api/removeLineItem', {
-      method: 'POST',
-      body: JSON.stringify({
-        variantId,
-        checkoutId,
-      }),
-    });
+    try {
+      await fetch('/api/removeLineItem', {
+        method: 'POST',
+        body: JSON.stringify({
+          variantId,
+          checkoutId,
+        }),
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const updateItemInCart = async (id, variantId, quantity, checkoutId) => {
-    await fetch('/api/updateLineItems', {
-      method: 'POST',
-      body: JSON.stringify({
-        id,
-        variantId,
-        quantity,
-        checkoutId,
-      }),
-    });
+    try {
+      await fetch('/api/updateLineItems', {
+        method: 'POST',
+        body: JSON.stringify({
+          id,
+          variantId,
+          quantity,
+          checkoutId,
+        }),
+      });
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const exposed = {
