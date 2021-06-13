@@ -17,6 +17,7 @@ const MenuDrawer = ({ isOpen, onClose }) => {
       placement='right'
       onClose={onClose}
       closeOnOverlayClick={true}
+      size={['xs']}
     >
       <DrawerOverlay />
       <DrawerContent>
