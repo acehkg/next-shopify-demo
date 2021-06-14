@@ -6,7 +6,5 @@ export const fetcherWithCheckout = async (url, checkoutId) => {
     });
     const checkout = await res.json();
     return checkout;
-  } catch (e) {
-    console.log(e);
-  }
+  } catch (e) {}
 };

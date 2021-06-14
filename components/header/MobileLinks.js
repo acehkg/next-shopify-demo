@@ -1,8 +1,9 @@
-import { Flex } from '@chakra-ui/react';
-import links from '../../utils/links.json';
+import { Flex, useColorModeValue } from '@chakra-ui/react';
 import MenuItem from '../header/MenuItem';
+import CollectionsMenu from './CollectionsMenu';
 
 const MobileLinks = () => {
+  const bg = useColorModeValue('white', 'gray.700');
   return (
     <Flex
       as='nav'
@@ -12,15 +13,8 @@ const MobileLinks = () => {
       h='100%'
     >
       <MenuItem href={'/'}>HOME</MenuItem>
-      <MenuItem href={'/collections'}>COLLECTIONS</MenuItem>
+      <CollectionsMenu bg={bg} />
       <MenuItem href={'/products'}>ALL PRODUCTS</MenuItem>
-      {links.map((link) => {
-        return (
-          <MenuItem key={link.handle} href={`/collections/${link.handle}`}>
-            {link.title.toUpperCase()}
-          </MenuItem>
-        );
-      })}
     </Flex>
   );
 };
