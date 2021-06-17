@@ -84,33 +84,6 @@ const HomePage = ({ products, collections }) => {
               layout='responsive'
             />
           </GridLink>
-          <GridItem>
-            <Box
-              bg={bg}
-              rounded='md'
-              position='relative'
-              height={['220px', '100%']}
-              width='100%'
-              position='relative'
-            >
-              <Text
-                fontSize='sm'
-                position='absolute'
-                p='1rem'
-                textAlign='center'
-                top='50%'
-                left='50%'
-                transform='translate(-50%, -50%)'
-                width='100%'
-              >
-                THIS SAMPLE APPLICATION BRINGS THE SPEED, POWER AND
-                ACCESSABILITY OF AN ADVANCED FRAMEWORK TO SHOPIFY. THIS IS A
-                LIVE DEMO CONNECTED TO A DEVELOPMENT STORE. PLEASE EXPLORE AND
-                ENJOY. THE STYLING IS BASIC BUT IS 100% CUSTOMIZABLE TO ANY
-                DESIGN YOU WOULD LIKE.
-              </Text>
-            </Box>
-          </GridItem>
 
           {products.map((product) => {
             return (
