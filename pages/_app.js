@@ -13,14 +13,11 @@ import { CookiesProvider, useCookies } from 'react-cookie';
 //Layout Components
 import Header from '../components/header/Header';
 import Breadcumb from '../components/interface/Breadcrumb';
-import CookiePop from '../components/modals/CookiePop';
 import Footer from '../components/footer/Footer';
 
 function MyApp({ Component, pageProps }) {
   const [checkout, setCheckout] = useState();
-  const [cookies, setCookie] = useCookies(['checkoutId']);
-  const [shouldPop, setShouldPop] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [cookies, setCookie] = useCookies(['checkout_id']);
 
   //retrieve existing checkout from cookies or create a new checkout
   useEffect(async () => {
@@ -31,24 +28,21 @@ function MyApp({ Component, pageProps }) {
       if (Object.keys(checkoutId).length === 0) {
         const res = await fetch('/api/createCheckout');
         const createdCheckout = await res.json();
-        setCookie('checkoutId', createdCheckout.id, {
+        setCookie('checkout_id', createdCheckout.id, {
           expires: date,
           secure: true,
         });
         setCheckout(createdCheckout.id);
       } else {
-        setCheckout(checkoutId.checkoutId);
+        const { checkout_id } = checkoutId;
+        const res = await fetch('/api/existingCheckout', {
+          method: 'POST',
+          body: checkout_id,
+        });
+        const existingCheckout = await res.json();
+        setCheckout(existingCheckout.id);
       }
     } catch (e) {}
-  }, []);
-
-  useEffect(() => {
-    let pop_status = localStorage.getItem('pop_status');
-    if (!pop_status) {
-      setShouldPop(true);
-      localStorage.setItem('pop_status', 1);
-      onOpen();
-    }
   }, []);
 
   return (
@@ -60,7 +54,6 @@ function MyApp({ Component, pageProps }) {
             <Breadcumb />
             <Component {...pageProps} />
             <Footer />
-            {shouldPop ? <CookiePop isOpen={isOpen} onClose={onClose} /> : null}
           </CartProvider>
         </CookiesProvider>
       </ChakraProvider>

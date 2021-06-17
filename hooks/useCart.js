@@ -8,7 +8,7 @@ const useCart = (checkoutId) => {
   );
   return {
     checkout,
-    isLoading: !error && !checkout,
+    isLoading: (!error && !checkout) || checkout.msg === 'loading',
     isError: error,
   };
 };

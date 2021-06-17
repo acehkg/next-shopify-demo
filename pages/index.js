@@ -1,14 +1,25 @@
+import { useState, useEffect } from 'react';
 //storefront API Client
 import { shopifyClient } from '../utils/client';
 //chakra ui
-import { Box, Grid, Text, GridItem, useColorModeValue } from '@chakra-ui/react';
+import {
+  Box,
+  Grid,
+  Text,
+  GridItem,
+  useColorModeValue,
+  useDisclosure,
+} from '@chakra-ui/react';
 import GridLink from '../components/layout/GridLink';
 import ProductCard from '../components/display/ProductCard';
 import NextImage from '../components/images/NextImage';
 import PageSeo from '../components/seo/PageSeo';
+import CookiePop from '../components/modals/CookiePop';
 import { useRouter } from 'next/router';
 
 const HomePage = ({ products, collections }) => {
+  const [shouldPop, setShouldPop] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const bg = useColorModeValue('gray.200', 'gray.700');
   const { asPath } = useRouter();
   const metadata = {
@@ -18,6 +29,14 @@ const HomePage = ({ products, collections }) => {
     previewImage: '/images/logo.png',
     siteName: 'NEXT JS and Shopify Demo',
   };
+  useEffect(() => {
+    let pop_status = localStorage.getItem('pop_status');
+    if (!pop_status) {
+      setShouldPop(true);
+      localStorage.setItem('pop_status', 1);
+      onOpen();
+    }
+  }, []);
 
   return (
     <>
@@ -102,6 +121,7 @@ const HomePage = ({ products, collections }) => {
           })}
         </Grid>
       </Box>
+      {shouldPop ? <CookiePop isOpen={isOpen} onClose={onClose} /> : null}
     </>
   );
 };

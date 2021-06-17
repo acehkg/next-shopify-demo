@@ -7,6 +7,6 @@ export default async function handler(req, res) {
     res.status(200).json(checkout);
   } catch (err) {
     const error = JSON.stringify(err);
-    res.status(200).json(error);
+    res.status(200).json({ msg: 'loading' });
   }
 }
