@@ -12,7 +12,6 @@ import SelectGroup from '../interface/SelectGroup';
 import BuyButton from '../interface/BuyButton';
 
 const TwoOptionProduct = ({ product }) => {
-  console.log(product);
   //checkoutid
   const { checkoutId, addItemToCart } = useCartContext();
   //for a product with to options render selectors and filter selections for target variantId

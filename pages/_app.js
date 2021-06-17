@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 //global styles and styles for components
 import GlobalStyles from '../style/GlobalStyles';
 //Chakra UI
-import { ChakraProvider, useDisclosure } from '@chakra-ui/react';
+import { ChakraProvider } from '@chakra-ui/react';
 import theme from '../style/theme';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/700.css';

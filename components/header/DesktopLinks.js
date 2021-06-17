@@ -1,7 +1,6 @@
 import { Flex, Box, useColorModeValue } from '@chakra-ui/react';
 import MenuItem from '../header/MenuItem';
 import CartWidget from '../cart/CartWidget';
-import links from '../../utils/links.json';
 import DarkMode from '../interface/DarkMode';
 import CollectionsMenu from './CollectionsMenu';
 

@@ -1,6 +1,4 @@
-import { useRef } from 'react';
 import {
-  Button,
   Drawer,
   DrawerOverlay,
   DrawerContent,
@@ -11,14 +9,8 @@ import {
 } from '@chakra-ui/react';
 
 const CookiePop = ({ isOpen, onClose }) => {
-  const accept = useRef();
   return (
-    <Drawer
-      isOpen={isOpen}
-      onClose={onClose}
-      placement='bottom'
-      initialFocusRef={accept}
-    >
+    <Drawer isOpen={isOpen} onClose={onClose} placement='bottom'>
       <DrawerOverlay />
       <DrawerContent>
         <DrawerHeader>
@@ -27,11 +19,7 @@ const CookiePop = ({ isOpen, onClose }) => {
         <DrawerBody textAlign='center' p='1rem'>
           THIS WEBSITE USES COOKIES TO IMPROVE YOUR SHOPPING EXPERIENCE
         </DrawerBody>
-        <DrawerFooter>
-          <Button onClick={onClose} ref={accept}>
-            ACCEPT
-          </Button>
-        </DrawerFooter>
+        <DrawerFooter></DrawerFooter>
       </DrawerContent>
     </Drawer>
   );

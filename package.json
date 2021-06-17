@@ -1,7 +1,7 @@
 {
   "name": "nextjs-and-shopify",
   "version": "1.0.0",
-  "description": "A demo of a NEXT JS app connected to the Shopify Storefron API",
+  "description": "A demo of a NEXT JS app connected to the Shopify Storefront API",
   "main": "index.js",
   "author": "Andrew Embury",
   "license": "ISC",
@@ -15,7 +15,6 @@
     "dotenv": "^10.0.0",
     "framer-motion": "^4.1.17",
     "next": "^10.0.9",
-    "next-google-fonts": "^2.2.0",
     "node-fetch": "^2.6.1",
     "react": "^17.0.1",
     "react-cookie": "^4.0.3",

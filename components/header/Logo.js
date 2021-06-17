@@ -1,16 +1,17 @@
 import Link from 'next/link';
-import { Box, Image } from '@chakra-ui/react';
+import Image from 'next/image';
+import { Box } from '@chakra-ui/react';
 
-const Logo = (props) => {
+const Logo = ({ src, alt, ...rest }) => {
   return (
     <Link href='/'>
-      <Box {...props}>
+      <Box {...rest}>
         <Image
-          boxSize='100px'
-          src='/images/logo.png'
-          alt='Better Beer Co'
-          htmlHeight='200px'
-          htmlWidth='200px'
+          src={src}
+          alt={alt}
+          height={200}
+          width={200}
+          layout='responsive'
         />
       </Box>
     </Link>

@@ -6,9 +6,9 @@ import DesktopLinks from './DesktopLinks';
 import MenuItem from '../header/MenuItem';
 import MenuDrawer from '../header/MenuDrawer';
 import { RiMenu4Line } from 'react-icons/ri';
-import DarkMode from '../interface/DarkMode';
 
 const CartWidget = dynamic(() => import('../cart/CartWidget'), { ssr: false });
+
 const Header = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
@@ -23,10 +23,9 @@ const Header = () => {
         pl='5%'
         pr='5%'
       >
-        <Logo image='/images/logo.png' alt='Better Beer Co' />
+        <Logo src='/images/logo.png' alt='Better Beer Co' boxSize='100px' />
 
         <Flex align='center' d={['flex', 'flex', 'flex', 'none']}>
-          <DarkMode mr='0.5rem' size='sm' />
           <MenuItem href='/cart'>
             <CartWidget />
           </MenuItem>

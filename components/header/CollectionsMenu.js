@@ -4,7 +4,6 @@ import {
   MenuButton,
   MenuList,
   MenuItem,
-  useColorModeValue,
   Text,
 } from '@chakra-ui/react';
 import links from '../../utils/links.json';
