@@ -1,7 +1,7 @@
 import useCart from '../../hooks/useCart';
 import useCartContext from '../../hooks/useCartContext';
-import { Flex, Spinner, Box } from '@chakra-ui/react';
-import { RiShoppingCart2Line } from 'react-icons/ri';
+import { Spinner, Box } from '@chakra-ui/react';
+import { RiShoppingBagLine } from 'react-icons/ri';
 import { useEffect, useState } from 'react';
 import QuantityDisplay from './QuantityDispaly';
 
@@ -29,24 +29,17 @@ const CartWidget = () => {
   }
 
   return (
-    <Flex
-      direction='column'
-      align='center'
-      pt={[2, 2, 0, 0]}
-      pl={[0, 0, 4, 0]}
-      aria-label='cart'
-    >
+    <Box aria-label='cart' mb='1.5rem'>
       <QuantityDisplay
-        height='1rem'
-        width='1rem'
+        height='1.25rem'
+        width='1.25rem'
         borderRadius='50%'
-        fontSize={'.75rem'}
-        lineHeight='1.25'
-        ml='.75rem'
+        fontSize={'1rem'}
+        lineHeight='1.3'
         quantity={total}
       />
-      <RiShoppingCart2Line size={24} />
-    </Flex>
+      <RiShoppingBagLine size={32} />
+    </Box>
   );
 };
 

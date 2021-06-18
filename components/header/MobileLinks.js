@@ -13,7 +13,7 @@ const MobileLinks = () => {
       h='100%'
     >
       <MenuItem href={'/'}>HOME</MenuItem>
-      <CollectionsMenu bg={bg} />
+      <CollectionsMenu bg={bg} placement='bottom' />
       <MenuItem href={'/products'}>ALL PRODUCTS</MenuItem>
     </Flex>
   );

@@ -15,6 +15,7 @@ const Breadcrumbs = () => {
   return (
     <Breadcrumb
       p={8}
+      pl='5%'
       spacing='8px'
       separator={<FaChevronRight />}
       fontSize='sm'

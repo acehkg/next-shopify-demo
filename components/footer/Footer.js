@@ -3,6 +3,7 @@ import FbButton from '../interface/FbButton';
 import InstaButton from '../interface/InstaButton';
 import TwButton from '../interface/TwButton';
 import PoliciesMenu from './PoliciesMenu';
+import DarkMode from '../interface/DarkMode';
 //policies generated in pre-build script
 import policies from '../../utils/policies.json';
 
@@ -32,6 +33,7 @@ const Footer = () => {
         size='24'
         bg={bg}
       />
+      <DarkMode variant='outline' border='none' />
     </Flex>
   );
 };

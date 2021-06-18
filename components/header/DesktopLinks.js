@@ -1,7 +1,6 @@
 import { Flex, Box, useColorModeValue } from '@chakra-ui/react';
 import MenuItem from '../header/MenuItem';
 import CartWidget from '../cart/CartWidget';
-import DarkMode from '../interface/DarkMode';
 import CollectionsMenu from './CollectionsMenu';
 
 const DesktopLinks = () => {
@@ -27,7 +26,6 @@ const DesktopLinks = () => {
       <MenuItem href='/cart' mr='2%'>
         <CartWidget />
       </MenuItem>
-      <DarkMode variant='outline' border='none' />
     </Flex>
   );
 };
