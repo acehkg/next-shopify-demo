@@ -32,6 +32,7 @@
     "prebuild": "node ./buildlinks.js"
   },
   "devDependencies": {
-    "babel-plugin-styled-components": "latest"
+    "babel-plugin-styled-components": "latest",
+    "next-secure-headers": "^2.2.0"
   }
 }
