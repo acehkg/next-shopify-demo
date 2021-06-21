@@ -12,7 +12,7 @@ module.exports = {
               defaultSrc: "'self' data:",
               scriptSrc: "'self' 'unsafe-eval' 'unsafe-inline'",
               imageSrc: "'self'  'https://*.shopify.com' ",
-              styleSrc: "'unsafe-inline'",
+              styleSrc: " 'self' 'unsafe-inline'",
             },
           },
         }),
