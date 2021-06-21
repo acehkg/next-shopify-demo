@@ -8,7 +8,7 @@ const ColorRadioCard = (props) => {
 
   return (
     <Box as='label'>
-      <input {...input} />
+      <input aria-label={props.label} {...input} />
       <Box
         {...checkbox}
         cursor='pointer'

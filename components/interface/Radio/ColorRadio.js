@@ -1,4 +1,4 @@
-import { useRadioGroup, Flex, Box, HStack } from '@chakra-ui/react';
+import { useRadioGroup, HStack } from '@chakra-ui/react';
 import ColorRadioCard from './ColorRadioCard';
 
 const ColorRadio = ({ options, name, onChange }) => {
@@ -14,7 +14,12 @@ const ColorRadio = ({ options, name, onChange }) => {
       {options.map(({ value }) => {
         const radio = getRadioProps({ value });
         return (
-          <ColorRadioCard color={value} key={value} {...radio}></ColorRadioCard>
+          <ColorRadioCard
+            color={value}
+            key={value}
+            label={value}
+            {...radio}
+          ></ColorRadioCard>
         );
       })}
     </HStack>

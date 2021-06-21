@@ -15,7 +15,7 @@ const LabelRadio = ({ options, name, onChange }) => {
       {options.map(({ value }) => {
         const radio = getRadioProps({ value });
         return (
-          <LabelRadioCard key={value} {...radio}>
+          <LabelRadioCard key={value} label={value} {...radio}>
             {value}
           </LabelRadioCard>
         );
