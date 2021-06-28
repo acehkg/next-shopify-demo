@@ -20,7 +20,7 @@ const ImageWrapper = styled.div`
 
 const OneOptionProduct = ({ product }) => {
   //checkoutid
-  const { checkoutId, addItemToCart } = useCartContext();
+  const { checkoutId, addItemToCart, updateItemsCookie } = useCartContext();
   //for a product with to options render selectors and filter selections for target variantId
   //seperate the two options arrays
   const optionOne = product.options[0];
@@ -58,6 +58,7 @@ const OneOptionProduct = ({ product }) => {
       await addItemToCart(selected.id, quantity, checkoutId);
       mutate([`/api/existingCheckout/`, checkoutId]);
       router.push('/cart');
+      updateItemsCookie(checkoutId);
     } catch (e) {
       console.log('Error adding item to cart...');
       console.log(e);

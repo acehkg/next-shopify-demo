@@ -1,32 +1,17 @@
-import useCart from '../../hooks/useCart';
-import useCartContext from '../../hooks/useCartContext';
-import { Spinner, Box } from '@chakra-ui/react';
+import { useCookies } from 'react-cookie';
+import { Box } from '@chakra-ui/react';
 import { RiShoppingBagLine } from 'react-icons/ri';
 import { useEffect, useState } from 'react';
 import QuantityDisplay from './QuantityDispaly';
 
-const Waiting = () => {
-  return (
-    <Box pl={'1rem'} pt={'0.5rem'}>
-      <Spinner size='md' />
-    </Box>
-  );
-};
-
 const CartWidget = () => {
-  const { checkoutId } = useCartContext();
-  const cartData = useCart(checkoutId);
+  const [cookies] = useCookies(['checkout_length']);
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    if (cartData.isLoading === false) {
-      setTotal(cartData.checkout.lineItems.length);
-    }
-  }, [cartData]);
-
-  if (cartData.isLoading === true) {
-    return <Waiting />;
-  }
+    const { checkout_length } = cookies;
+    checkout_length ? setTotal(checkout_length) : null;
+  }, [cookies]);
 
   return (
     <Box aria-label='cart' mb='1.5rem'>

@@ -21,7 +21,7 @@ const ImageWrapper = styled.div`
 
 const TwoRadioSelectors = ({ product }) => {
   //checkoutid
-  const { checkoutId, addItemToCart } = useCartContext();
+  const { checkoutId, addItemToCart, updateItemsCookie } = useCartContext();
   //for a product with to options render selectors and filter selections for target variantId
 
   const [quantity, setQuantity] = useState(1);
@@ -60,6 +60,7 @@ const TwoRadioSelectors = ({ product }) => {
       await addItemToCart(selected.id, quantity, checkoutId);
       mutate([`/api/existingCheckout/`, checkoutId]);
       router.push('/cart');
+      updateItemsCookie(checkoutId);
     } catch (e) {
       console.log('Error adding item to cart...');
       console.log(e);

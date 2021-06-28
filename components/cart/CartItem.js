@@ -18,7 +18,12 @@ const CartItem = ({
   variant,
   currency,
 }) => {
-  const { checkoutId, removeItemFromCart, updateItemInCart } = useCartContext();
+  const {
+    checkoutId,
+    removeItemFromCart,
+    updateItemInCart,
+    updateItemsCookie,
+  } = useCartContext();
   const [quantity, setQuantity] = useState(qty);
   const incrementQty = () => {
     setQuantity(() => quantity + 1);
@@ -47,6 +52,7 @@ const CartItem = ({
     try {
       await removeItemFromCart(id, checkoutId);
       mutate([`/api/existingCheckout/`, checkoutId]);
+      updateItemsCookie(checkoutId);
     } catch (e) {
       console.log('Error Removing Item from Cart...');
       console.log(e);

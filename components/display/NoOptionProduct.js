@@ -19,7 +19,7 @@ const ImageWrapper = styled.div`
 
 const NoOptionProduct = ({ product }) => {
   //checkoutid
-  const { checkoutId, addItemToCart } = useCartContext();
+  const { checkoutId, addItemToCart, updateItemsCookie } = useCartContext();
   //handle quantity
   const [quantity, setQuantity] = useState(1);
 
@@ -45,6 +45,7 @@ const NoOptionProduct = ({ product }) => {
       await addItemToCart(product.variants[0].id, quantity, checkoutId);
       mutate([`/api/existingCheckout/`, checkoutId]);
       router.push('/cart');
+      updateItemsCookie(checkoutId);
     } catch (e) {
       console.log('Error adding item to cart...');
       console.log(e);
