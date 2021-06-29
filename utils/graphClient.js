@@ -4,7 +4,7 @@ const endpoint = process.env.GRAPHQL_ENDPOINT;
 
 const storefrontClient = new GraphQLClient(endpoint, {
   headers: {
-    authorization: `'X-Shopify-Access-Token:${process.env.SHOPIFY_STOREFRONT_TOKEN}'`,
+    'X-Shopify-Storefront-Access-Token': process.env.SHOPIFY_STOREFRONT_TOKEN,
   },
 });
 

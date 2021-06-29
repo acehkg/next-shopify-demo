@@ -23,12 +23,12 @@ const Cart = ({ children }) => {
         });
         setCheckoutId(createdCheckout.id);
       } else {
-        const res = await fetch('/api/existingCheckout', {
+        /* const res = await fetch('/api/existingCheckout', {
           method: 'POST',
           body: checkout_id,
         });
-        const oldCheckout = await res.json();
-        setCheckoutId(oldCheckout.id);
+        const oldCheckout = await res.json(); */
+        setCheckoutId(checkout_id);
       }
     } catch (e) {}
   }, []);
