@@ -21,7 +21,6 @@ import CookiePop from '../components/modals/CookiePop';
 import { useRouter } from 'next/router';
 
 const HomePage = ({ products, collections }) => {
-  console.log(products.title);
   const [shouldPop, setShouldPop] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const bg = useColorModeValue('gray.200', 'gray.700');
@@ -44,7 +43,61 @@ const HomePage = ({ products, collections }) => {
 
   return (
     <>
-      <h1>TEST</h1>
+      <PageSeo metadata={metadata} />
+      <Box pb='2rem'>
+        <Grid
+          sx={{
+            gridTemplateColumns:
+              'repeat(auto-fill, minmax(min(300px, 100%), 1fr))',
+          }}
+          /* templateRows={['repeat(6, 1fr)', 'repeat(6, 1fr)', 'repeat(2,1fr)']}
+      templateColumns={['repeat(4, 1fr)', 'repeat(4, 1fr)', 'repeat(4, 1fr)']}*/
+          gap={8}
+          ml='5%'
+          mr='5%'
+          pb='2rem'
+        >
+          <GridLink href={`/collections/${collections[0].handle}`}>
+            <NextImage
+              src={collections[0].image.originalSrc}
+              alt={collections[0].title}
+              rounding='var(--chakra-radii-md)'
+              height={512}
+              width={768}
+              layout='responsive'
+            />
+          </GridLink>
+          <GridLink href={`/collections/${collections[1].handle}`}>
+            <NextImage
+              src={collections[1].image.originalSrc}
+              alt={collections[1].title}
+              rounding='var(--chakra-radii-md)'
+              height={512}
+              width={768}
+              layout='responsive'
+            />
+          </GridLink>
+          <GridLink href={`/collections/${collections[2].handle}`}>
+            <NextImage
+              src={collections[2].image.originalSrc}
+              alt={collections[2].title}
+              rounding='var(--chakra-radii-md)'
+              height={512}
+              width={768}
+              layout='responsive'
+            />
+          </GridLink>
+
+          {products.map((product) => {
+            return (
+              <GridItem key={product.id}>
+                <ProductCard product={product} />
+              </GridItem>
+            );
+          })}
+        </Grid>
+      </Box>
+      {shouldPop ? <CookiePop isOpen={isOpen} onClose={onClose} /> : null}
     </>
   );
 };
@@ -58,6 +111,7 @@ export async function getStaticProps() {
       products(first: 250) {
         edges {
           node {
+            id
             title
             description
             descriptionHtml
@@ -105,64 +159,13 @@ export async function getStaticProps() {
 
   return {
     props: {
-      products: productsResponse.products.edges.map((node) => node),
-      collections: collectionsResponse.collections.edges.map((node) => node),
+      products: productsResponse.products.edges.map((edge) => {
+        return edge.node;
+      }),
+
+      collections: collectionsResponse.collections.edges.map((edge) => {
+        return edge.node;
+      }),
     },
   };
 }
-
-// <PageSeo metadata={metadata} />
-//     <Box pb='2rem'>
-//       <Grid
-//         sx={{
-//           gridTemplateColumns:
-//             'repeat(auto-fill, minmax(min(300px, 100%), 1fr))',
-//         }}
-//         /* templateRows={['repeat(6, 1fr)', 'repeat(6, 1fr)', 'repeat(2,1fr)']}
-//       templateColumns={['repeat(4, 1fr)', 'repeat(4, 1fr)', 'repeat(4, 1fr)']}*/
-//         gap={8}
-//         ml='5%'
-//         mr='5%'
-//         pb='2rem'
-//       >
-//         <GridLink href={`/collections/${collections[0].handle}`}>
-//           <NextImage
-//             src={collections[0].image.src}
-//             alt={collections[0].title}
-//             rounding='var(--chakra-radii-md)'
-//             height={512}
-//             width={768}
-//             layout='responsive'
-//           />
-//         </GridLink>
-//         <GridLink href={`/collections/${collections[1].handle}`}>
-//           <NextImage
-//             src={collections[1].image.src}
-//             alt={collections[1].title}
-//             rounding='var(--chakra-radii-md)'
-//             height={512}
-//             width={768}
-//             layout='responsive'
-//           />
-//         </GridLink>
-//         <GridLink href={`/collections/${collections[2].handle}`}>
-//           <NextImage
-//             src={collections[2].image.src}
-//             alt={collections[2].title}
-//             rounding='var(--chakra-radii-md)'
-//             height={512}
-//             width={768}
-//             layout='responsive'
-//           />
-//         </GridLink>
-
-//         {products.map((product) => {
-//           return (
-//             <GridItem key={product.id}>
-//               <ProductCard product={product} />
-//             </GridItem>
-//           );
-//         })}
-//       </Grid>
-//     </Box>
-//     {shouldPop ? <CookiePop isOpen={isOpen} onClose={onClose} /> : null}

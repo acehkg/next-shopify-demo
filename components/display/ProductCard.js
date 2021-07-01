@@ -13,7 +13,7 @@ import NextImage from '../images/NextImage';
 
 const CardImage = ({ product, ...rest }) => {
   //if no product image return a placeholder
-  if (product.images.length === 0) {
+  if (product.images.edges.length === 0) {
     return (
       <Box {...rest}>
         <NextImage
@@ -31,7 +31,7 @@ const CardImage = ({ product, ...rest }) => {
   return (
     <Box {...rest}>
       <NextImage
-        src={product.images[0].src}
+        src={product.images.edges[0].node.originalSrc}
         alt={product.title}
         height={577}
         width={768}
@@ -65,8 +65,8 @@ const CardContent = ({ title, description, ...rest }) => {
 
 const Price = ({ variants, ...rest }) => {
   //create an array of prices
-  const prices = variants.map((variant) => {
-    return variant.price;
+  const prices = variants.edges.map((variant) => {
+    return variant.node.priceV2.amount;
   });
   //determin whether all prices are the same or not and render appropriate information (price or From Price)
   const allEqual = (arr) => arr.every((v) => v === arr[0]);
@@ -96,10 +96,17 @@ const ProductCard = ({ product }) => {
 
   return (
     <Flex justify='space-evenly' align='center' bg={bg} p='1rem' rounded='md'>
-      <Flex direction='column' width='100%' align='center' justify='center'>
+      <Flex
+        direction='column'
+        width='300px'
+        minHeight='12rem'
+        align='center'
+        justify='center'
+      >
         <CardImage
           product={product}
-          width={['8.75rem', '9rem', '9rem', '10rem']}
+          width={['150px', '150px', '150px', '175px', '200px']}
+          height='auto'
         />
         <Price variants={product.variants} pt='1rem' />
       </Flex>
@@ -113,7 +120,7 @@ const ProductCard = ({ product }) => {
         <CardContent
           title={product.title}
           description={shortDescription}
-          width={['8.75rem', '9rem', '9rem', '10rem']}
+          width='100%'
         />
 
         <Box>

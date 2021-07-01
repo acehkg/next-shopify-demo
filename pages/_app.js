@@ -2,7 +2,7 @@
 import GlobalStyles from '../style/GlobalStyles';
 //Chakra UI
 import { ChakraProvider } from '@chakra-ui/react';
-import theme from '../style/theme';
+import customTheme from '../style/customTheme';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/700.css';
 //Cart Context
@@ -17,7 +17,7 @@ import Footer from '../components/footer/Footer';
 function MyApp({ Component, pageProps }) {
   return (
     <>
-      <ChakraProvider theme={theme}>
+      <ChakraProvider theme={customTheme}>
         <CookiesProvider>
           <CartProvider>
             <Header />
