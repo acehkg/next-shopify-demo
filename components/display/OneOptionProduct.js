@@ -26,11 +26,11 @@ const OneOptionProduct = ({ product }) => {
   const optionOne = product.options[0];
 
   //filter the array of variants for the created filter and return selected varaiant
-  const [filter, setFilter] = useState(product.options[0].values[0].value);
-  const [selected, setSelected] = useState(product.variants[0]);
+  const [filter, setFilter] = useState(product.options[0].values[0]);
+  const [selected, setSelected] = useState(product.variants.edges[0]);
   useEffect(() => {
-    const filtered = product.variants.filter((variant) => {
-      return variant.title.includes(filter);
+    const filtered = product.variants.edges.filter((variant) => {
+      return variant.node.title.includes(filter);
     });
     setSelected(() => filtered[0]);
   }, [filter]);
@@ -47,8 +47,9 @@ const OneOptionProduct = ({ product }) => {
   //calculate totaprice when selected changes
   const [totalPrice, setTotalPrice] = useState(0.0);
   useEffect(() => {
-    const price = selected.price;
-    setTotalPrice(price * quantity);
+    const price = selected.node.priceV2.amount;
+    const pFloat = parseFloat(price);
+    setTotalPrice((pFloat * quantity).toFixed(2));
   }, [quantity, selected]);
 
   const router = useRouter();
@@ -68,7 +69,7 @@ const OneOptionProduct = ({ product }) => {
   const [stock, setStock] = useState(true);
 
   useEffect(() => {
-    selected.available ? setStock(true) : setStock(false);
+    selected.node.availableForSale ? setStock(true) : setStock(false);
   }, [selected]);
   return (
     <Box>
@@ -107,7 +108,7 @@ const OneOptionProduct = ({ product }) => {
               />
             ) : (
               <Image
-                src={selected.image.src}
+                src={selected.node.image.originalSrc}
                 alt={product.title}
                 height={577}
                 width={768}
@@ -146,7 +147,7 @@ const OneOptionProduct = ({ product }) => {
           <BuyButton
             stock={stock}
             totalPrice={totalPrice}
-            currencyCode={selected.priceV2.currencyCode}
+            currencyCode={selected.node.priceV2.currencyCode}
             handleClick={handleClick}
             quantity={quantity}
             title={product.title}

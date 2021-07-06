@@ -17,7 +17,7 @@ const Footer = () => {
       width='100%'
       align='center'
       justify='space-evenly'
-      height='15%'
+      height='5rem'
       border='none'
       borderTop='solid'
       borderColor={borderColor}

@@ -1,6 +1,4 @@
 import { useState, useEffect } from 'react';
-//storefront API Client
-import { shopifyClient } from '../utils/client';
 //storefront Graph Client
 import storefrontClient from '../utils/graphClient';
 import { gql } from 'graphql-request';
@@ -9,6 +7,7 @@ import {
   Box,
   Grid,
   GridItem,
+  SimpleGrid,
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
@@ -43,58 +42,50 @@ const HomePage = ({ products, collections }) => {
   return (
     <>
       <PageSeo metadata={metadata} />
-      <Box pb='4rem'>
-        <Grid
-          sx={{
-            gridTemplateColumns:
-              'repeat(auto-fill, minmax(min(300px, 100%), 1fr))',
-          }}
-          /* templateRows={['repeat(6, 1fr)', 'repeat(6, 1fr)', 'repeat(2,1fr)']}
-      templateColumns={['repeat(4, 1fr)', 'repeat(4, 1fr)', 'repeat(4, 1fr)']}*/
-          gap={8}
-          ml='5%'
-          mr='5%'
-        >
-          <GridLink href={`/collections/${collections[0].handle}`}>
-            <NextImage
-              src={collections[0].image.originalSrc}
-              alt={collections[0].title}
-              rounding='var(--chakra-radii-md)'
-              height={512}
-              width={768}
-              layout='responsive'
-            />
-          </GridLink>
-          <GridLink href={`/collections/${collections[1].handle}`}>
-            <NextImage
-              src={collections[1].image.originalSrc}
-              alt={collections[1].title}
-              rounding='var(--chakra-radii-md)'
-              height={512}
-              width={768}
-              layout='responsive'
-            />
-          </GridLink>
-          <GridLink href={`/collections/${collections[2].handle}`}>
-            <NextImage
-              src={collections[2].image.originalSrc}
-              alt={collections[2].title}
-              rounding='var(--chakra-radii-md)'
-              height={512}
-              width={768}
-              layout='responsive'
-            />
-          </GridLink>
 
-          {products.map((product) => {
-            return (
-              <GridItem key={product.id}>
-                <ProductCard product={product} />
-              </GridItem>
-            );
-          })}
-        </Grid>
-      </Box>
+      <SimpleGrid
+        as='section'
+        minChildWidth='20rem'
+        gap='2rem'
+        width='90%'
+        mx='auto'
+        pb='4rem'
+      >
+        <GridLink href={`/collections/${collections[0].handle}`}>
+          <NextImage
+            src={collections[0].image.originalSrc}
+            alt={collections[0].title}
+            rounding='var(--chakra-radii-md)'
+            height={512}
+            width={768}
+            layout='responsive'
+          />
+        </GridLink>
+        <GridLink href={`/collections/${collections[1].handle}`}>
+          <NextImage
+            src={collections[1].image.originalSrc}
+            alt={collections[1].title}
+            rounding='var(--chakra-radii-md)'
+            height={512}
+            width={768}
+            layout='responsive'
+          />
+        </GridLink>
+        <GridLink href={`/collections/${collections[2].handle}`}>
+          <NextImage
+            src={collections[2].image.originalSrc}
+            alt={collections[2].title}
+            rounding='var(--chakra-radii-md)'
+            height={512}
+            width={768}
+            layout='responsive'
+          />
+        </GridLink>
+
+        {products.map((product) => {
+          return <ProductCard key={product.id} product={product} />;
+        })}
+      </SimpleGrid>
       {shouldPop ? <CookiePop isOpen={isOpen} onClose={onClose} /> : null}
     </>
   );

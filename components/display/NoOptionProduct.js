@@ -34,15 +34,20 @@ const NoOptionProduct = ({ product }) => {
   //calculate totaprice when selected changes
   const [totalPrice, setTotalPrice] = useState(0.0);
   useEffect(() => {
-    const price = product.variants[0].price;
-    setTotalPrice(price * quantity);
+    const price = product.variants.edges[0].node.priceV2.amount;
+    const pFloat = parseFloat(price);
+    setTotalPrice((pFloat * quantity).toFixed(2));
   }, [quantity]);
 
   const router = useRouter();
 
   const handleClick = async () => {
     try {
-      await addItemToCart(product.variants[0].id, quantity, checkoutId);
+      await addItemToCart(
+        product.variants.edges[0].node.id,
+        quantity,
+        checkoutId
+      );
       mutate([`/api/existingCheckout/`, checkoutId]);
       router.push('/cart');
       updateItemsCookie(checkoutId);
@@ -54,7 +59,9 @@ const NoOptionProduct = ({ product }) => {
   const [stock, setStock] = useState(true);
 
   useEffect(() => {
-    product.variants[0].available ? setStock(true) : setStock(false);
+    product.variants.edges[0].node.availableForSale
+      ? setStock(true)
+      : setStock(false);
   }, []);
 
   return (
@@ -83,7 +90,7 @@ const NoOptionProduct = ({ product }) => {
           mr={['0', '0', '0', '2%']}
         >
           <ImageWrapper>
-            {product.variants[0].image === null ? (
+            {product.variants.edges[0].node.image === null ? (
               <Image
                 src='/images/comingsoon.jpg'
                 alt={product.title}
@@ -94,7 +101,7 @@ const NoOptionProduct = ({ product }) => {
               />
             ) : (
               <Image
-                src={product.variants[0].image.src}
+                src={product.variants.edges[0].node.image.originalSrc}
                 alt={product.title}
                 height={577}
                 width={768}
@@ -127,7 +134,7 @@ const NoOptionProduct = ({ product }) => {
           <BuyButton
             stock={stock}
             totalPrice={totalPrice}
-            currencyCode={product.variants[0].priceV2.currencyCode}
+            currencyCode={product.variants.edges[0].node.priceV2.currencyCode}
             handleClick={handleClick}
             quantity={quantity}
             title={product.title}

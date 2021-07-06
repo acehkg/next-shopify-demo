@@ -4,7 +4,6 @@ import {
   LinkOverlay,
   Heading,
   Text,
-  Image,
   useColorModeValue,
 } from '@chakra-ui/react';
 import NextImage from '../images/NextImage';
@@ -16,16 +15,17 @@ const CollectionCard = ({ collection }) => {
       aria-label='Visit Item in Collection'
       display='flex'
       flexDirection='column'
-      maxWidth='20rem'
+      minWidth='20rem'
+      p='1rem'
       bg={bg}
       rounded='md'
-      p={2}
+      cursor='pointer'
     >
       <NextImage
         src={
           collection.image === null
             ? '/images/comingsoon.jpg'
-            : `${collection.image.src}`
+            : `${collection.image.originalSrc}`
         }
         alt={collection.title}
         rounding='var(--chakra-radii-md)'

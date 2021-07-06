@@ -22,6 +22,7 @@ const Header = () => {
         height='20%'
         pl='5%'
         pr='5%'
+        pt='3rem'
       >
         <Logo src='/images/logo.png' alt='Better Beer Co' boxSize='100px' />
 

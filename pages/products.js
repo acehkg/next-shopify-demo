@@ -4,11 +4,10 @@ import storefrontClient from '../utils/graphClient';
 import { gql } from 'graphql-request';
 //styling
 import ProductCard from '../components/display/ProductCard';
-import { Box, Grid, GridItem } from '@chakra-ui/react';
+import { SimpleGrid } from '@chakra-ui/react';
 import PageSeo from '../components/seo/PageSeo';
 
 const Products = ({ products }) => {
-  console.log(products);
   const { asPath } = useRouter();
   const metadata = {
     pageTitle: 'All Products',
@@ -20,25 +19,19 @@ const Products = ({ products }) => {
   return (
     <>
       <PageSeo metadata={metadata} />
-      <Box as='main' pb='4rem'>
-        <Grid
-          sx={{
-            gridTemplateColumns:
-              'repeat(auto-fill, minmax(min(300px, 100%), 1fr))',
-          }}
-          gap={8}
-          ml='5%'
-          mr='5%'
-        >
-          {products.map((product) => {
-            return (
-              <GridItem key={product.id}>
-                <ProductCard product={product} />
-              </GridItem>
-            );
-          })}
-        </Grid>
-      </Box>
+
+      <SimpleGrid
+        as='main'
+        minChildWidth='20rem'
+        gap='2rem'
+        width='90%'
+        mx='auto'
+        pb='4rem'
+      >
+        {products.map((product) => {
+          return <ProductCard key={product.id} product={product} />;
+        })}
+      </SimpleGrid>
     </>
   );
 };

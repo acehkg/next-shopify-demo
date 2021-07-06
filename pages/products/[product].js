@@ -1,5 +1,7 @@
 import { useRouter } from 'next/router';
-import { shopifyClient } from '../../utils/client';
+//storefront graph API Client
+import storefrontClient from '../../utils/graphClient';
+import { gql } from 'graphql-request';
 import NoOptionProduct from '../../components/display/NoOptionProduct';
 import OneOptionProduct from '../../components/display/OneOptionProduct';
 import TwoRadioSelectors from '../../components/display/TwoRadioSelectors';
@@ -10,7 +12,7 @@ const Product = ({ product }) => {
   const siteName = 'NEXT JS and Shopify';
   const url = `https://next-shopify-demo-three.vercel.app${asPath}`;
 
-  if (product.variants.length === 1) {
+  if (product.variants.edges.length === 1) {
     return (
       <>
         <ProductSeo product={product} url={url} siteName={siteName} />
@@ -39,9 +41,24 @@ const Product = ({ product }) => {
 export default Product;
 
 export async function getStaticPaths() {
-  //query storefron API and fetch all products
-  const products = await shopifyClient.product.fetchAll();
-  const formattedProducts = JSON.parse(JSON.stringify(products));
+  //build query for products
+  const PRODUCTS_QUERY = gql`
+    {
+      products(first: 250) {
+        edges {
+          node {
+            handle
+          }
+        }
+      }
+    }
+  `;
+  //query storefront API and fetch  products
+  const productsResponse = await storefrontClient.request(PRODUCTS_QUERY);
+
+  const formattedProducts = productsResponse.products.edges.map((edge) => {
+    return edge.node;
+  });
   //return handle as paths parameter
   const createPath = (item) => ({
     params: { product: item.handle },
@@ -55,9 +72,46 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   //get relevant product by querying by handle
-  const item = await shopifyClient.product.fetchByHandle(params.product);
+  const QUERY_HANDLE = gql`
+    {
+      productByHandle(handle:"${params.product}") {
+        title
+        description
+        images(first:250){
+          edges{
+          node{
+            originalSrc
+        }
+      }
+    }
+        options {
+          values
+        }
+        variants(first: 250) {
+          edges {
+            node {
+              id
+              availableForSale
+              image{
+                originalSrc
+              }
+              title
+              priceV2 {
+                amount
+                currencyCode
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+  //query storefront API and fetch  products
+  const productResponse = await storefrontClient.request(QUERY_HANDLE);
   return {
     //data needs to be properly formatted
-    props: { product: JSON.parse(JSON.stringify(item)) },
+    props: {
+      product: productResponse.productByHandle,
+    },
   };
 }

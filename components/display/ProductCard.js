@@ -66,7 +66,9 @@ const CardContent = ({ title, description, ...rest }) => {
 const Price = ({ variants, ...rest }) => {
   //create an array of prices
   const prices = variants.edges.map((variant) => {
-    return variant.node.priceV2.amount;
+    const pFloat = parseFloat(variant.node.priceV2.amount);
+    const price = pFloat.toFixed(2);
+    return price;
   });
   //determin whether all prices are the same or not and render appropriate information (price or From Price)
   const allEqual = (arr) => arr.every((v) => v === arr[0]);
@@ -101,7 +103,7 @@ const ProductCard = ({ product }) => {
       bg={bg}
       p='1rem'
       rounded='md'
-      maxW='30rem'
+      minW='20rem'
     >
       <Flex
         direction='column'
