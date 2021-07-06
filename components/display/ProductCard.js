@@ -95,7 +95,14 @@ const ProductCard = ({ product }) => {
   }
 
   return (
-    <Flex justify='space-evenly' align='center' bg={bg} p='1rem' rounded='md'>
+    <Flex
+      justify='space-evenly'
+      align='center'
+      bg={bg}
+      p='1rem'
+      rounded='md'
+      maxW='30rem'
+    >
       <Flex
         direction='column'
         width='300px'

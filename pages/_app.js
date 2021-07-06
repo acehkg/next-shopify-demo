@@ -1,5 +1,3 @@
-//global styles and styles for components
-import GlobalStyles from '../style/GlobalStyles';
 //Chakra UI
 import { ChakraProvider } from '@chakra-ui/react';
 import customTheme from '../style/customTheme';
@@ -27,7 +25,6 @@ function MyApp({ Component, pageProps }) {
           </CartProvider>
         </CookiesProvider>
       </ChakraProvider>
-      <GlobalStyles />
     </>
   );
 }

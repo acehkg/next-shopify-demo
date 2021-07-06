@@ -8,7 +8,6 @@ import { gql } from 'graphql-request';
 import {
   Box,
   Grid,
-  Text,
   GridItem,
   useColorModeValue,
   useDisclosure,
@@ -44,7 +43,7 @@ const HomePage = ({ products, collections }) => {
   return (
     <>
       <PageSeo metadata={metadata} />
-      <Box pb='2rem'>
+      <Box pb='4rem'>
         <Grid
           sx={{
             gridTemplateColumns:
@@ -55,7 +54,6 @@ const HomePage = ({ products, collections }) => {
           gap={8}
           ml='5%'
           mr='5%'
-          pb='2rem'
         >
           <GridLink href={`/collections/${collections[0].handle}`}>
             <NextImage

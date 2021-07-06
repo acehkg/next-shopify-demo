@@ -18,6 +18,7 @@ const Footer = () => {
       align='center'
       justify='space-evenly'
       height='15%'
+      border='none'
       borderTop='solid'
       borderColor={borderColor}
       borderWidth='1px'
