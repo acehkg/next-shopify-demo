@@ -56,7 +56,7 @@ const OneOptionProduct = ({ product }) => {
 
   const handleClick = async () => {
     try {
-      await addItemToCart(selected.id, quantity, checkoutId);
+      await addItemToCart(selected.node.id, quantity, checkoutId);
       mutate([`/api/existingCheckout/`, checkoutId]);
       router.push('/cart');
       updateItemsCookie(checkoutId);
@@ -97,7 +97,7 @@ const OneOptionProduct = ({ product }) => {
           mr={['0', '0', '0', '2%']}
         >
           <ImageWrapper>
-            {selected.image === null ? (
+            {selected.node.image === null ? (
               <Image
                 src='/images/comingsoon.jpg'
                 alt={product.title}

@@ -22,7 +22,7 @@ const Products = ({ products }) => {
 
       <SimpleGrid
         as='main'
-        minChildWidth='20rem'
+        minChildWidth='18rem'
         gap='2rem'
         width='90%'
         mx='auto'

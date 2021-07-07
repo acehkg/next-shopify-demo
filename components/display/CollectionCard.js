@@ -15,7 +15,7 @@ const CollectionCard = ({ collection }) => {
       aria-label='Visit Item in Collection'
       display='flex'
       flexDirection='column'
-      minWidth='20rem'
+      minWidth='17rem'
       p='1rem'
       bg={bg}
       rounded='md'

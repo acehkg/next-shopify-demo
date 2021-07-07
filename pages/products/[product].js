@@ -107,11 +107,11 @@ export async function getStaticProps({ params }) {
     }
   `;
   //query storefront API and fetch  products
-  const productResponse = await storefrontClient.request(QUERY_HANDLE);
+  const { productByHandle } = await storefrontClient.request(QUERY_HANDLE);
   return {
     //data needs to be properly formatted
     props: {
-      product: productResponse.productByHandle,
+      product: productByHandle,
     },
   };
 }

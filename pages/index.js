@@ -45,7 +45,7 @@ const HomePage = ({ products, collections }) => {
 
       <SimpleGrid
         as='section'
-        minChildWidth='20rem'
+        minChildWidth='18rem'
         gap='2rem'
         width='90%'
         mx='auto'
