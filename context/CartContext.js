@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
+import { gql } from 'graphql-request';
 export const CartContext = createContext();
 
 //add error handling to the cart functions
@@ -10,24 +11,44 @@ const Cart = ({ children }) => {
 
   //retrieve existing checkout from cookies or create a new checkout
   useEffect(async () => {
+    const QUERY = gql`
+      mutation checkoutCreate($input: CheckoutCreateInput!) {
+        checkoutCreate(input: $input) {
+          checkout {
+            id
+          }
+          checkoutUserErrors {
+            code
+            field
+            message
+          }
+        }
+      }
+    `;
+    const variables = {
+      input: {},
+    };
     const { checkout_id } = cookies;
     let date = new Date();
     date.setTime(date.getTime() + 30 * 24 * 60 * 60 * 1000);
     try {
       if (checkout_id === undefined) {
-        const res = await fetch('/api/createCheckout');
-        const createdCheckout = await res.json();
-        setCookie('checkout_id', createdCheckout.id, {
+        const res = await fetch('/api/storefrontMutation', {
+          method: 'POST',
+          body: JSON.stringify({
+            QUERY,
+            variables,
+          }),
+        });
+
+        const { checkoutCreate } = await res.json();
+
+        setCookie('checkout_id', checkoutCreate.checkout.id, {
           expires: date,
           secure: true,
         });
-        setCheckoutId(createdCheckout.id);
+        setCheckoutId(checkoutCreate.checkout.id);
       } else {
-        /* const res = await fetch('/api/existingCheckout', {
-          method: 'POST',
-          body: checkout_id,
-        });
-        const oldCheckout = await res.json(); */
         setCheckoutId(checkout_id);
       }
     } catch (e) {}

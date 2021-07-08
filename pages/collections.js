@@ -22,7 +22,7 @@ const Collections = ({ collections }) => {
 
       <SimpleGrid
         as='main'
-        minChildWidth='20rem'
+        minChildWidth={['18rem', '18rem', '18rem', '20rem']}
         gap='2rem'
         width='90%'
         mx='auto'

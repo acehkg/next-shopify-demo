@@ -104,6 +104,7 @@ const ProductCard = ({ product }) => {
       p='1rem'
       rounded='md'
       minW='17rem'
+      maxW='25rem'
     >
       <Flex
         direction='column'
