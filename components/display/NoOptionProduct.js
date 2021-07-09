@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import useCartContext from '../../hooks/useCartContext';
 import { mutate } from 'swr';
 //chakra ui
-import { Flex, Text, Heading, Box } from '@chakra-ui/react';
+import { Flex, Text, Heading, Box, useToast } from '@chakra-ui/react';
 //components
 import QuantityAdjust from '../interface/QuantityAdjust';
 import BuyButton from '../interface/BuyButton';
@@ -39,7 +39,9 @@ const NoOptionProduct = ({ product }) => {
     setTotalPrice((pFloat * quantity).toFixed(2));
   }, [quantity]);
 
-  const router = useRouter();
+  // const router = useRouter();
+
+  const toast = useToast();
 
   const handleClick = async () => {
     try {
@@ -48,9 +50,25 @@ const NoOptionProduct = ({ product }) => {
         quantity,
         checkoutId
       );
-      mutate([`/api/existingCheckout/`, checkoutId]);
-      router.push('/cart');
-      updateItemsCookie(checkoutId);
+      mutate([`/api/storefrontQuery/`, checkoutId]);
+      toast({
+        isClosable: true,
+        render: () => (
+          <Flex
+            justifyContent='center'
+            alignItems='center'
+            color='white'
+            bg='gray.700'
+            height='5rem'
+            textAlign='center'
+            fontSize='lg'
+            rounded='md'
+          >
+            ITEM ADDED TO CART
+          </Flex>
+        ),
+      });
+      //router.push('/cart');
     } catch (e) {
       console.log('Error adding item to cart...');
       console.log(e);

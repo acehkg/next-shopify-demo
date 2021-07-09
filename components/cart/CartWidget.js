@@ -6,14 +6,7 @@ import QuantityDisplay from './QuantityDispaly';
 import useCartContext from '../../hooks/useCartContext';
 
 const CartWidget = () => {
-  //const [cookies] = useCookies(['checkout_length']);
-  //const [total, setTotal] = useState(0);
   const { itemsInCart } = useCartContext();
-
-  /*  useEffect(() => {
-    const { checkout_length } = cookies;
-    checkout_length ? setTotal(checkout_length) : null;
-  }, [cookies]); */
 
   return (
     <Box aria-label='cart' mb='1.5rem'>

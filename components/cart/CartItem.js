@@ -18,12 +18,7 @@ const CartItem = ({
   variant,
   currency,
 }) => {
-  const {
-    checkoutId,
-    removeItemFromCart,
-    updateItemInCart,
-    updateItemsCookie,
-  } = useCartContext();
+  const { checkoutId, removeItemFromCart, updateItemInCart } = useCartContext();
   const [quantity, setQuantity] = useState(qty);
   const incrementQty = () => {
     setQuantity(() => quantity + 1);
@@ -33,15 +28,16 @@ const CartItem = ({
     quantity === 1 ? setQuantity(1) : setQuantity(() => quantity - 1);
   };
   //calculate price when qty changes
-  const [totalPrice, setTotalPrice] = useState(price);
+  const [totalPrice, setTotalPrice] = useState(0);
   useEffect(() => {
-    setTotalPrice((price * quantity).toFixed(2));
+    const pFloat = parseFloat(price);
+    setTotalPrice((pFloat * quantity).toFixed(2));
   }, [quantity]);
 
   useEffect(async () => {
     try {
       await updateItemInCart(id, variantId, quantity, checkoutId);
-      mutate([`/api/existingCheckout/`, checkoutId]);
+      mutate([`/api/storefrontQuery/`, checkoutId]);
     } catch (e) {
       console.log('Error updating cart...');
       console.log(e);
@@ -51,7 +47,7 @@ const CartItem = ({
   const handleTrash = async () => {
     try {
       await removeItemFromCart(id, checkoutId);
-      mutate([`/api/existingCheckout/`, checkoutId]);
+      mutate([`/api/storefrontQuery/`, checkoutId]);
     } catch (e) {
       console.log('Error Removing Item from Cart...');
       console.log(e);

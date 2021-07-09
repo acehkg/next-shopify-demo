@@ -13,11 +13,23 @@ const Cart = ({ children }) => {
   let date = new Date();
   date.setTime(date.getTime() + 7 * 24 * 60 * 60 * 1000);
 
-  //set items in cart total to display in widget and set the cookie for next visit
+  //set items in cart total to display cookie value and update cookie when items in cart adjusted
   useEffect(() => {
     const { checkout_items } = cookies;
     checkout_items ? setItemsInCart(checkout_items) : setItemsInCart(0);
   }, []);
+
+  useEffect(() => {
+    itemsInCart == 0
+      ? setCookie('checkout_items', 0, {
+          expires: date,
+          secure: true,
+        })
+      : setCookie('checkout_items', itemsInCart, {
+          expires: date,
+          secure: true,
+        });
+  }, [itemsInCart]);
 
   //retrieve existing checkout from cookies or create a new checkout
   useEffect(async () => {
@@ -110,17 +122,18 @@ const Cart = ({ children }) => {
       const {
         checkoutLineItemsAdd: { checkout },
       } = await res.json();
+      const lineItems = checkout.lineItems.edges;
 
-      const itemsArray = checkout.lineItems.edges.map((edge) => {
-        return edge.node.quantity;
-      });
+      const itemsArray =
+        Array.isArray(lineItems) && lineItems.length
+          ? lineItems.map((item) => {
+              return item.node.quantity;
+            })
+          : null;
 
-      const itemsTotal = itemsArray.reduce(reducer);
-      setItemsInCart(itemsTotal);
-      setCookie('checkout_items', itemsTotal, {
-        expires: date,
-        secure: true,
-      });
+      itemsArray
+        ? setItemsInCart(itemsArray.reduce(reducer))
+        : setItemsInCart(0);
     } catch (err) {
       console.log(err);
     }
@@ -170,22 +183,18 @@ const Cart = ({ children }) => {
         checkoutLineItemsRemove: { checkout },
       } = await res.json();
 
-      let itemsTotal;
-      console.log(checkout.lineItems.edges.length);
-      if ((checkout.lineItems.edges.length = 0)) {
-        itemsTotal = 0;
-      } else {
-        const itemsArray = checkout.lineItems.edges.map((edge) => {
-          return edge.node.quantity;
-        });
-        itemsTotal = itemsArray.reduce(reducer);
-      }
+      const lineItems = checkout.lineItems.edges;
 
-      setItemsInCart(itemsTotal);
-      setCookie('checkout_items', itemsTotal, {
-        expires: date,
-        secure: true,
-      });
+      const itemsArray =
+        Array.isArray(lineItems) && lineItems.length
+          ? lineItems.map((item) => {
+              return item.node.quantity;
+            })
+          : null;
+
+      itemsArray
+        ? setItemsInCart(itemsArray.reduce(reducer))
+        : setItemsInCart(0);
     } catch (err) {
       console.log(err);
     }
@@ -244,38 +253,22 @@ const Cart = ({ children }) => {
         checkoutLineItemsUpdate: { checkout },
       } = await res.json();
 
-      const itemsArray = checkout.lineItems.edges.map((edge) => {
-        return edge.node.quantity;
-      });
+      const lineItems = checkout.lineItems.edges;
 
-      const itemsTotal = itemsArray.reduce(reducer);
-      setItemsInCart(itemsTotal);
-      setCookie('checkout_items', itemsTotal, {
-        expires: date,
-        secure: true,
-      });
+      const itemsArray =
+        Array.isArray(lineItems) && lineItems.length
+          ? lineItems.map((item) => {
+              return item.node.quantity;
+            })
+          : null;
+
+      itemsArray
+        ? setItemsInCart(itemsArray.reduce(reducer))
+        : setItemsInCart(0);
     } catch (err) {
       console.log(err);
     }
   };
-
-  /*  const updateItemsCookie = async (checkoutId) => {
-    let date = new Date();
-    date.setTime(date.getTime() + 7 * 24 * 60 * 60 * 1000);
-    try {
-      const res = await fetch('/api/existingCheckout', {
-        method: 'POST',
-        body: checkoutId,
-      });
-      const oldCheckout = await res.json();
-      setCookie('checkout_length', oldCheckout.lineItems.length, {
-        expires: date,
-        secure: true,
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  }; */
 
   const exposed = {
     checkoutId,

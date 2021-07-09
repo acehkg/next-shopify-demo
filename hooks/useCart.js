@@ -3,7 +3,7 @@ import { fetcherWithCheckout } from '../utils/swr';
 
 const useCart = (checkoutId) => {
   const { data: checkout, error } = useSWR(
-    [`/api/existingCheckout/`, checkoutId],
+    [`/api/storefrontQuery/`, checkoutId],
     fetcherWithCheckout
   );
   return {
