@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 //cart context and data
 import useCartContext from '../../hooks/useCartContext';
 import { mutate } from 'swr';
@@ -58,7 +57,7 @@ const OneOptionProduct = ({ product }) => {
   const handleClick = async () => {
     try {
       await addItemToCart(selected.node.id, quantity, checkoutId);
-      mutate([`/api/existingCheckout/`, checkoutId]);
+      mutate([`/api/storefrontQuery/`, checkoutId]);
       toast({
         isClosable: true,
         render: () => (
@@ -76,7 +75,6 @@ const OneOptionProduct = ({ product }) => {
           </Flex>
         ),
       });
-      //router.push('/cart');
     } catch (e) {
       console.log('Error adding item to cart...');
       console.log(e);

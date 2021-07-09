@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 //cart context and data
 import useCartContext from '../../hooks/useCartContext';
 import { mutate } from 'swr';
@@ -79,7 +78,6 @@ const TwoRadioSelectors = ({ product }) => {
           </Flex>
         ),
       });
-      //router.push('/cart');
     } catch (e) {
       console.log('Error adding item to cart...');
       console.log(e);
