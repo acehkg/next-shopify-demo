@@ -3,12 +3,20 @@ import { useState, useEffect } from 'react';
 import useCartContext from '../../hooks/useCartContext';
 import { mutate } from 'swr';
 //chakra ui
-import { Flex, Text, Heading, Box, useToast } from '@chakra-ui/react';
+import {
+  Flex,
+  Text,
+  Heading,
+  Box,
+  useToast,
+  useColorModeValue,
+} from '@chakra-ui/react';
 //components
 import QuantityAdjust from '../interface/QuantityAdjust';
 import BuyButton from '../interface/BuyButton';
 import Image from 'next/image';
 import styled from 'styled-components';
+import CartToast from '../modals/CartToast';
 
 const ImageWrapper = styled.div`
   img {
@@ -19,6 +27,8 @@ const ImageWrapper = styled.div`
 const NoOptionProduct = ({ product }) => {
   //checkoutid
   const { checkoutId, addItemToCart, updateItemsCookie } = useCartContext();
+  const bg = useColorModeValue('gray.200', 'gray.700');
+  const color = useColorModeValue('black', 'white');
   //handle quantity
   const [quantity, setQuantity] = useState(1);
 
@@ -51,21 +61,8 @@ const NoOptionProduct = ({ product }) => {
       );
       mutate([`/api/storefrontQuery/`, checkoutId]);
       toast({
-        isClosable: true,
-        render: () => (
-          <Flex
-            justifyContent='center'
-            alignItems='center'
-            color='white'
-            bg='gray.700'
-            height='5rem'
-            textAlign='center'
-            fontSize='lg'
-            rounded='md'
-          >
-            ITEM ADDED TO CART
-          </Flex>
-        ),
+        duration: 5000,
+        render: () => <CartToast bg={bg} color={color} />,
       });
     } catch (e) {
       console.log('Error adding item to cart...');

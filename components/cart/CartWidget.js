@@ -1,7 +1,5 @@
-import { useCookies } from 'react-cookie';
 import { Box } from '@chakra-ui/react';
 import { RiShoppingBagLine } from 'react-icons/ri';
-import { useEffect, useState } from 'react';
 import QuantityDisplay from './QuantityDispaly';
 import useCartContext from '../../hooks/useCartContext';
 

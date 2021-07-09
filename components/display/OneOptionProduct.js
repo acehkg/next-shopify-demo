@@ -3,12 +3,20 @@ import { useState, useEffect } from 'react';
 import useCartContext from '../../hooks/useCartContext';
 import { mutate } from 'swr';
 //chakra ui
-import { Flex, Text, Heading, Box, useToast } from '@chakra-ui/react';
+import {
+  Flex,
+  Text,
+  Heading,
+  Box,
+  useToast,
+  useColorModeValue,
+} from '@chakra-ui/react';
 //components
 import QuantityAdjust from '../interface/QuantityAdjust';
 import BuyButton from '../interface/BuyButton';
 import LabelRadio from '../interface/Radio/LabelRadio';
 import Image from 'next/image';
+import CartToast from '../modals/CartToast';
 import styled from 'styled-components';
 
 const ImageWrapper = styled.div`
@@ -19,7 +27,9 @@ const ImageWrapper = styled.div`
 
 const OneOptionProduct = ({ product }) => {
   //checkoutid
-  const { checkoutId, addItemToCart, updateItemsCookie } = useCartContext();
+  const { checkoutId, addItemToCart } = useCartContext();
+  const bg = useColorModeValue('gray.200', 'gray.700');
+  const color = useColorModeValue('black', 'white');
   //for a product with to options render selectors and filter selections for target variantId
   //seperate the two options arrays
   const optionOne = product.options[0];
@@ -59,21 +69,8 @@ const OneOptionProduct = ({ product }) => {
       await addItemToCart(selected.node.id, quantity, checkoutId);
       mutate([`/api/storefrontQuery/`, checkoutId]);
       toast({
-        isClosable: true,
-        render: () => (
-          <Flex
-            justifyContent='center'
-            alignItems='center'
-            color='white'
-            bg='gray.700'
-            height='5rem'
-            textAlign='center'
-            fontSize='lg'
-            rounded='md'
-          >
-            ITEM ADDED TO CART
-          </Flex>
-        ),
+        duration: 5000,
+        render: () => <CartToast bg={bg} color={color} />,
       });
     } catch (e) {
       console.log('Error adding item to cart...');

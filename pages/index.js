@@ -1,27 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 //storefront Graph Client
 import storefrontClient from '../utils/graphClient';
 import { gql } from 'graphql-request';
 //chakra ui
-import {
-  Box,
-  Grid,
-  GridItem,
-  SimpleGrid,
-  useColorModeValue,
-  useDisclosure,
-} from '@chakra-ui/react';
+import { useToast, SimpleGrid, useColorModeValue } from '@chakra-ui/react';
 import GridLink from '../components/layout/GridLink';
 import ProductCard from '../components/display/ProductCard';
 import NextImage from '../components/images/NextImage';
 import PageSeo from '../components/seo/PageSeo';
-import CookiePop from '../components/modals/CookiePop';
+import CookieToast from '../components/modals/CookieToast';
 import { useRouter } from 'next/router';
 
 const HomePage = ({ products, collections }) => {
-  const [shouldPop, setShouldPop] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const bg = useColorModeValue('gray.200', 'gray.700');
+  const color = useColorModeValue('black', 'white');
   const { asPath } = useRouter();
   const metadata = {
     pageTitle: 'Home',
@@ -30,12 +22,16 @@ const HomePage = ({ products, collections }) => {
     previewImage: '/images/logo.png',
     siteName: 'NEXT JS and Shopify Demo',
   };
+
+  const toast = useToast();
   useEffect(() => {
     let pop_status = localStorage.getItem('pop_status');
     if (!pop_status) {
-      setShouldPop(true);
       localStorage.setItem('pop_status', 1);
-      onOpen();
+      toast({
+        duration: 5000,
+        render: () => <CookieToast bg={bg} color={color} />,
+      });
     }
   }, []);
 
@@ -86,7 +82,6 @@ const HomePage = ({ products, collections }) => {
           return <ProductCard key={product.id} product={product} />;
         })}
       </SimpleGrid>
-      {shouldPop ? <CookiePop isOpen={isOpen} onClose={onClose} /> : null}
     </>
   );
 };

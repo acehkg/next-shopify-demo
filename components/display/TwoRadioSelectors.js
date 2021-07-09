@@ -3,7 +3,15 @@ import { useState, useEffect } from 'react';
 import useCartContext from '../../hooks/useCartContext';
 import { mutate } from 'swr';
 //chakra ui
-import { Flex, Stack, Text, Heading, Box, useToast } from '@chakra-ui/react';
+import {
+  Flex,
+  Stack,
+  Text,
+  Heading,
+  Box,
+  useToast,
+  useColorModeValue,
+} from '@chakra-ui/react';
 //components
 import QuantityAdjust from '../interface/QuantityAdjust';
 import BuyButton from '../interface/BuyButton';
@@ -11,6 +19,7 @@ import ColorRadio from '../interface/Radio/ColorRadio';
 import LabelRadio from '../interface/Radio/LabelRadio';
 import Image from 'next/image';
 import styled from 'styled-components';
+import CartToast from '../modals/CartToast';
 
 const ImageWrapper = styled.div`
   img {
@@ -21,8 +30,8 @@ const ImageWrapper = styled.div`
 const TwoRadioSelectors = ({ product }) => {
   //checkoutid
   const { checkoutId, addItemToCart, updateItemsCookie } = useCartContext();
-  //for a product with to options render selectors and filter selections for target variantId
-
+  const bg = useColorModeValue('gray.200', 'gray.700');
+  const color = useColorModeValue('black', 'white');
   const [quantity, setQuantity] = useState(1);
 
   //seperate the two options arrays
@@ -53,7 +62,6 @@ const TwoRadioSelectors = ({ product }) => {
     const pFloat = parseFloat(price);
     setTotalPrice((pFloat * quantity).toFixed(2));
   }, [quantity, selected]);
-  //const router = useRouter();
 
   const toast = useToast();
 
@@ -62,21 +70,8 @@ const TwoRadioSelectors = ({ product }) => {
       await addItemToCart(selected.node.id, quantity, checkoutId);
       mutate([`/api/storefrontQuery/`, checkoutId]);
       toast({
-        isClosable: true,
-        render: () => (
-          <Flex
-            justifyContent='center'
-            alignItems='center'
-            color='white'
-            bg='gray.700'
-            height='5rem'
-            textAlign='center'
-            fontSize='lg'
-            rounded='md'
-          >
-            ITEM ADDED TO CART
-          </Flex>
-        ),
+        duration: 5000,
+        render: () => <CartToast bg={bg} color={color} />,
       });
     } catch (e) {
       console.log('Error adding item to cart...');
