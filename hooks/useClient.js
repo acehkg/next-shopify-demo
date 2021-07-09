@@ -20,7 +20,6 @@ const useClient = (query, variables) => {
 
   useEffect(() => {
     makeQuery(query, variables);
-    console.log(storefrontClient);
   }, []);
 
   return { response, error, loading };

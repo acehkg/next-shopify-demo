@@ -3,11 +3,21 @@ import { useCookies } from 'react-cookie';
 import { gql } from 'graphql-request';
 export const CartContext = createContext();
 
-//add error handling to the cart functions
-
 const Cart = ({ children }) => {
   const [checkoutId, setCheckoutId] = useState();
-  const [cookies, setCookie] = useCookies();
+  const [itemsInCart, setItemsInCart] = useState();
+  const [cookies, setCookie] = useCookies(['checkout_items', 'checkout_id']);
+
+  const reducer = (accumulator, currentValue) => accumulator + currentValue;
+
+  let date = new Date();
+  date.setTime(date.getTime() + 7 * 24 * 60 * 60 * 1000);
+
+  //set items in cart total to display in widget and set the cookie for next visit
+  useEffect(() => {
+    const { checkout_items } = cookies;
+    checkout_items ? setItemsInCart(checkout_items) : setItemsInCart(0);
+  }, []);
 
   //retrieve existing checkout from cookies or create a new checkout
   useEffect(async () => {
@@ -29,8 +39,6 @@ const Cart = ({ children }) => {
       input: {},
     };
     const { checkout_id } = cookies;
-    let date = new Date();
-    date.setTime(date.getTime() + 30 * 24 * 60 * 60 * 1000);
     try {
       if (checkout_id === undefined) {
         const res = await fetch('/api/storefrontMutation', {
@@ -55,14 +63,63 @@ const Cart = ({ children }) => {
   }, []);
 
   const addItemToCart = async (variantId, quantity, checkoutId) => {
+    const QUERY = gql`
+      mutation checkoutLineItemsAdd(
+        $lineItems: [CheckoutLineItemInput!]!
+        $checkoutId: ID!
+      ) {
+        checkoutLineItemsAdd(lineItems: $lineItems, checkoutId: $checkoutId) {
+          checkout {
+            id
+            lineItems(first: 250) {
+              edges {
+                node {
+                  id
+                  title
+                  quantity
+                }
+              }
+            }
+          }
+          checkoutUserErrors {
+            code
+            field
+            message
+          }
+        }
+      }
+    `;
+
+    const variables = {
+      lineItems: [
+        {
+          quantity: quantity,
+          variantId: variantId,
+        },
+      ],
+      checkoutId: checkoutId,
+    };
     try {
-      await fetch('/api/addLineItem', {
+      const res = await fetch('/api/storefrontMutation', {
         method: 'POST',
         body: JSON.stringify({
-          variantId,
-          quantity,
-          checkoutId,
+          QUERY,
+          variables,
         }),
+      });
+      const {
+        checkoutLineItemsAdd: { checkout },
+      } = await res.json();
+
+      const itemsArray = checkout.lineItems.edges.map((edge) => {
+        return edge.node.quantity;
+      });
+
+      const itemsTotal = itemsArray.reduce(reducer);
+      setItemsInCart(itemsTotal);
+      setCookie('checkout_items', itemsTotal, {
+        expires: date,
+        secure: true,
       });
     } catch (err) {
       console.log(err);
@@ -70,13 +127,64 @@ const Cart = ({ children }) => {
   };
 
   const removeItemFromCart = async (variantId, checkoutId) => {
+    const QUERY = gql`
+      mutation checkoutLineItemsRemove($checkoutId: ID!, $lineItemIds: [ID!]!) {
+        checkoutLineItemsRemove(
+          checkoutId: $checkoutId
+          lineItemIds: $lineItemIds
+        ) {
+          checkout {
+            id
+            lineItems(first: 250) {
+              edges {
+                node {
+                  id
+                  title
+                  quantity
+                }
+              }
+            }
+          }
+          checkoutUserErrors {
+            code
+            field
+            message
+          }
+        }
+      }
+    `;
+
+    const variables = {
+      checkoutId: checkoutId,
+      lineItemIds: [variantId],
+    };
     try {
-      await fetch('/api/removeLineItem', {
+      const res = await fetch('/api/storefrontMutation', {
         method: 'POST',
         body: JSON.stringify({
-          variantId,
-          checkoutId,
+          QUERY,
+          variables,
         }),
+      });
+      const {
+        checkoutLineItemsRemove: { checkout },
+      } = await res.json();
+
+      let itemsTotal;
+      console.log(checkout.lineItems.edges.length);
+      if ((checkout.lineItems.edges.length = 0)) {
+        itemsTotal = 0;
+      } else {
+        const itemsArray = checkout.lineItems.edges.map((edge) => {
+          return edge.node.quantity;
+        });
+        itemsTotal = itemsArray.reduce(reducer);
+      }
+
+      setItemsInCart(itemsTotal);
+      setCookie('checkout_items', itemsTotal, {
+        expires: date,
+        secure: true,
       });
     } catch (err) {
       console.log(err);
@@ -84,24 +192,76 @@ const Cart = ({ children }) => {
   };
 
   const updateItemInCart = async (id, variantId, quantity, checkoutId) => {
+    const QUERY = gql`
+      mutation checkoutLineItemsUpdate(
+        $checkoutId: ID!
+        $lineItems: [CheckoutLineItemUpdateInput!]!
+      ) {
+        checkoutLineItemsUpdate(
+          checkoutId: $checkoutId
+          lineItems: $lineItems
+        ) {
+          checkout {
+            id
+            lineItems(first: 250) {
+              edges {
+                node {
+                  id
+                  title
+                  quantity
+                }
+              }
+            }
+          }
+          checkoutUserErrors {
+            code
+            field
+            message
+          }
+        }
+      }
+    `;
+
+    const variables = {
+      checkoutId: checkoutId,
+      lineItems: [
+        {
+          id: id,
+          quantity: quantity,
+          variantId: variantId,
+        },
+      ],
+    };
     try {
-      await fetch('/api/updateLineItems', {
+      const res = await fetch('/api/storefrontMutation', {
         method: 'POST',
         body: JSON.stringify({
-          id,
-          variantId,
-          quantity,
-          checkoutId,
+          QUERY,
+          variables,
         }),
+      });
+      const {
+        checkoutLineItemsUpdate: { checkout },
+      } = await res.json();
+
+      const itemsArray = checkout.lineItems.edges.map((edge) => {
+        return edge.node.quantity;
+      });
+
+      const itemsTotal = itemsArray.reduce(reducer);
+      setItemsInCart(itemsTotal);
+      setCookie('checkout_items', itemsTotal, {
+        expires: date,
+        secure: true,
       });
     } catch (err) {
       console.log(err);
     }
   };
 
-  const updateItemsCookie = async (checkoutId) => {
+  /*  const updateItemsCookie = async (checkoutId) => {
     let date = new Date();
-    date.setTime(date.getTime() + 30 * 24 * 60 * 60 * 1000);
+    date.setTime(date.getTime() + 7 * 24 * 60 * 60 * 1000);
     try {
       const res = await fetch('/api/existingCheckout', {
         method: 'POST',
@@ -115,14 +275,14 @@ const Cart = ({ children }) => {
     } catch (err) {
       console.log(err);
     }
-  };
+  }; */
 
   const exposed = {
     checkoutId,
+    itemsInCart,
     addItemToCart,
     removeItemFromCart,
     updateItemInCart,
-    updateItemsCookie,
   };
 
   return (

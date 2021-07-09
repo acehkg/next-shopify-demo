@@ -58,8 +58,7 @@ const OneOptionProduct = ({ product }) => {
     try {
       await addItemToCart(selected.node.id, quantity, checkoutId);
       mutate([`/api/existingCheckout/`, checkoutId]);
-      router.push('/cart');
-      updateItemsCookie(checkoutId);
+      //router.push('/cart');
     } catch (e) {
       console.log('Error adding item to cart...');
       console.log(e);

@@ -52,7 +52,6 @@ const CartItem = ({
     try {
       await removeItemFromCart(id, checkoutId);
       mutate([`/api/existingCheckout/`, checkoutId]);
-      updateItemsCookie(checkoutId);
     } catch (e) {
       console.log('Error Removing Item from Cart...');
       console.log(e);

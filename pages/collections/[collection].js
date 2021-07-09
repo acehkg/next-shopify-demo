@@ -82,6 +82,7 @@ export async function getStaticProps({ params }) {
               id
               title
               description
+              handle
               images(first: 250) {
                 edges {
                   node {

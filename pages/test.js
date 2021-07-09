@@ -1,44 +1,41 @@
 import { useEffect } from 'react';
 import { gql } from 'graphql-request';
+import useCartContext from '../hooks/useCartContext';
 
 const test = () => {
-  const testGraph = async () => {
+  const { checkoutId } = useCartContext();
+  console.log(checkoutId);
+  const testGraph = async (checkoutId) => {
     const QUERY = gql`
-      mutation checkoutCreate($input: CheckoutCreateInput!) {
-        checkoutCreate(input: $input) {
-          checkout {
+      {
+        node(
+          id: "${checkoutId}"
+        ) {
+          ... on Checkout {
             id
-          }
-          checkoutUserErrors {
-            code
-            field
-            message
+            webUrl
           }
         }
       }
     `;
-    const variables = {
-      input: {},
-    };
 
     try {
-      const res = await fetch('/api/storefrontMutation', {
+      const res = await fetch('/api/storefrontQuery', {
         method: 'POST',
         body: JSON.stringify({
           QUERY,
-          variables,
         }),
       });
-      const { checkoutCreate } = await res.json();
+      const response = await res.json();
 
-      console.log(checkout.id);
+      console.log(response);
     } catch (err) {
       console.log(err);
     }
   };
   useEffect(() => {
-    testGraph();
-  }, []);
+    checkoutId ? testGraph(checkoutId) : null;
+  }, [checkoutId]);
   return <div>HELLO</div>;
 };
 

@@ -6,8 +6,10 @@ export default async function handler(req, res) {
     return res.status.json({ msg: 'Method Not Allowed' });
   }
   //make request to graphQL endpoint
+  const { QUERY } = JSON.parse(req.body);
+  console.log(QUERY);
   try {
-    const data = await storefrontClient.request(req.body);
+    const data = await storefrontClient.request(QUERY);
     res.status(200).json(data);
   } catch (err) {
     console.log(err);
