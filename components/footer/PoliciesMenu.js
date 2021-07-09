@@ -26,9 +26,9 @@ const PoliciesMenu = ({ policies, size, ...rest }) => {
         STORE POLICIES
       </MenuButton>
       <MenuList>
-        {newPolicies.map((policy) => {
+        {newPolicies.map((policy, index) => {
           return (
-            <MenuItem key={policy.id}>
+            <MenuItem key={index}>
               <Link href={policy.url}>{policy.title}</Link>
             </MenuItem>
           );
