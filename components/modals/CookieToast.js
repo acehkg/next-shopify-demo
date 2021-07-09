@@ -12,7 +12,7 @@ const CookieToast = ({ bg, color }) => {
       fontSize='lg'
       rounded='md'
     >
-      <Text>ITEM ADDED TO CART</Text>
+      <Text>WE USE COOKIES TO ENHANCE YOUR SHOPPING EXPERIENCE</Text>
     </Flex>
   );
 };
