@@ -11,15 +11,19 @@ const LabelRadioCard = (props) => {
       <input aria-label={props.label} {...input} />
       <Box
         {...checkbox}
+        display='flex'
+        justifyContent='center'
+        alignItems='center'
         cursor='pointer'
         borderWidth='2px'
         borderRadius='md'
         boxShadow='md'
+        height='3rem'
+        width='3rem'
+        textAlign='center'
         _focus={{
           boxShadow: 'outline',
         }}
-        px={3}
-        py={3}
       >
         {props.children}
       </Box>

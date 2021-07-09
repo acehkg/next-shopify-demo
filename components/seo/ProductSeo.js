@@ -2,9 +2,9 @@ import Head from 'next/head';
 
 const ProductSeo = ({ product, url, siteName }) => {
   let src;
-  product.images.length === 0
+  product.images.edges.length === 0
     ? (src = '/images/comingsoon.jpg')
-    : (src = `${product.variants[0].image.src}`);
+    : (src = `${product.variants.edges[0].node.image.originalSrc}`);
   return (
     <Head>
       <link

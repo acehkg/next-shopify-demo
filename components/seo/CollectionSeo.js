@@ -4,7 +4,7 @@ const CollectionSeo = ({ collection, url, siteName }) => {
   let src;
   collection.image === null
     ? (src = '/images/comingsoon.jpg')
-    : (src = `${collection.image.src}`);
+    : (src = `${collection.image.originalSrc}`);
   return (
     <Head>
       <link

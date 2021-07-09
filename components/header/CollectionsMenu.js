@@ -17,7 +17,11 @@ const CollectionsMenu = ({ bg, ...rest }) => {
         as={Button}
         rightIcon={<HiChevronDown />}
         bg={bg}
-        _hover={{ bg: { bg } }}
+        _hover={{
+          bg: { bg },
+          transform: 'scale(1.1)',
+          transition: '0.1s all ease-in-out',
+        }}
         _active={{ bg: { bg } }}
         _focus={{ border: 'none' }}
       >

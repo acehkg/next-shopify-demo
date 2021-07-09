@@ -1,15 +1,22 @@
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 //cart context and data
 import useCartContext from '../../hooks/useCartContext';
 import { mutate } from 'swr';
 //chakra ui
-import { Flex, Text, Heading, Box } from '@chakra-ui/react';
+import {
+  Flex,
+  Text,
+  Heading,
+  Box,
+  useToast,
+  useColorModeValue,
+} from '@chakra-ui/react';
 //components
 import QuantityAdjust from '../interface/QuantityAdjust';
 import BuyButton from '../interface/BuyButton';
 import Image from 'next/image';
 import styled from 'styled-components';
+import CartToast from '../modals/CartToast';
 
 const ImageWrapper = styled.div`
   img {
@@ -20,6 +27,8 @@ const ImageWrapper = styled.div`
 const NoOptionProduct = ({ product }) => {
   //checkoutid
   const { checkoutId, addItemToCart, updateItemsCookie } = useCartContext();
+  const bg = useColorModeValue('gray.200', 'gray.700');
+  const color = useColorModeValue('black', 'white');
   //handle quantity
   const [quantity, setQuantity] = useState(1);
 
@@ -34,18 +43,27 @@ const NoOptionProduct = ({ product }) => {
   //calculate totaprice when selected changes
   const [totalPrice, setTotalPrice] = useState(0.0);
   useEffect(() => {
-    const price = product.variants[0].price;
-    setTotalPrice(price * quantity);
+    const price = product.variants.edges[0].node.priceV2.amount;
+    const pFloat = parseFloat(price);
+    setTotalPrice((pFloat * quantity).toFixed(2));
   }, [quantity]);
 
-  const router = useRouter();
+  // const router = useRouter();
+
+  const toast = useToast();
 
   const handleClick = async () => {
     try {
-      await addItemToCart(product.variants[0].id, quantity, checkoutId);
-      mutate([`/api/existingCheckout/`, checkoutId]);
-      router.push('/cart');
-      updateItemsCookie(checkoutId);
+      await addItemToCart(
+        product.variants.edges[0].node.id,
+        quantity,
+        checkoutId
+      );
+      mutate([`/api/storefrontQuery/`, checkoutId]);
+      toast({
+        duration: 5000,
+        render: () => <CartToast bg={bg} color={color} />,
+      });
     } catch (e) {
       console.log('Error adding item to cart...');
       console.log(e);
@@ -54,7 +72,9 @@ const NoOptionProduct = ({ product }) => {
   const [stock, setStock] = useState(true);
 
   useEffect(() => {
-    product.variants[0].available ? setStock(true) : setStock(false);
+    product.variants.edges[0].node.availableForSale
+      ? setStock(true)
+      : setStock(false);
   }, []);
 
   return (
@@ -83,7 +103,7 @@ const NoOptionProduct = ({ product }) => {
           mr={['0', '0', '0', '2%']}
         >
           <ImageWrapper>
-            {product.variants[0].image === null ? (
+            {product.variants.edges[0].node.image === null ? (
               <Image
                 src='/images/comingsoon.jpg'
                 alt={product.title}
@@ -94,7 +114,7 @@ const NoOptionProduct = ({ product }) => {
               />
             ) : (
               <Image
-                src={product.variants[0].image.src}
+                src={product.variants.edges[0].node.image.originalSrc}
                 alt={product.title}
                 height={577}
                 width={768}
@@ -127,7 +147,7 @@ const NoOptionProduct = ({ product }) => {
           <BuyButton
             stock={stock}
             totalPrice={totalPrice}
-            currencyCode={product.variants[0].priceV2.currencyCode}
+            currencyCode={product.variants.edges[0].node.priceV2.currencyCode}
             handleClick={handleClick}
             quantity={quantity}
             title={product.title}

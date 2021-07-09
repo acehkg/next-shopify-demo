@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router';
-//storefront API Client
-import { shopifyClient } from '../utils/client';
+//storefront graph API Client
+import storefrontClient from '../utils/graphClient';
+import { gql } from 'graphql-request';
 //styling
-import GridContainer from '../components/layout/GridContainer';
 import ProductCard from '../components/display/ProductCard';
-import { Box } from '@chakra-ui/layout';
+import { SimpleGrid } from '@chakra-ui/react';
 import PageSeo from '../components/seo/PageSeo';
 
 const Products = ({ products }) => {
@@ -13,19 +13,25 @@ const Products = ({ products }) => {
     pageTitle: 'All Products',
     description: 'All the products featured in our store',
     currentURL: `https://next-shopify-demo-three.vercel.app${asPath}`,
-    previewImage: `${products[0].images[0].src}`,
+    previewImage: `${products[0].images.edges[0].node.originalSrc}`,
     siteName: 'NEXT JS and Shopify Demo',
   };
   return (
     <>
       <PageSeo metadata={metadata} />
-      <Box as='main' width='90%' mx='auto' pb='2rem'>
-        <GridContainer>
-          {products.map((product) => {
-            return <ProductCard key={product.id} product={product} />;
-          })}
-        </GridContainer>
-      </Box>
+
+      <SimpleGrid
+        as='main'
+        minChildWidth={['18rem', '18rem', '18rem', '20rem']}
+        gap='2rem'
+        width='90%'
+        mx='auto'
+        pb='4rem'
+      >
+        {products.map((product) => {
+          return <ProductCard key={product.id} product={product} />;
+        })}
+      </SimpleGrid>
     </>
   );
 };
@@ -33,11 +39,47 @@ const Products = ({ products }) => {
 export default Products;
 
 export async function getStaticProps() {
-  //query storefront API and fetch all products in shop
-  const products = await shopifyClient.product.fetchAll();
+  //build query for products
+  const PRODUCTS_QUERY = gql`
+    {
+      products(first: 250) {
+        edges {
+          node {
+            id
+            title
+            description
+            descriptionHtml
+            handle
+            images(first: 250) {
+              edges {
+                node {
+                  originalSrc
+                }
+              }
+            }
+            variants(first: 250) {
+              edges {
+                node {
+                  priceV2 {
+                    amount
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+  //query storefront API and fetch  products
+  const productsResponse = await storefrontClient.request(PRODUCTS_QUERY);
 
   return {
     //data needs to be properly formatted
-    props: { products: JSON.parse(JSON.stringify(products)) },
+    props: {
+      products: productsResponse.products.edges.map((edge) => {
+        return edge.node;
+      }),
+    },
   };
 }

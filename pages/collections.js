@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router';
-//storefront API Client
-import { shopifyClient } from '../utils/client';
+//storefront Graph Client
+import storefrontClient from '../utils/graphClient';
+import { gql } from 'graphql-request';
 //styling
-import GridContainer from '../components/layout/GridContainer';
 import CollectionCard from '../components/display/CollectionCard';
-import { Box } from '@chakra-ui/layout';
+import { SimpleGrid } from '@chakra-ui/react';
 import PageSeo from '../components/seo/PageSeo';
 
 const Collections = ({ collections }) => {
@@ -13,21 +13,25 @@ const Collections = ({ collections }) => {
     pageTitle: 'Collections',
     description: 'All the collections featured in our store',
     currentURL: `https://next-shopify-demo-three.vercel.app${asPath}`,
-    previewImage: `${collections[0].image.src}`,
+    previewImage: `${collections[0].image.originalSrc}`,
     siteName: 'NEXT JS and Shopify Demo',
   };
   return (
     <>
       <PageSeo metadata={metadata} />
-      <Box width='90%' mx='auto' pb='2rem'>
-        <GridContainer>
-          {collections.map((collection) => {
-            return (
-              <CollectionCard key={collection.id} collection={collection} />
-            );
-          })}
-        </GridContainer>
-      </Box>
+
+      <SimpleGrid
+        as='main'
+        minChildWidth={['18rem', '18rem', '18rem', '20rem']}
+        gap='2rem'
+        width='90%'
+        mx='auto'
+        pb='4rem'
+      >
+        {collections.map((collection) => {
+          return <CollectionCard key={collection.id} collection={collection} />;
+        })}
+      </SimpleGrid>
     </>
   );
 };
@@ -35,11 +39,32 @@ const Collections = ({ collections }) => {
 export default Collections;
 
 export async function getStaticProps() {
-  //query storefront API and fetch all products in shop
-  const collections = await shopifyClient.collection.fetchAll();
+  //query for all collections
+  const COLLECTIONS_QUERY = gql`
+    {
+      collections(first: 250) {
+        edges {
+          node {
+            id
+            title
+            handle
+            image {
+              originalSrc
+            }
+          }
+        }
+      }
+    }
+  `;
+  //query storefront API and fetch collections
+  const collectionsResponse = await storefrontClient.request(COLLECTIONS_QUERY);
 
   return {
     //data needs to be properly formatted
-    props: { collections: JSON.parse(JSON.stringify(collections)) },
+    props: {
+      collections: collectionsResponse.collections.edges.map((edge) => {
+        return edge.node;
+      }),
+    },
   };
 }

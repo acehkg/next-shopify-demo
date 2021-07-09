@@ -1,27 +1,73 @@
 import { createContext, useEffect, useState } from 'react';
 import { useCookies } from 'react-cookie';
+import { gql } from 'graphql-request';
 export const CartContext = createContext();
-
-//add error handling to the cart functions
 
 const Cart = ({ children }) => {
   const [checkoutId, setCheckoutId] = useState();
-  const [cookies, setCookie] = useCookies();
+  const [itemsInCart, setItemsInCart] = useState();
+  const [cookies, setCookie] = useCookies(['checkout_items', 'checkout_id']);
 
-  //retrieve existing checkout from cookies or create a new checkout
-  useEffect(async () => {
-    const { checkout_id } = cookies;
-    let date = new Date();
-    date.setTime(date.getTime() + 30 * 24 * 60 * 60 * 1000);
-    try {
-      if (checkout_id === undefined) {
-        const res = await fetch('/api/createCheckout');
-        const createdCheckout = await res.json();
-        setCookie('checkout_id', createdCheckout.id, {
+  const reducer = (accumulator, currentValue) => accumulator + currentValue;
+
+  let date = new Date();
+  date.setTime(date.getTime() + 7 * 24 * 60 * 60 * 1000);
+
+  //set items in cart total to display cookie value and update cookie when items in cart adjusted
+  useEffect(() => {
+    const { checkout_items } = cookies;
+    checkout_items ? setItemsInCart(checkout_items) : setItemsInCart(0);
+  }, []);
+
+  useEffect(() => {
+    itemsInCart == 0
+      ? setCookie('checkout_items', 0, {
+          expires: date,
+          secure: true,
+        })
+      : setCookie('checkout_items', itemsInCart, {
           expires: date,
           secure: true,
         });
-        setCheckoutId(createdCheckout.id);
+  }, [itemsInCart]);
+
+  //retrieve existing checkout from cookies or create a new checkout
+  useEffect(async () => {
+    const QUERY = gql`
+      mutation checkoutCreate($input: CheckoutCreateInput!) {
+        checkoutCreate(input: $input) {
+          checkout {
+            id
+          }
+          checkoutUserErrors {
+            code
+            field
+            message
+          }
+        }
+      }
+    `;
+    const variables = {
+      input: {},
+    };
+    const { checkout_id } = cookies;
+    try {
+      if (checkout_id === undefined) {
+        const res = await fetch('/api/storefrontMutation', {
+          method: 'POST',
+          body: JSON.stringify({
+            QUERY,
+            variables,
+          }),
+        });
+
+        const { checkoutCreate } = await res.json();
+
+        setCookie('checkout_id', checkoutCreate.checkout.id, {
+          expires: date,
+          secure: true,
+        });
+        setCheckoutId(checkoutCreate.checkout.id);
       } else {
         setCheckoutId(checkout_id);
       }
@@ -29,63 +75,196 @@ const Cart = ({ children }) => {
   }, []);
 
   const addItemToCart = async (variantId, quantity, checkoutId) => {
+    const QUERY = gql`
+      mutation checkoutLineItemsAdd(
+        $lineItems: [CheckoutLineItemInput!]!
+        $checkoutId: ID!
+      ) {
+        checkoutLineItemsAdd(lineItems: $lineItems, checkoutId: $checkoutId) {
+          checkout {
+            id
+            lineItems(first: 250) {
+              edges {
+                node {
+                  id
+                  title
+                  quantity
+                }
+              }
+            }
+          }
+          checkoutUserErrors {
+            code
+            field
+            message
+          }
+        }
+      }
+    `;
+
+    const variables = {
+      lineItems: [
+        {
+          quantity: quantity,
+          variantId: variantId,
+        },
+      ],
+      checkoutId: checkoutId,
+    };
     try {
-      await fetch('/api/addLineItem', {
+      const res = await fetch('/api/storefrontMutation', {
         method: 'POST',
         body: JSON.stringify({
-          variantId,
-          quantity,
-          checkoutId,
+          QUERY,
+          variables,
         }),
       });
+      const {
+        checkoutLineItemsAdd: { checkout },
+      } = await res.json();
+      const lineItems = checkout.lineItems.edges;
+
+      const itemsArray =
+        Array.isArray(lineItems) && lineItems.length
+          ? lineItems.map((item) => {
+              return item.node.quantity;
+            })
+          : null;
+
+      itemsArray
+        ? setItemsInCart(itemsArray.reduce(reducer))
+        : setItemsInCart(0);
     } catch (err) {
       console.log(err);
     }
   };
 
   const removeItemFromCart = async (variantId, checkoutId) => {
+    const QUERY = gql`
+      mutation checkoutLineItemsRemove($checkoutId: ID!, $lineItemIds: [ID!]!) {
+        checkoutLineItemsRemove(
+          checkoutId: $checkoutId
+          lineItemIds: $lineItemIds
+        ) {
+          checkout {
+            id
+            lineItems(first: 250) {
+              edges {
+                node {
+                  id
+                  title
+                  quantity
+                }
+              }
+            }
+          }
+          checkoutUserErrors {
+            code
+            field
+            message
+          }
+        }
+      }
+    `;
+
+    const variables = {
+      checkoutId: checkoutId,
+      lineItemIds: [variantId],
+    };
     try {
-      await fetch('/api/removeLineItem', {
+      const res = await fetch('/api/storefrontMutation', {
         method: 'POST',
         body: JSON.stringify({
-          variantId,
-          checkoutId,
+          QUERY,
+          variables,
         }),
       });
+      const {
+        checkoutLineItemsRemove: { checkout },
+      } = await res.json();
+
+      const lineItems = checkout.lineItems.edges;
+
+      const itemsArray =
+        Array.isArray(lineItems) && lineItems.length
+          ? lineItems.map((item) => {
+              return item.node.quantity;
+            })
+          : null;
+
+      itemsArray
+        ? setItemsInCart(itemsArray.reduce(reducer))
+        : setItemsInCart(0);
     } catch (err) {
       console.log(err);
     }
   };
 
   const updateItemInCart = async (id, variantId, quantity, checkoutId) => {
+    const QUERY = gql`
+      mutation checkoutLineItemsUpdate(
+        $checkoutId: ID!
+        $lineItems: [CheckoutLineItemUpdateInput!]!
+      ) {
+        checkoutLineItemsUpdate(
+          checkoutId: $checkoutId
+          lineItems: $lineItems
+        ) {
+          checkout {
+            id
+            lineItems(first: 250) {
+              edges {
+                node {
+                  id
+                  title
+                  quantity
+                }
+              }
+            }
+          }
+          checkoutUserErrors {
+            code
+            field
+            message
+          }
+        }
+      }
+    `;
+
+    const variables = {
+      checkoutId: checkoutId,
+      lineItems: [
+        {
+          id: id,
+          quantity: quantity,
+          variantId: variantId,
+        },
+      ],
+    };
     try {
-      await fetch('/api/updateLineItems', {
+      const res = await fetch('/api/storefrontMutation', {
         method: 'POST',
         body: JSON.stringify({
-          id,
-          variantId,
-          quantity,
-          checkoutId,
+          QUERY,
+          variables,
         }),
       });
-    } catch (err) {
-      console.log(err);
-    }
-  };
+      const {
+        checkoutLineItemsUpdate: { checkout },
+      } = await res.json();
 
-  const updateItemsCookie = async (checkoutId) => {
-    let date = new Date();
-    date.setTime(date.getTime() + 30 * 24 * 60 * 60 * 1000);
-    try {
-      const res = await fetch('/api/existingCheckout', {
-        method: 'POST',
-        body: checkoutId,
-      });
-      const oldCheckout = await res.json();
-      setCookie('checkout_length', oldCheckout.lineItems.length, {
-        expires: date,
-        secure: true,
-      });
+      const lineItems = checkout.lineItems.edges;
+
+      const itemsArray =
+        Array.isArray(lineItems) && lineItems.length
+          ? lineItems.map((item) => {
+              return item.node.quantity;
+            })
+          : null;
+
+      itemsArray
+        ? setItemsInCart(itemsArray.reduce(reducer))
+        : setItemsInCart(0);
     } catch (err) {
       console.log(err);
     }
@@ -93,10 +272,10 @@ const Cart = ({ children }) => {
 
   const exposed = {
     checkoutId,
+    itemsInCart,
     addItemToCart,
     removeItemFromCart,
     updateItemInCart,
-    updateItemsCookie,
   };
 
   return (

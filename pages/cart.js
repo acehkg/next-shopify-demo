@@ -42,25 +42,25 @@ const Cart = () => {
           <BackButton size='lg' color='current' mb='2rem' />
         </Box>
         <Flex direction='column' align='center'>
-          {cartData.checkout.lineItems.map((item) => (
+          {cartData.checkout.lineItems.edges.map((item) => (
             <CartItem
-              key={item.variant.id}
-              id={item.id}
-              title={item.title}
-              qty={item.quantity}
-              price={item.variant.price}
-              currency={item.variant.priceV2.currencyCode}
+              key={item.node.variant.id}
+              id={item.node.id}
+              title={item.node.title}
+              qty={item.node.quantity}
+              price={item.node.variant.priceV2.amount}
+              currency={item.node.variant.priceV2.currencyCode}
               src={
-                item.variant.image === null
+                item.node.variant.image === null
                   ? '/images/comingsoon.jpg'
-                  : `${item.variant.image.src}`
+                  : `${item.node.variant.image.originalSrc}`
               }
-              alt={item.title}
-              variantId={item.variant.id}
+              alt={item.node.title}
+              variantId={item.node.variant.id}
               variant={
-                item.variant.title === 'Default Title'
+                item.node.variant.title === 'Default Title'
                   ? ` `
-                  : `${item.variant.title}`
+                  : `${item.node.variant.title}`
               }
             />
           ))}
