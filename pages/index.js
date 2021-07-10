@@ -18,8 +18,8 @@ const HomePage = ({ products, collections }) => {
   const metadata = {
     pageTitle: 'Home',
     description: 'The Home Page of the Better Beer App',
-    currentURL: `https://next-shopify-demo-three.vercel.app${asPath}`,
-    previewImage: '/images/logo.png',
+    currentURL: `https://betterbeer.app${asPath}`,
+    previewImage: 'https://betterbeer.app/images/logo.png',
     siteName: 'NEXT JS and Shopify Demo',
   };
 

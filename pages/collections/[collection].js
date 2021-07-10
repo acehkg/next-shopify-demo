@@ -11,7 +11,7 @@ import CollectionSeo from '../../components/seo/CollectionSeo';
 const Collection = ({ collection }) => {
   const { asPath } = useRouter();
   const siteName = 'NEXT JS and Shopify';
-  const url = `https://next-shopify-demo-three.vercel.app${asPath}`;
+  const url = `https://betterbeer.app${asPath}`;
 
   const products = collection.products.edges.map((edge) => {
     return edge.node;

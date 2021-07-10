@@ -12,7 +12,7 @@ const Collections = ({ collections }) => {
   const metadata = {
     pageTitle: 'Collections',
     description: 'All the collections featured in our store',
-    currentURL: `https://next-shopify-demo-three.vercel.app${asPath}`,
+    currentURL: `https://betterbeer.app${asPath}`,
     previewImage: `${collections[0].image.originalSrc}`,
     siteName: 'NEXT JS and Shopify Demo',
   };

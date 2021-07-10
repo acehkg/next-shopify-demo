@@ -10,7 +10,7 @@ import ProductSeo from '../../components/seo/ProductSeo';
 const Product = ({ product }) => {
   const { asPath } = useRouter();
   const siteName = 'NEXT JS and Shopify';
-  const url = `https://next-shopify-demo-three.vercel.app${asPath}`;
+  const url = `https://betterbeer.app${asPath}`;
 
   if (product.variants.edges.length === 1) {
     return (
