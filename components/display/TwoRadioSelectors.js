@@ -20,6 +20,7 @@ import LabelRadio from '../interface/Radio/LabelRadio';
 import Image from 'next/image';
 import styled from 'styled-components';
 import CartToast from '../modals/CartToast';
+import useProduct from '../../hooks/useProduct';
 
 const ImageWrapper = styled.div`
   img {
@@ -28,11 +29,23 @@ const ImageWrapper = styled.div`
 `;
 
 const TwoRadioSelectors = ({ product }) => {
-  //checkoutid
-  const { checkoutId, addItemToCart, updateItemsCookie } = useCartContext();
+  //styling changes for light/dark mode
   const bg = useColorModeValue('gray.200', 'gray.700');
   const color = useColorModeValue('black', 'white');
-  const [quantity, setQuantity] = useState(1);
+
+  //access cart context
+  const { checkoutId, addItemToCart } = useCartContext();
+
+  //placed common variables in custom hook for efficiency
+  const {
+    quantity,
+    incrementQty,
+    decrementQty,
+    stock,
+    selected,
+    setSelected,
+    totalPrice,
+  } = useProduct(product);
 
   //seperate the two options arrays
   const optionOne = product.options[0];
@@ -47,21 +60,12 @@ const TwoRadioSelectors = ({ product }) => {
   }, [selectOne, selectTwo]);
 
   //filter the array of variants for the created filter and return selected varaiant
-  const [selected, setSelected] = useState(product.variants.edges[0]);
   useEffect(() => {
     const filtered = product.variants.edges.filter((variant) => {
       return variant.node.title.includes(filter);
     });
     setSelected(() => filtered[0]);
   }, [filter]);
-
-  //calculate totaprice when selected changes
-  const [totalPrice, setTotalPrice] = useState(0.0);
-  useEffect(() => {
-    const price = selected.node.priceV2.amount;
-    const pFloat = parseFloat(price);
-    setTotalPrice((pFloat * quantity).toFixed(2));
-  }, [quantity, selected]);
 
   const toast = useToast();
 
@@ -87,19 +91,6 @@ const TwoRadioSelectors = ({ product }) => {
   const handleChangeTwo = (value) => {
     setSelectTwo(() => value);
   };
-
-  const incrementQty = () => {
-    setQuantity(() => quantity + 1);
-  };
-
-  const decrementQty = () => {
-    quantity === 1 ? setQuantity(1) : setQuantity(() => quantity - 1);
-  };
-  const [stock, setStock] = useState(true);
-
-  useEffect(() => {
-    selected.node.availableForSale ? setStock(true) : setStock(false);
-  }, [selected]);
 
   return (
     <Box>

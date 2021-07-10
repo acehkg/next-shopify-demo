@@ -17,6 +17,7 @@ import BuyButton from '../interface/BuyButton';
 import Image from 'next/image';
 import styled from 'styled-components';
 import CartToast from '../modals/CartToast';
+import useProduct from '../../hooks/useProduct';
 
 const ImageWrapper = styled.div`
   img {
@@ -26,39 +27,19 @@ const ImageWrapper = styled.div`
 
 const NoOptionProduct = ({ product }) => {
   //checkoutid
-  const { checkoutId, addItemToCart, updateItemsCookie } = useCartContext();
+  const { checkoutId, addItemToCart } = useCartContext();
   const bg = useColorModeValue('gray.200', 'gray.700');
   const color = useColorModeValue('black', 'white');
-  //handle quantity
-  const [quantity, setQuantity] = useState(1);
 
-  const incrementQty = () => {
-    setQuantity(() => quantity + 1);
-  };
-
-  const decrementQty = () => {
-    quantity === 1 ? setQuantity(1) : setQuantity(() => quantity - 1);
-  };
-
-  //calculate totaprice when selected changes
-  const [totalPrice, setTotalPrice] = useState(0.0);
-  useEffect(() => {
-    const price = product.variants.edges[0].node.priceV2.amount;
-    const pFloat = parseFloat(price);
-    setTotalPrice((pFloat * quantity).toFixed(2));
-  }, [quantity]);
-
-  // const router = useRouter();
+  //placed common variables in custom hook for efficiency
+  const { quantity, incrementQty, decrementQty, stock, selected, totalPrice } =
+    useProduct(product);
 
   const toast = useToast();
 
   const handleClick = async () => {
     try {
-      await addItemToCart(
-        product.variants.edges[0].node.id,
-        quantity,
-        checkoutId
-      );
+      await addItemToCart(selected.node.id, quantity, checkoutId);
       mutate([`/api/storefrontQuery/`, checkoutId]);
       toast({
         duration: 5000,
@@ -69,13 +50,6 @@ const NoOptionProduct = ({ product }) => {
       console.log(e);
     }
   };
-  const [stock, setStock] = useState(true);
-
-  useEffect(() => {
-    product.variants.edges[0].node.availableForSale
-      ? setStock(true)
-      : setStock(false);
-  }, []);
 
   return (
     <Box>

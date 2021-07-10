@@ -18,6 +18,7 @@ import LabelRadio from '../interface/Radio/LabelRadio';
 import Image from 'next/image';
 import CartToast from '../modals/CartToast';
 import styled from 'styled-components';
+import useProduct from '../../hooks/useProduct';
 
 const ImageWrapper = styled.div`
   img {
@@ -30,36 +31,29 @@ const OneOptionProduct = ({ product }) => {
   const { checkoutId, addItemToCart } = useCartContext();
   const bg = useColorModeValue('gray.200', 'gray.700');
   const color = useColorModeValue('black', 'white');
-  //for a product with to options render selectors and filter selections for target variantId
-  //seperate the two options arrays
+
+  //placed common variables in custom hook for efficiency
+  const {
+    quantity,
+    incrementQty,
+    decrementQty,
+    stock,
+    selected,
+    setSelected,
+    totalPrice,
+  } = useProduct(product);
+
+  //seperate the options array
   const optionOne = product.options[0];
 
   //filter the array of variants for the created filter and return selected varaiant
   const [filter, setFilter] = useState(product.options[0].values[0]);
-  const [selected, setSelected] = useState(product.variants.edges[0]);
   useEffect(() => {
     const filtered = product.variants.edges.filter((variant) => {
       return variant.node.title.includes(filter);
     });
     setSelected(() => filtered[0]);
   }, [filter]);
-
-  const [quantity, setQuantity] = useState(1);
-  const incrementQty = () => {
-    setQuantity(() => quantity + 1);
-  };
-
-  const decrementQty = () => {
-    quantity === 1 ? setQuantity(1) : setQuantity(() => quantity - 1);
-  };
-
-  //calculate totaprice when selected changes
-  const [totalPrice, setTotalPrice] = useState(0.0);
-  useEffect(() => {
-    const price = selected.node.priceV2.amount;
-    const pFloat = parseFloat(price);
-    setTotalPrice((pFloat * quantity).toFixed(2));
-  }, [quantity, selected]);
 
   //const router = useRouter();
   const toast = useToast();
@@ -78,11 +72,6 @@ const OneOptionProduct = ({ product }) => {
     }
   };
 
-  const [stock, setStock] = useState(true);
-
-  useEffect(() => {
-    selected.node.availableForSale ? setStock(true) : setStock(false);
-  }, [selected]);
   return (
     <Box>
       <Heading
